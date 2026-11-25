@@ -2,11 +2,13 @@
 
 [![HomeHub QA](https://github.com/M10-Solutions/homehub-cms/actions/workflows/qa.yml/badge.svg?branch=main)](https://github.com/M10-Solutions/homehub-cms/actions/workflows/qa.yml)
 
-**Dein Zuhause. Alles im Blick.**
+**Dein Zuhause auf einen Blick.**
 
 Ein schlankes, dateibasiertes CMS für private Intranets, Haushalte und kleine Gemeinschaften. Inhalte werden als Markdown-Dateien gespeichert; eine Datenbank ist nicht erforderlich.
 
-Version: `1.0-20261124` · Geplanter GitHub-Tag: `v1.0.0` · Lizenz: GPL-3.0-or-later
+Version: `1.0-20261124` · GitHub-Tag: `1.0.0` · Lizenz: GPL-3.0-or-later
+
+![HomeHub CMS mit Wiki-Navigation und integriertem Benutzerhandbuch](docs/images/homehub-screenshot.jpg)
 
 ## Funktionen
 

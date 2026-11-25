@@ -7,7 +7,7 @@ $read = static fn(string $path): string => file_get_contents($root . '/' . $path
 $assert = static function (bool $ok, string $message): void { if (!$ok) { fwrite(STDERR, "FAIL: $message\n"); exit(1); } };
 foreach (['src/index.php', 'src/admin.php'] as $entry) {
     $text = $read($entry);
-    $assert(str_contains($text, '/js/hub-feedback.js?v=2'), "$entry loads shared JS");
+    $assert(str_contains($text, '/js/hub-feedback.js?v=3'), "$entry loads shared JS");
     $assert(str_contains($text, '/css/hub-feedback.css?v=2'), "$entry loads shared CSS");
 }
 $feedback = $read('src/js/hub-feedback.js');

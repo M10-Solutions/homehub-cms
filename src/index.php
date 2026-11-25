@@ -91,6 +91,7 @@ if ($accessDenied) {
     header('Cache-Control: no-store, private');
     header('X-Robots-Tag: noindex');
 }
+$loginModalOpen = $loginModalOpen || ($accessDenied && $role === null);
 $notFound = $currentPage === null || $accessDenied;
 // Own and inherited visibility restrictions both count as protected.
 $hasRestrictedVisibility = !$notFound && (
@@ -268,9 +269,9 @@ function e(string $value): string
     <?php if ($inlineAllowed): ?><link rel="stylesheet" href="/css/page-picker.css?v=1&amp;theme=1"><?php endif; ?>
     <link rel="stylesheet" href="/css/login-modal.css?v=2&amp;theme=1">
     <link rel="stylesheet" href="/css/page-metadata.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/page-actions.css?v=5&amp;theme=1">
+    <link rel="stylesheet" href="/css/page-actions.css?v=6&amp;theme=1">
     <link rel="stylesheet" href="/css/header-create.css?v=1">
-    <link rel="stylesheet" href="/css/wiki-navigation-ux.css?v=2&amp;theme=1">
+    <link rel="stylesheet" href="/css/wiki-navigation-ux.css?v=3&amp;theme=1">
     <link rel="stylesheet" href="/css/sidebar-account.css?v=3&amp;theme=1">
     <link rel="stylesheet" href="/css/page-protection.css?v=1&amp;theme=1">
     <link rel="stylesheet" href="/css/chapter-export.css?v=2&amp;theme=1">
@@ -279,18 +280,18 @@ function e(string $value): string
     <script src="/js/code-blocks.js?v=1" defer></script>
     <script src="/js/markdown-toolbar.js?v=3" defer></script>
     <script src="/js/inline-editor.js?v=6" defer></script>
-    <?php if ($inlineAllowed): ?><script src="/js/page-picker.js?v=3" defer></script><?php endif; ?>
+    <?php if ($inlineAllowed): ?><script src="/js/page-picker.js?v=4" defer></script><?php endif; ?>
     <script src="/js/login-modal.js?v=1" defer></script>
-    <script src="/js/page-actions.js?v=6" defer></script>
-    <script src="/js/wiki-navigation-ux.js?v=3" defer></script>
-    <script src="/js/chapter-export.js?v=1" defer></script>
+    <script src="/js/page-actions.js?v=7" defer></script>
+    <script src="/js/wiki-navigation-ux.js?v=4" defer></script>
+    <script src="/js/chapter-export.js?v=2" defer></script>
 <link rel="stylesheet" href="/css/dialog-header.css?v=1">
 <link rel="stylesheet" href="/css/admin-buttons.css?v=4&amp;theme=1">
 <link rel="stylesheet" href="/css/wiki-search.css?v=1">
 <link rel="stylesheet" href="/css/theme.css?v=1"><link rel="stylesheet" href="/css/hub-feedback.css?v=2">
 <link rel="stylesheet" href="/css/responsive-navigation.css?v=1">
 <script src="/js/responsive-navigation.js?v=1" defer></script>
-<script src="/js/hub-feedback.js?v=2" defer></script><script src="/js/page-link-feedback.js?v=1" defer></script><script src="/js/theme.js?v=1"></script>
+<script src="/js/hub-feedback.js?v=3" defer></script><script src="/js/page-link-feedback.js?v=1" defer></script><script src="/js/theme.js?v=1"></script>
 </head>
 <body>
 <?php if (isset($_SESSION['hub_page_deleted_notice'])): ?>
@@ -478,7 +479,7 @@ function e(string $value): string
 <?php if ($role === null): ?>
 <dialog id="hub-login-dialog" class="hub-login-dialog" aria-labelledby="hub-login-title" <?= $loginModalOpen ? 'data-open-on-load' : '' ?>>
     <div class="hub-login-modal-heading hub-dialog-header">
-        <div><h2 id="hub-login-title">Bei HomeHub anmelden</h2><p>Mit deinem Benutzerkonto anmelden.</p></div>
+        <div><h2 id="hub-login-title"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i> <span class="hub-dialog-title-text">Bei HomeHub anmelden</span></h2><p>Mit deinem Benutzerkonto anmelden.</p></div>
         <button type="button" class="hub-login-close" id="hub-login-close" aria-label="Dialog schliessen"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </div>
     <?php if ($loginError !== ''): ?><p class="hub-login-error" role="alert"><?= e($loginError) ?></p><?php endif; ?>
@@ -496,9 +497,10 @@ function e(string $value): string
 <?php if ($canManagePages): ?>
 <dialog id="hub-page-create" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-create-title">
 <form action="/page-actions.php" method="post">
-<h2 class="hub-dialog-header" id="hub-create-title">Neue Wiki-Seite</h2>
+<h2 class="hub-dialog-header" id="hub-create-title"><i class="fa-solid fa-file-circle-plus" aria-hidden="true"></i> <span class="hub-dialog-title-text">Neue Wiki-Seite</span></h2>
 <input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="create">
-<label>Seitenpfad (a-z, 0-9, - und _)<input name="slug" type="text" maxlength="180" required pattern="[a-z0-9_-]+(/[a-z0-9_-]+)*" value="<?= e($createPrefix) ?>" placeholder="thema/neue-seite"></label>
+<label>Seitenpfad (a-z, 0-9, - und _)<input name="slug" aria-describedby="hub-create-error" type="text" maxlength="180" required pattern="[a-z0-9_\-]+(\/[a-z0-9_\-]+)*" value="<?= e($createPrefix) ?>" placeholder="thema/neue-seite"></label>
+<p id="hub-create-error" role="status" aria-live="polite" class="hub-create-error" hidden></p>
 <label>Titel<input name="title" type="text" maxlength="160" required></label>
 <label>Beschreibung<textarea name="description" rows="2" maxlength="500"></textarea></label>
 <p class="hub-muted"><?= $role === 'admin' ? 'Die neue Seite wird veröffentlicht. Sichtbarkeit und weitere Einstellungen kannst du anschliessend anpassen.' : 'Die neue Seite wird als Draft im berechtigten Kapitel angelegt und kann anschliessend veröffentlicht werden.' ?></p>
@@ -507,7 +509,7 @@ function e(string $value): string
 <?php if ($managePage !== null): ?>
 <dialog id="hub-page-settings" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-settings-title">
 <form action="/page-actions.php" method="post">
-<h2 class="hub-dialog-header" id="hub-settings-title">Seiteneinstellungen</h2>
+<h2 class="hub-dialog-header" id="hub-settings-title"><i class="fa-solid fa-gear" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seiteneinstellungen</span></h2>
 <input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="settings"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>"><input type="hidden" name="revision" value="<?= e($manageRevision) ?>">
 <label>Titel<input name="title" type="text" required maxlength="160" value="<?= e($managePage['title']) ?>"></label>
 <label>Beschreibung<textarea name="description" rows="2" maxlength="500"><?= e($managePage['description']) ?></textarea></label>
@@ -541,7 +543,7 @@ function e(string $value): string
 <div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit">Speichern</button></div>
 </form></dialog>
 <dialog id="hub-page-move" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-move-title"><form action="/page-actions.php" method="post">
-<h2 class="hub-dialog-header" id="hub-move-title">Seite umbenennen oder verschieben</h2><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="move"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>"><input type="hidden" name="revision" value="<?= e($manageRevision) ?>">
+<h2 class="hub-dialog-header" id="hub-move-title"><i class="fa-solid fa-folder-open" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seite umbenennen oder verschieben</span></h2><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="move"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>"><input type="hidden" name="revision" value="<?= e($manageRevision) ?>">
 <div class="hub-move-fields" data-page-move-fields>
 <label>Zielordner
 <select data-move-folder aria-describedby="hub-move-folder-help">
@@ -559,7 +561,7 @@ function e(string $value): string
 <p class="hub-muted">Die Seiten-ID bleibt erhalten. ID-basierte Links funktionieren weiter; alte pfadbasierte Links müssen gegebenenfalls separat migriert werden.</p>
 <div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit">Verschieben</button></div></form></dialog>
 <dialog id="hub-page-delete" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-delete-title"><form id="hub-delete-page-form" action="/page-actions.php" method="post">
-<h2 class="hub-dialog-header" id="hub-delete-title">Seite löschen?</h2><p>„<?= e($pageTitle) ?>“ wird dauerhaft gelöscht.</p><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="delete"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>">
+<h2 class="hub-dialog-header" id="hub-delete-title"><i class="fa-solid fa-trash" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seite löschen?</span></h2><p>„<?= e($pageTitle) ?>“ wird dauerhaft gelöscht.</p><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="delete"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>">
 <div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit" class="hub-danger">Endgültig löschen</button></div></form></dialog>
 <?php endif; ?>
 <?php endif; ?>

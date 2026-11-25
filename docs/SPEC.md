@@ -1,6 +1,6 @@
 # HomeHub CMS – Funktionsspezifikation
 
-**Stand:** 25.11.2026 · HomeHub 1.0-20261124; private Betreiberfreigabe, öffentliche Freigabe offen.
+**Stand:** 25.11.2026 · HomeHub 1.0-20261125; Release 1.0.1 zur Publikation vorbereitet.
 Diese Datei ist die konsolidierte Soll-/Ist-Beschreibung des aktuellen Produkts; ältere Abnahmedokumente sind historische Nachweise. SEARCH-001 und die vorangegangenen Erweiterungen sind laut Betreiber abgenommen. CLEANUP-001 / SDD-002: Betreiber bestätigt 24/24 Tests und manuelle Funktionstests. QA-002: NAS-Abnahme mit 25/25 Tests bestätigt. VERSION-001: 26/26 Regressionen bestätigt; Footer nicht separat bestätigt. UI-011: 27/27 Regressionen und manuelle Funktionstests bestätigt.
 
 ## Verbindliche SDD-Grundsätze (25.11.2026)
@@ -218,3 +218,15 @@ Betreiber bestätigt Desktop-Navigation inklusive Breitenverstellung, Tablet-Hoc
 
 ## PUB-001 – Publikationsanforderungen
 GPL-3.0-or-later; Drittkomponenten gemäss THIRD-PARTY-NOTICES.md. Reproduzierbarer Composer-Lockfile-Build, optionale .env-Konfiguration und GitHub-QA. Keine produktiven Daten im Repository. Aktuelle Freigabekriterien siehe PROJECT.md; Prüfungen siehe TESTING.md.
+
+
+## UI-013 – Benutzerführung und Dialogkonsistenz
+
+- a: Gemeinsamer Header: «Dein Zuhause auf einen Blick.»
+- b/c: Desktop-Navigationsbutton auf Mittelachse des Suchfelds, dessen Position unverändert bleibt; eingeklappt Mittelpunkt am linken Fensterrand. Mobile Navigation unverändert.
+- d/e: Admin-Logout nur Icon mit zugänglicher Beschriftung; nach Logout Startseite, bei anonym verweigertem Zugriff modaler Login.
+- f: Kapitel-Exportdialog schliesst bei gültigem nativem Exportstart (PDF/ODT/ZIP); Browser meldet Downloadabschluss nicht, serverseitige Fehler bleiben in der nativen Antwort sichtbar.
+- g: Seitenerstellung prüft den tatsächlichen Seitenpfad nach 300 ms Eingabepause serverseitig mit bestehender ACL und Pfadlogik; Konflikte im Dialog, Eingaben bleiben erhalten. Autoritative Prüfung beim Schreiben unter bestehender Sperre bleibt erhalten.
+- h: Alle modalen Dialogheader mit funktionsbezogenem Font-Awesome-Icon links vom Titel, auch dynamische Dialoge.
+
+Abnahme: alle Punkte manuell prüfen, Light/Dark und responsive Darstellung erhalten, Regressionen warnungsfrei, keine neuen Abhängigkeiten oder Migrationen.

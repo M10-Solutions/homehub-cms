@@ -7,7 +7,7 @@
   const dialog = document.createElement('dialog');
   dialog.className = 'hh-page-picker';
   dialog.setAttribute('aria-label', 'Wiki-Seite verlinken');
-  dialog.innerHTML = '<div class="hh-page-picker-head hub-dialog-header"><strong>Wiki-Seite verlinken</strong><button type="button" data-close aria-label="Schliessen">×</button></div><label>Seite suchen<input type="search" placeholder="Titel oder Pfad" autocomplete="off"></label><div class="hh-page-picker-results" role="list"></div><p class="hh-page-picker-note">Neue Links verwenden die stabile Seiten-ID.</p>';
+  dialog.innerHTML = '<div class="hh-page-picker-head hub-dialog-header"><strong><i class="fa-solid fa-link" aria-hidden="true"></i> Wiki-Seite verlinken</strong><button type="button" data-close aria-label="Schliessen">×</button></div><label>Seite suchen<input type="search" placeholder="Titel oder Pfad" autocomplete="off"></label><div class="hh-page-picker-results" role="list"></div><p class="hh-page-picker-note">Neue Links verwenden die stabile Seiten-ID.</p>';
   document.body.append(dialog);
   const search = dialog.querySelector('input');
   const results = dialog.querySelector('.hh-page-picker-results');

@@ -1,7 +1,7 @@
 # Sicherheit / Security
 
 ## Unterstützter Stand
-HomeHub CMS 1.0 (`1.0-20261124`) ist für vertrauenswürdige private Netze vorgesehen. Die öffentliche Bereitstellung des Quellcodes ist keine Freigabe für öffentlich erreichbare Installationen.
+HomeHub CMS 1.0 (`1.0-20261125`) ist für vertrauenswürdige private Netze vorgesehen. Die öffentliche Bereitstellung des Quellcodes ist keine Freigabe für öffentlich erreichbare Installationen.
 
 ## Sicherer Betrieb
 - Kein direktes Port-Forwarding aus dem Internet. Firewall, VPN und bei Zugriff über nicht vertrauenswürdige Netze HTTPS mit geeigneter Zugriffsbeschränkung verwenden.

@@ -20,5 +20,13 @@ try {
  $a->updateUser('reader','renamed','','editor',false); check($a->user('renamed')['email']==='reader@example.org');
  $a->updateUser('renamed','renamed','','editor',false,['email'=>'']); check($a->user('renamed')['email']==='');
  $a->deleteUser('renamed'); check(count($a->allUsers())===1);
-} finally { foreach(glob($d.'/*') as $f) unlink($f); rmdir($d); }
+} finally {
+    foreach (scandir($d) as $file) {
+        if ($file === '.' || $file === '..') {
+            continue;
+        }
+        unlink($d . '/' . $file);
+    }
+    rmdir($d);
+}
 echo "USER-001 OK\n";

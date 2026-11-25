@@ -53,7 +53,7 @@ Die Version wird in `src/config/app.php` unter `version` gepflegt (initial `0.8-
 Der Schalter im Wiki- und Admin-Header speichert die Wahl lokal im Browser. Standard: Light. Keine Migration oder zusätzliche Konfiguration erforderlich. App-Version: `0.9-20261122`.
 
 ## Fachliche Abnahme und Release
-UAT-002a–f und UI-012 sind abgenommen; NAS-Regression 34/34 auf 0.13-20261123. Release 1.0-20261124 ist seit 24.11.2026 freigegeben; finale NAS-QA 35/35. Siehe TESTING.md für Prüfschritte und Risiken.
+UAT-002a–f und UI-012 sind abgenommen; NAS-Regression 34/34 auf 0.13-20261123. Release 1.0-20261124 ist seit 24.11.2026 freigegeben; finale NAS-QA 35/35. Wartungsrelease 1.0.1 (Anwendung 1.0-20261125) vorbereitet; QA-002 und UI-013 abgenommen, zuletzt 36/36 ohne Warnungen laut Betreiber. Siehe TESTING.md für Prüfschritte und Risiken.
 
 ## Backup und Wiederherstellung
 Vor einem Update Schreibzugriffe beenden (Wartungsfenster, `docker compose stop homehub`). Vollständiges Projekt einschliesslich `data/` und individueller Compose-/Konfigurationsdateien geschützt sichern. Sicherung ausserhalb des Projektverzeichnisses aufbewahren und auf Lesbarkeit prüfen. Patch ohne Nutzdaten einspielen; individuelle Konfiguration erhalten. Anschliessend `docker compose up -d --build`. Bei Rückkehr zum alten Stand Container stoppen und zusammengehörigen Code- und Datenstand aus der Sicherung wiederherstellen; seit dem Backup entstandene Änderungen vorher separat sichern. Restore zunächst auf isolierter Instanz mit eigenem Port und separaten Daten prüfen.

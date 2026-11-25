@@ -36,7 +36,7 @@ $tests = [
     'page-identity.php', 'page-link-id.php', 'page-004-move.php',
     'media-operation-lock.php', 'page-media-lock.php',
     'migrate-page-links.php', 'media-004-migration.php',
-    'export-002-odt.php', 'admin-001b-folders.php', 'admin-001d-cleanup.php', 'media-006-batch.php', 'user-001.php', 'ui-001.php', 'ui-005.php', 'ui-006.php', 'ui-007.php', 'ui-008.php', 'ui-009.php', 'export-003-zip.php', 'tag-001.php', 'tag-003.php', 'tag-004.php', 'search-001.php', 'cleanup-001.php', 'qa-002.php', 'version-001.php', 'ui-011.php', 'ui-012-nav-theme.php', 'uat-002a.php', 'uat-002a-followup.php', 'uat-002c.php', 'uat-edt-01.php', 'uat-002d.php', 'uat-002b.php', 'security-metadata.php',
+    'export-002-odt.php', 'admin-001b-folders.php', 'admin-001d-cleanup.php', 'media-006-batch.php', 'user-001.php', 'ui-001.php', 'ui-005.php', 'ui-006.php', 'ui-007.php', 'ui-008.php', 'ui-009.php', 'export-003-zip.php', 'tag-001.php', 'tag-003.php', 'tag-004.php', 'search-001.php', 'cleanup-001.php', 'qa-002.php', 'version-001.php', 'ui-011.php', 'ui-012-nav-theme.php', 'uat-002a.php', 'uat-002a-followup.php', 'uat-002c.php', 'uat-edt-01.php', 'uat-002d.php', 'uat-002b.php', 'security-metadata.php', 'ui-013.php',
 ];
 $start = microtime(true);
 $failed = [];

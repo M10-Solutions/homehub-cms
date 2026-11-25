@@ -1,6 +1,6 @@
 # HomeHub CMS – Architektur und Entscheidungen
 
-**Stand:** 25.11.2026 · HomeHub 1.0-20261124; private Betreiberfreigabe, öffentliche Freigabe offen.
+**Stand:** 25.11.2026 · HomeHub 1.0-20261125; Release 1.0.1 zur Publikation vorbereitet.
 
 ## Verbindliche SDD-Grundsätze (25.11.2026)
 

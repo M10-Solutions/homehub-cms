@@ -44,11 +44,22 @@ $assertManage = static function (string $pageSlug) use ($repository, $role, $use
     }
 };
 $slug = trim((string) ($_POST['slug'] ?? ''), '/');
+$json = in_array($action, ['create', 'check-create'], true) && ($_SERVER['HTTP_ACCEPT'] ?? '') === 'application/json';
+$reply = static function (array $payload, int $status = 200): void {
+    http_response_code($status);
+    header('Content-Type: application/json; charset=UTF-8');
+    echo json_encode($payload, JSON_THROW_ON_ERROR);
+};
 try {
     if (!Admin::slugIsValid($slug)) throw new RuntimeException('Ungültiger Seitenpfad.');
-    if ($action === 'create') {
+    if (in_array($action, ['create', 'check-create'], true)) {
         if (!PermissionService::canCreateAt($slug, $role, $repository, $userId)) {
             throw new RuntimeException('Neue Seiten sind nur in berechtigten Kapiteln möglich.');
+        }
+        if ($action === 'check-create') {
+            $admin->assertCreateAvailable($slug);
+            $reply(['ok' => true]);
+            exit;
         }
         $input = [
             'title' => $_POST['title'] ?? '', 'description' => $_POST['description'] ?? '',
@@ -97,9 +108,11 @@ try {
     if ($target !== '' && in_array($action, ['create', 'settings', 'move'], true) && !$admin->read($target)['published']) {
         $url = '/?draft=' . rawurlencode($target);
     }
+    if ($json) { $reply(['ok' => true, 'url' => $url]); exit; }
     header('Location: ' . $url, true, 303);
     exit;
 } catch (Throwable $error) {
+    if ($json || $action === 'check-create') { $reply(['ok' => false, 'error' => $error->getMessage()], 400); exit; }
     http_response_code(400);
     header('Content-Type: text/html; charset=UTF-8');
     echo '<!doctype html><html lang="de"><meta charset="utf-8"><title>HomeHub – Aktion fehlgeschlagen</title><main style="font:1rem system-ui;max-width:42rem;margin:4rem auto"><h1>Aktion fehlgeschlagen</h1><p>'

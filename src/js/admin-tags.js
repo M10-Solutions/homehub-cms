@@ -26,7 +26,7 @@
         form.elements.action.value = creating ? 'tag-create' : 'tag-update';
         form.elements.original_tag.value = creating ? '' : selected.dataset.id;
         form.elements.tag.value = creating ? '' : selected.dataset.tag;
-        get('tags-title').textContent = creating ? 'Schlagwort erstellen' : 'Schlagwort bearbeiten';
+        get('tags-title').querySelector('.hub-dialog-title-text').textContent = creating ? 'Schlagwort erstellen' : 'Schlagwort bearbeiten';
         dialog.showModal(); form.elements.tag.focus();
     };
     for (const row of rows) {

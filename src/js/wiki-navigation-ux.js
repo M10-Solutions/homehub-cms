@@ -6,7 +6,16 @@
   const toggle = document.getElementById('hub-nav-toggle');
   if (!sidebar || !toggle) return;
   const storage = (key, value) => { try { if (value === undefined) return localStorage.getItem(key); localStorage.setItem(key, value); } catch (_) { return null; } };
-  const applyCollapsed = collapsed => { document.body.classList.toggle('hub-nav-collapsed', collapsed); toggle.setAttribute('aria-expanded', String(!collapsed)); const label = collapsed ? 'Navigation ausklappen' : 'Navigation einklappen'; toggle.title = label; toggle.setAttribute('aria-label', label); const icon = toggle.querySelector('i'); if (icon) { icon.classList.toggle('fa-chevron-right', collapsed); icon.classList.toggle('fa-chevron-left', !collapsed); } };
+  const applyCollapsed = collapsed => { document.body.classList.toggle('hub-nav-collapsed', collapsed); toggle.setAttribute('aria-expanded', String(!collapsed)); const label = collapsed ? 'Navigation ausklappen' : 'Navigation einklappen'; toggle.title = label; requestAnimationFrame(alignToggle); toggle.setAttribute('aria-label', label); const icon = toggle.querySelector('i'); if (icon) { icon.classList.toggle('fa-chevron-right', collapsed); icon.classList.toggle('fa-chevron-left', !collapsed); } };
+  const field = sidebar.querySelector('.hub-nav-search-field');
+  const alignToggle = () => {
+    if (!field || !field.getClientRects().length) return;
+    const rect = field.getBoundingClientRect();
+    toggle.style.setProperty('--hub-nav-toggle-top', `${rect.top + sidebar.scrollTop + (rect.height - 42) / 2}px`);
+  };
+  alignToggle();
+  window.addEventListener('resize', alignToggle);
+  if (field && typeof ResizeObserver !== 'undefined') new ResizeObserver(alignToggle).observe(field);
   applyCollapsed(storage('homehub.wiki.nav.collapsed') === '1');
   toggle.addEventListener('click', () => { const collapsed = !document.body.classList.contains('hub-nav-collapsed'); applyCollapsed(collapsed); storage('homehub.wiki.nav.collapsed', collapsed ? '1' : '0'); });
   const resize = document.getElementById('hub-nav-resize');
@@ -96,7 +105,7 @@
     const slug = selectedSlug; close();
     if (action === 'create') {
       const dialog = document.getElementById('hub-page-create');
-      if (dialog) { const field = dialog.querySelector('[name="slug"]'); if (field) field.value = slug ? slug + '/' : ''; dialog.showModal(); field?.focus(); }
+      if (dialog) { const field = dialog.querySelector('[name="slug"]'); if (field) field.value = slug ? slug + '/' : ''; dialog.showModal(); field?.dispatchEvent(new Event('input')); field?.focus(); }
       return;
     }
     // Settings/move/delete dialogs contain page-specific revision and form data.

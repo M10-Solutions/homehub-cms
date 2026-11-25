@@ -30,4 +30,12 @@ try {
         $html = (string)$md->convert("<script>alert(1)</script>\n\n[a](javascript:alert)\n\n| A | B |\n|---|---|\n| x | y |");
         check(!str_contains($html, '<script>') && !str_contains($html, 'href="javascript:') && str_contains($html, '<table>'));
     } else echo "CommonMark integration unavailable\n";
-} finally { foreach (glob($dir . '/*') as $file) unlink($file); rmdir($dir); }
+} finally {
+    foreach (scandir($dir) as $file) {
+        if ($file === '.' || $file === '..') {
+            continue;
+        }
+        unlink($dir . '/' . $file);
+    }
+    rmdir($dir);
+}

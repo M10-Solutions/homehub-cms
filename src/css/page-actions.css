@@ -54,3 +54,5 @@
 /* UAT-002c.1 navigation semantics: hidden drafts remain discoverable by editors. */
 .hub-draft-hidden{display:inline-flex;align-items:center;color:var(--theme-muted,#718096);font-size:.78em;margin-left:.3em;vertical-align:baseline}
 .hub-nav-setting-help{margin-top:-.65rem!important;line-height:1.45}
+
+.hub-create-error { color: var(--theme-danger-text, #a32727); margin: 0; }

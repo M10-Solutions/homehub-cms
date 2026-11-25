@@ -6,5 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (!dialog || !trigger) return;
   trigger.addEventListener('click', () => dialog.showModal());
   dialog.querySelector('[data-chapter-export-close]')?.addEventListener('click', () => dialog.close());
+  dialog.querySelector('form').addEventListener('submit', () => dialog.close());
   dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
 });

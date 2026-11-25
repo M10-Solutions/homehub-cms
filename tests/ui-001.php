@@ -15,6 +15,10 @@ foreach (['admin.php','admin-users-view.php'] as $file) {
             if (!str_contains($button, 'aria-label=') || !str_contains($button, 'aria-controls="admin-sidebar"') || !str_contains($button, 'fa-bars') || !str_contains($font, '.fa-bars')) throw new RuntimeException('Mobile navigation control incomplete');
             continue;
         }
+        if (str_contains($button, 'class="hub-auth-button"')) {
+            if (!str_contains($button, 'aria-label="Abmelden"') || !str_contains($button, 'fa-right-from-bracket') || str_contains($button, '<span>')) throw new RuntimeException('Logout icon-only contract failed');
+            continue;
+        }
         ++$count;
         if (!str_contains($button,'admin-btn') || !preg_match('/fa-solid (fa-[a-z-]+)/',$button,$icon) || !str_contains($font,'.'.$icon[1]) || !str_contains($button,'<span>')) throw new RuntimeException('Missing button style, icon or label: '.$button);
         if (str_contains($button,'<span>Löschen</span>') && !str_contains($button,'danger')) throw new RuntimeException('Delete styling missing');

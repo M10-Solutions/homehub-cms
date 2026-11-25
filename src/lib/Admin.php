@@ -51,6 +51,11 @@ final class Admin
         return $target;
     }
 
+    public function assertCreateAvailable(string $slug): void
+    {
+        if (file_exists($this->file($slug))) throw new \RuntimeException('Diese Seite existiert bereits.');
+    }
+
     /** @return array{title:string,description:string,category:string,order:int,published:bool,nav:bool,body:string} */
     public function read(string $slug): array
     {
@@ -111,7 +116,7 @@ final class Admin
         }
         $path = $this->file($slug);
         $originalPath = $create ? null : $this->file($originalSlug);
-        if ($create && file_exists($path)) throw new \RuntimeException('Diese Seite existiert bereits.');
+        if ($create) $this->assertCreateAvailable($slug);
         if (!$create && !is_file($originalPath)) throw new \RuntimeException('Die Seite existiert nicht mehr.');
         if (!$create && $path !== $originalPath && file_exists($path)) {
             throw new \RuntimeException('Am neuen Seitenpfad existiert bereits eine Seite.');

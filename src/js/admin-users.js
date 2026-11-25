@@ -27,7 +27,7 @@
    f.reset(); e.action.value=row?'user-update':'user-create'; e.original_username.value=u.username||'';
    for(const key of ['username','first_name','last_name','email']) e[key].value=u[key]||'';
    e.role.value=u.role||'reader'; e.active.checked=row?u.active:true; e.password.required=!row;
-   get('editor-title').textContent=row?'Benutzer bearbeiten':'Benutzer erstellen'; get('editor').showModal(); e.username.focus();
+   get('editor-title').querySelector('.hub-dialog-title-text').textContent=row?'Benutzer bearbeiten':'Benutzer erstellen'; get('editor').showModal(); e.username.focus();
  }
  rows.forEach(r=>{r.addEventListener('click',()=>select(r)); r.querySelector('input').addEventListener('change',()=>select(r)); r.addEventListener('dblclick',()=>edit(r));});
  for(const id of ['search','role','status']) get(id).addEventListener(id==='search'?'input':'change',refresh);

@@ -12,6 +12,49 @@
     dialog.querySelectorAll('[data-close-page-dialog]').forEach(button => button.addEventListener('click', () => dialog.close()));
     dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
   });
+  const create = document.querySelector('#hub-page-create form');
+  if (create) {
+    const slug = create.elements.slug;
+    const error = create.querySelector('#hub-create-error');
+    const submit = create.querySelector('[type=submit]');
+    let timer, generation = 0, busy = false;
+    const showError = message => { error.textContent = message; error.hidden = !message; };
+    const request = async action => {
+      const body = new FormData(create);
+      body.set('page_action', action);
+      const response = await fetch(create.action, {method: 'POST', body, headers: {Accept: 'application/json'}});
+      const result = await response.json();
+      if (!response.ok || !result.ok) throw new Error(result.error || 'Aktion fehlgeschlagen.');
+      return result;
+    };
+    const schedule = () => {
+      clearTimeout(timer);
+      const current = ++generation;
+      showError('');
+      submit.disabled = busy;
+      if (!slug.validity.valid) return;
+      timer = setTimeout(async () => {
+        try { await request('check-create'); }
+        catch (e) {
+          if (current !== generation || busy) return;
+          showError(e instanceof SyntaxError ? 'Prüfung nicht verfügbar. Beim Erstellen wird erneut geprüft.' : e.message);
+          // Network failures must not prevent the authoritative create attempt.
+          submit.disabled = !(e instanceof TypeError || e instanceof SyntaxError);
+        }
+      }, 300);
+    };
+    slug.addEventListener('input', schedule);
+    create.closest('dialog').addEventListener('close', () => { clearTimeout(timer); ++generation; });
+    document.querySelectorAll('[data-open-page-dialog="hub-page-create"]').forEach(button => button.addEventListener('click', schedule));
+    create.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (busy) return;
+      clearTimeout(timer); ++generation; busy = true; submit.disabled = true; showError('');
+      try { const result = await request('create'); window.location.assign(result.url); }
+      catch (e) { showError(e instanceof SyntaxError ? 'Erstellen fehlgeschlagen. Bitte Anmeldung prüfen.' : e.message); }
+      finally { busy = false; submit.disabled = false; }
+    });
+  }
   // ADMIN-001b: the server still receives the original validated target_slug.
   const moveFields = document.querySelector('[data-page-move-fields]');
   if (moveFields) {

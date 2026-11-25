@@ -38,7 +38,7 @@ body.hub-nav-collapsed .app-shell > .main-area { margin-left: 0; }
 .hub-nav-edge-toggle {
   position: fixed;
   z-index: 40;
-  top: calc(var(--hub-header-height) + 26px);
+  top: var(--hub-nav-toggle-top, calc(var(--hub-header-height) + 26px));
   left: var(--hub-wiki-nav-width);
   transform: translateX(-50%);
   display: grid;
@@ -58,7 +58,8 @@ body.hub-nav-collapsed .app-shell > .main-area { margin-left: 0; }
 .hub-nav-edge-toggle:hover { background: #2455b4; box-shadow: 0 6px 17px rgba(32, 72, 140, .34); }
 .hub-nav-edge-toggle:active { transform: translateX(-50%) scale(.94); }
 .hub-nav-edge-toggle:focus-visible { outline: 3px solid #6ea8ff; outline-offset: 3px; }
-body.hub-nav-collapsed .hub-nav-edge-toggle { left: 21px; }
+body.hub-nav-collapsed .hub-nav-edge-toggle { left: 0px; }
+body.hub-nav-collapsed .hub-nav-edge-toggle i { transform: translateX(8px); }
 @media (max-width: 760px) {
   .hub-nav-edge-toggle { left: auto; right: 12px; top: calc(var(--hub-header-height) + 10px); transform: none; width: 40px; height: 40px; z-index: 40; }
   .hub-nav-edge-toggle:active { transform: scale(.94); }

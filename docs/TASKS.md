@@ -1,7 +1,7 @@
 # HomeHub CMS – Aufgaben
 
-## Aktuell: PUB-001
-Massgebliche Abschlusscheckliste: PROJECT.md. Keine weiteren Features vor v1.0.0.
+## Aktuell
+PUB-001 abgeschlossen; Release 1.0.0 veröffentlicht. QA-002 Cleanup-Korrektur umgesetzt; strikte NAS-Regression 35/35 ohne Warnungen und Betreiberabnahme am 25.11.2026 bestätigt. UI-013a–h umgesetzt und am 25.11.2026 vollständig abgenommen (36/36, keine PHP-Warnungen). Release 1.0.1 zur gebündelten GitHub-Publikation freigegeben; Publikation und abschliessende Regression nach Versionspflege noch nicht bestätigt. Status und administrative Restpunkte siehe PROJECT.md.
 
 ## Nach Veröffentlichung (nicht beauftragt)
 - Browser-/Export-End-to-End-Tests und parallele Schreibzugriffe bei konkretem Bedarf vertiefen.

@@ -10,7 +10,7 @@
     document.body.append(stack);
     const dialog = document.createElement('dialog');
     dialog.className = 'hub-confirm-dialog';
-    dialog.innerHTML = '<h2 class="hub-dialog-header" id="hub-confirm-title">Bestätigung</h2><p id="hub-confirm-message"></p><div class="hub-confirm-actions"><button type="button" class="admin-btn" data-hub-no>Abbrechen</button><button type="button" class="admin-btn danger" data-hub-yes>Bestätigen</button></div>';
+    dialog.innerHTML = '<h2 class="hub-dialog-header" id="hub-confirm-title"><i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i> <span class="hub-dialog-title-text">Bestätigung</span></h2><p id="hub-confirm-message"></p><div class="hub-confirm-actions"><button type="button" class="admin-btn" data-hub-no>Abbrechen</button><button type="button" class="admin-btn danger" data-hub-yes>Bestätigen</button></div>';
     dialog.setAttribute('aria-labelledby', 'hub-confirm-title');
     dialog.setAttribute('aria-describedby', 'hub-confirm-message');
     document.body.append(dialog);
@@ -38,7 +38,7 @@
     const confirm = (message, options = {}) => new Promise(resolve => {
       if (pending) { resolve(false); return; }
       pending = resolve;
-      dialog.querySelector('#hub-confirm-title').textContent = options.title || 'Bitte bestätigen';
+      dialog.querySelector('#hub-confirm-title .hub-dialog-title-text').textContent = options.title || 'Bitte bestätigen';
       dialog.querySelector('#hub-confirm-message').textContent = String(message);
       const yes = dialog.querySelector('[data-hub-yes]');
       yes.textContent = options.confirmLabel || 'Bestätigen';

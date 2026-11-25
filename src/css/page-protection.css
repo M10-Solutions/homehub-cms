@@ -1,0 +1,6 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* Dezenter Berechtigungshinweis neben dem Seitentitel. */
+.hub-page-title-row { display: flex; align-items: center; flex-wrap: wrap; gap: .65rem; }
+.hub-page-title-row h1 { margin: 0; }
+.hub-page-protected { display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto; color: var(--theme-muted, #75849a); font-size: .88rem; line-height: 1; }

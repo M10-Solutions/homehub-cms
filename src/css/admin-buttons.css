@@ -1,0 +1,35 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* UI-001 / UI-009: shared action styles for admin and wiki dialog buttons. */
+:root { --admin-action-accent:#4263eb; --admin-action-danger:#9c2434; }
+:is(.hub-admin .admin-btn, .hub-action-btn),
+.hub-admin .admin-action-summary {
+ display:inline-flex; align-items:center; justify-content:center; gap:7px;
+ min-height:38px; max-width:100%; padding:8px 12px;
+ border:1px solid var(--theme-line, #cbd5e1); border-radius:8px; background:var(--theme-surface, #fff); color:var(--theme-text, #243149);
+ font:600 13px/1.35 system-ui,-apple-system,sans-serif; text-align:center;
+ cursor:pointer; box-sizing:border-box; white-space:normal;
+}
+:is(.hub-admin .admin-btn, .hub-action-btn) i,.hub-admin .admin-action-summary i { color:inherit; flex:none; font-size:14px; }
+:is(.hub-admin .admin-btn, .hub-action-btn):not(:disabled):hover,.hub-admin .admin-action-summary:hover { background:var(--theme-selected, #edf1ff); border-color:#a9b9e4; color:var(--theme-accent, #273fa5); }
+:is(.hub-admin .admin-btn, .hub-action-btn).primary { background:var(--admin-action-accent); border-color:var(--admin-action-accent); color:#fff; }
+:is(.hub-admin .admin-btn, .hub-action-btn).primary:not(:disabled):hover { background:#3451c8; border-color:#3451c8; color:#fff; }
+:is(.hub-admin .admin-btn, .hub-action-btn).danger { background:var(--admin-action-danger); border-color:var(--admin-action-danger); color:#fff; }
+:is(.hub-admin .admin-btn, .hub-action-btn).danger:not(:disabled):hover { background:#761827; border-color:#761827; color:#fff; }
+:is(.hub-admin .admin-btn, .hub-action-btn):disabled { opacity:.45; cursor:not-allowed; }
+:is(.hub-admin .admin-btn, .hub-action-btn):focus-visible,.hub-admin .admin-action-summary:focus-visible { outline:2px solid #4263eb; outline-offset:2px; }
+.hub-admin .admin-top.hub-header .admin-btn.link-button { background:transparent; color:#fff; border-color:#ffffff80; }
+.hub-admin .admin-top.hub-header .admin-btn.link-button:hover { background:#ffffff26; color:#fff; }
+.hub-admin .users-table th .admin-btn { min-height:32px; padding:5px 7px; background:transparent; border-color:transparent; justify-content:flex-start; }
+.hub-admin .media-actions .admin-btn,.hub-admin .media-actions .admin-action-summary { font-size:12px; padding:7px 9px; min-height:34px; }
+.hub-admin .admin-action-summary { list-style:none; }
+.hub-admin .admin-action-summary::-webkit-details-marker { display:none; }
+.hub-admin .admin-action-summary::after { content:'▾'; }
+.hub-admin details[open] > .admin-action-summary::after { content:'▴'; }
+.hub-admin input[type=file]::file-selector-button { border:1px solid var(--theme-line, #cbd5e1); border-radius:8px; background:var(--theme-surface, #fff); color:var(--theme-text, #243149); padding:8px 12px; font:inherit; cursor:pointer; margin-right:8px; }
+
+.hub-admin .admin-top.hub-header a.admin-btn { text-decoration:none; white-space:nowrap; }
+
+/* UI-010: compact danger action in the wiki page toolbar. */
+.page-heading-actions .hub-action-btn.danger { background:var(--admin-action-danger); border-color:var(--admin-action-danger); color:#fff; min-height:0; }
+.page-heading-actions .hub-action-btn.danger:hover { background:#761827; border-color:#761827; color:#fff; }

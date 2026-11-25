@@ -1,0 +1,8 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+
+/* HomeHub text alignment */
+.homehub-align-left { text-align: left; }
+.homehub-align-center { text-align: center; }
+.homehub-align-right { text-align: right; }
+.homehub-align-justify { text-align: justify; }

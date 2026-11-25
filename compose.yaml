@@ -1,0 +1,41 @@
+services:
+  homehub:
+    build: &homehub-build
+      context: .
+      dockerfile: docker/Dockerfile
+      args:
+        HOMEHUB_UID: "${HOMEHUB_UID:-1000}"
+        HOMEHUB_GID: "${HOMEHUB_GID:-1001}"
+    image: "${HOMEHUB_IMAGE:-homehub-local:latest}"
+    container_name: "${HOMEHUB_CONTAINER_NAME:-homehub}"
+    restart: unless-stopped
+    ports:
+      - "${HOMEHUB_BIND_ADDRESS:-0.0.0.0}:${HOMEHUB_PORT:-8011}:80"
+    volumes:
+      - ./data:/var/www/homehub/data
+      - ./src:/var/www/homehub/src:ro
+      - ./bin:/var/www/homehub/bin:ro
+      - ./tests:/var/www/homehub/tests:ro
+      - ./docs/templates:/var/www/homehub/docs/templates:ro
+    environment:
+      TZ: "${HOMEHUB_TZ:-Europe/Zurich}"
+
+  qa:
+    profiles: [qa]
+    image: "${HOMEHUB_IMAGE:-homehub-local:latest}"
+    build: *homehub-build
+    entrypoint: [php, bin/run-regression-tests.php]
+    command: [--strict]
+    user: www-data
+    read_only: true
+    network_mode: none
+    tmpfs:
+      - /tmp:mode=1777
+    volumes:
+      - ./compose.yaml:/var/www/homehub/compose.yaml:ro
+      - ./src:/var/www/homehub/src:ro
+      - ./bin:/var/www/homehub/bin:ro
+      - ./tests:/var/www/homehub/tests:ro
+      - ./docs/templates:/var/www/homehub/docs/templates:ro
+    environment:
+      TZ: "${HOMEHUB_TZ:-Europe/Zurich}"

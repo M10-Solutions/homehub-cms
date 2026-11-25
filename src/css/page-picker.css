@@ -1,0 +1,12 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+.hh-page-picker{width:min(540px,calc(100vw - 32px));max-height:80vh;border:1px solid var(--border-color,#aeb9c5);border-radius:12px;padding:20px;background:var(--card-bg,#fff);color:var(--text-color,#202b38);box-shadow:0 15px 45px #0003}
+.hh-page-picker::backdrop{background:#0007}
+.hh-page-picker-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-size:1.1rem}
+.hh-page-picker-head button{border:0;background:transparent;color:inherit;font-size:1.6rem;cursor:pointer}
+.hh-page-picker label{display:grid;gap:6px}
+.hh-page-picker input{width:100%;padding:10px;border:1px solid var(--theme-line, #aeb9c5);border-radius:7px;background:inherit;color:inherit}
+.hh-page-picker-results{display:grid;gap:5px;overflow:auto;max-height:45vh;margin-top:14px}
+.hh-page-picker-item{display:grid;gap:3px;text-align:left;border:1px solid var(--theme-line, #c7d0d9);border-radius:7px;padding:10px;background:transparent;color:inherit;cursor:pointer}
+.hh-page-picker-item:hover,.hh-page-picker-item:focus-visible{background:#d9e6f333;outline:2px solid #588ac2}
+.hh-page-picker-item small,.hh-page-picker-note{opacity:.7;font-size:.85rem}

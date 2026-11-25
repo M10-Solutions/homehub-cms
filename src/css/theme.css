@@ -1,0 +1,66 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* UI-011: Dark mode only. Light fallbacks stay in the component stylesheets. */
+@media screen {
+:root[data-theme="dark"] {
+    color-scheme: dark;
+    --theme-bg: #111827;
+    --theme-surface: #1b2535;
+    --theme-raised: #243146;
+    --theme-text: #e3eaf5;
+    --theme-muted: #aab9ce;
+    --theme-line: #46566e;
+    --theme-accent: #a2b5ff;
+    --theme-selected: #293b60;
+    --theme-danger-text: #ffb4bc;
+    --theme-danger-bg: #422630;
+    --theme-danger-line: #84505b;
+    --theme-warning-bg: #443820;
+    --theme-warning-text: #f6d291;
+    --theme-success-bg: #203b32;
+    --theme-success-text: #a7e5bf;
+    --bg: var(--theme-bg);
+    --surface: var(--theme-surface);
+    --text: var(--theme-text);
+    --muted: var(--theme-muted);
+    --line: var(--theme-line);
+    --accent: var(--theme-accent);
+    --accent-soft: var(--theme-selected);
+    --card-bg: var(--theme-surface);
+    --text-color: var(--theme-text);
+    --border-color: var(--theme-line);
+    --hub-header-bg: #101c30;
+}
+:root[data-theme="dark"] body.hub-admin { background: var(--theme-bg, #f5f7fb); color: var(--theme-text, #243149); }
+:root[data-theme="dark"] :is(.hub-page-dialog,.hub-login-dialog,.hub-chapter-export-dialog,.inline-workspace) :is(input:not([type=checkbox]):not([type=radio]), select, textarea),
+:root[data-theme="dark"] .hub-nav-search-field input {
+    color: var(--theme-text);
+    background: var(--theme-surface);
+}
+:root[data-theme="dark"] .hub-chapter-export-dialog { background: var(--theme-surface); }
+:root[data-theme="dark"] .hub-page-dialog .hub-dialog-actions button:not([type=submit]):not(.hub-danger):not(.primary):not(.danger) { color: var(--theme-text); background: var(--theme-raised); }
+:root[data-theme="dark"] .hub-page-dialog .hub-tag-field input[type=text] { background: transparent; }
+:root[data-theme="dark"] .hub-media-tile img { background: #fff; } /* Keep transparent media legible. */
+:root[data-theme="dark"] :is(.hub-dialog-header,.hub-header) { color: #fff; }
+:root[data-theme="dark"] .hub-media-picker .hub-dialog-header :is(h2,button) { color: #fff; }
+:root[data-theme="dark"] .hub-media-picker .hub-dialog-header p { color: #e2e8f0; }
+:root[data-theme="dark"] .hub-header .hub-brand-mark,
+:root[data-theme="dark"] .brand-mark { background: #3269cf; color: #fff; }
+}
+/* One icon indicates the available action: moon in light mode, sun in dark mode. */
+.hub-theme-toggle[hidden] { display: none; }
+.hub-theme-toggle {
+    display: inline-flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    width: 38px; height: 38px; padding: 0; border: 1px solid #ffffff66;
+    border-radius: 8px; background: #ffffff1a; color: #fff; cursor: pointer;
+    font: inherit; font-size: 16px;
+}
+.hub-theme-toggle:hover { background: #ffffff30; }
+.hub-theme-toggle:focus-visible { outline: 3px solid #8bbaff; outline-offset: 2px; }
+.hub-theme-toggle .fa-moon { color: #d7e2ff; }
+.hub-theme-toggle .fa-sun { color: #f9d477; }
+@media (max-width: 520px) {
+    .admin-top.hub-header .hub-header-actions .admin-btn span { display: none; }
+    .admin-top.hub-header .hub-header-actions .admin-btn { min-width: 38px; }
+}
+@media print { .hub-theme-toggle { display: none; } }

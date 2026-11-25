@@ -1,0 +1,8 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+.page-export-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin: 0 0 20px; }
+.page-export-actions a { display: inline-flex; align-items: center; gap: 6px; padding: 5px 9px; border: 1px solid var(--theme-line, #d9e1eb); border-radius: 6px; background: var(--theme-surface, #fff); color: var(--theme-text, #475569); font-size: 12px; font-weight: 600; text-decoration: none; }
+.page-export-actions a:hover { background: var(--theme-raised, #f1f5f9); color: var(--theme-accent, #1e40af); }
+.page-export-actions svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+.markdown-content > .page-export-actions:first-child { width: 100%; }

@@ -1,0 +1,85 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* HomeHub compact tree navigation (public + admin). No header/content changes. */
+.sidebar nav, .admin-sidebar nav { display:block; min-width:0; }
+.sidebar nav .hub-nav-level, .admin-sidebar nav .hub-nav-level,
+.sidebar nav .hub-nav-node, .admin-sidebar nav .hub-nav-node { display:block; min-width:0; }
+.sidebar nav .hub-nav-branch, .admin-sidebar nav .hub-nav-branch { min-width:0; }
+.sidebar nav .hub-nav-row, .admin-sidebar nav .hub-nav-row {
+  display:flex; align-items:center; gap:7px; min-width:0; min-height:29px; margin:0;
+}
+.sidebar nav .hub-nav-summary, .admin-sidebar nav .hub-nav-summary {
+  cursor:pointer; list-style:none; padding:0; border-radius:5px;
+}
+.sidebar nav .hub-nav-summary::-webkit-details-marker, .admin-sidebar nav .hub-nav-summary::-webkit-details-marker { display:none; }
+.sidebar nav .hub-nav-summary::marker, .admin-sidebar nav .hub-nav-summary::marker { content:""; }
+.sidebar nav .hub-nav-summary:hover, .admin-sidebar nav .hub-nav-summary:hover { background:var(--theme-raised, #f5f7fb); }
+.sidebar nav .hub-nav-toggle, .admin-sidebar nav .hub-nav-toggle {
+  flex:0 0 13px; width:13px; height:22px; display:flex; align-items:center;
+  justify-content:center; color:var(--theme-muted, #8996a9);
+}
+.sidebar nav .hub-nav-chevron, .admin-sidebar nav .hub-nav-chevron {
+  display:block; width:6px; height:6px; border-right:1.5px solid currentColor;
+  border-bottom:1.5px solid currentColor; transform:rotate(-45deg); transition:transform .15s ease;
+}
+.sidebar nav details[open] > summary .hub-nav-chevron, .admin-sidebar nav details[open] > summary .hub-nav-chevron { transform:rotate(45deg); }
+.sidebar nav .hub-nav-icon, .admin-sidebar nav .hub-nav-icon {
+  flex:0 0 13px; width:13px; height:13px; position:relative; opacity:.72;
+}
+.sidebar nav .hub-nav-folder-icon::before, .admin-sidebar nav .hub-nav-folder-icon::before {
+  content:""; position:absolute; left:1px; top:4px; width:11px; height:8px;
+  border:1.3px solid var(--theme-line, #8492a6); border-radius:2px; background:var(--theme-raised, #f1f4f8);
+}
+.sidebar nav .hub-nav-folder-icon::after, .admin-sidebar nav .hub-nav-folder-icon::after {
+  content:""; position:absolute; left:2px; top:2px; width:5px; height:3px;
+  border:1.3px solid var(--theme-line, #8492a6); border-bottom:0; border-radius:2px 2px 0 0;
+}
+.sidebar nav .hub-nav-file-icon::before, .admin-sidebar nav .hub-nav-file-icon::before {
+  content:""; position:absolute; left:3px; top:1px; width:9px; height:11px;
+  border:1.3px solid var(--theme-line, #8e9aab); border-radius:2px; background:var(--theme-surface, #fff);
+}
+.sidebar nav .hub-nav-file-icon::after, .admin-sidebar nav .hub-nav-file-icon::after {
+  content:""; position:absolute; left:5px; top:5px; width:5px; border-top:1px solid var(--theme-line, #a9b4c3);
+  box-shadow:0 3px var(--theme-line, #a9b4c3);
+}
+.sidebar nav .hub-nav-title, .admin-sidebar nav .hub-nav-title {
+  display:block; flex:1 1 auto; min-width:0; padding:5px 6px; margin:0;
+  border-radius:4px; color:var(--theme-text, #586579); font-size:14px; font-weight:450;
+  line-height:1.4; text-decoration:none; overflow-wrap:anywhere;
+}
+.sidebar nav a.hub-nav-title:hover, .admin-sidebar nav a.hub-nav-title:hover {
+  color:var(--theme-accent, #2658a6); text-decoration:none;
+}
+.sidebar nav .hub-nav-title.active, .admin-sidebar nav .hub-nav-title.active {
+  color:var(--theme-accent, #245ab2); font-weight:650; background:var(--theme-selected, #f0f4fc);
+  box-shadow:inset 2px 0 #3970c7;
+}
+.sidebar nav .hub-nav-plain, .admin-sidebar nav .hub-nav-plain { cursor:inherit; }
+.sidebar nav .hub-nav-children, .admin-sidebar nav .hub-nav-children {
+  margin:1px 0 2px 6px; padding-left:7px; border-left:1px solid var(--theme-line, #e2e7ef);
+}
+.sidebar nav .hub-nav-category, .admin-sidebar nav .hub-nav-category { margin-top:6px; }
+.sidebar nav > .hub-nav-level > .hub-nav-category:first-child,
+.admin-sidebar nav > .hub-nav-level > .hub-nav-category:first-child { margin-top:0; }
+.sidebar nav .hub-nav-category > details > summary .hub-nav-title,
+.admin-sidebar nav .hub-nav-category > details > summary .hub-nav-title {
+  color:var(--theme-text, #354762); font-weight:700; letter-spacing:.015em; text-transform:uppercase; font-size:11px;
+}
+.sidebar nav .hub-nav-category > details > summary .hub-nav-title.active,
+.admin-sidebar nav .hub-nav-category > details > summary .hub-nav-title.active { color:var(--theme-accent, #245ab2); }
+.admin-sidebar nav .hub-nav-draft { display:inline; font-size:10px; font-weight:400; color:var(--theme-warning-text, #a16b42); margin-left:5px; }
+.sidebar nav .hub-nav-summary:focus-visible, .admin-sidebar nav .hub-nav-summary:focus-visible,
+.sidebar nav .hub-nav-title:focus-visible, .admin-sidebar nav .hub-nav-title:focus-visible {
+  outline:2px solid #4e7bcb; outline-offset:1px;
+}
+/* The public site's older mobile rule makes nav horizontal; retain vertical tree. */
+@media (max-width:760px) {
+  .sidebar nav { display:block; overflow-x:visible; }
+}
+
+/* Align folder and document icons on the same vertical axis.
+   The leaf reserves the same chevron column as a folder summary. */
+.sidebar nav .hub-nav-leaf, .admin-sidebar nav .hub-nav-leaf { padding-left:0; }
+.sidebar nav .hub-nav-leaf::before, .admin-sidebar nav .hub-nav-leaf::before {
+  content:""; display:block; flex:0 0 13px; width:13px; height:1px;
+}

@@ -1,0 +1,11 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* Einheitliche Font Awesome Icons und kompakte Kopf-Aktionen. */
+.hub-header-actions{gap:9px}
+.hub-header-actions .hub-auth-button,.hub-header-actions .hub-header-link{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;box-sizing:border-box;padding:0;border:1px solid rgba(255,255,255,.48);border-radius:8px;background:rgba(255,255,255,.1);color:#fff;text-decoration:none;font-size:16px;cursor:pointer}
+.hub-header-actions .hub-header-link:hover,.hub-header-actions .hub-auth-button:hover{background:rgba(255,255,255,.23);color:#fff}
+.hub-header-actions :is(a,button):focus-visible,.hub-icon-button:focus-visible{outline:3px solid #8bbaff;outline-offset:2px}
+.page-heading-actions .hub-icon-button{width:37px;min-width:37px;padding:8px;font-size:16px}
+.page-heading-actions .fa-solid{font-size:15px}
+.inline-toolbar button .fa-solid{font-size:15px;line-height:1}
+.hub-login-close .fa-solid{font-size:19px}

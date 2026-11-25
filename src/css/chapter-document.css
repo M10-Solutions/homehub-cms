@@ -1,0 +1,12 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* PDF-only chapter collection layout; ordinary single-page exports are unchanged. */
+#title-block-header { min-height: 210mm; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; break-after: page; }
+#title-block-header .title { font-size: 30pt; border: 0; }
+#TOC { break-after: page; }
+#TOC > ul { list-style: none; padding-left: 0; }
+#TOC ul ul { padding-left: 1.5em; }
+#TOC li { margin: .35em 0; }
+#TOC a { color: #243248; text-decoration: none; }
+h1 { break-before: page; }
+#title-block-header + h1 { break-before: auto; }

@@ -1,0 +1,33 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+.media-manager{display:grid;grid-template-columns:minmax(170px,230px) minmax(0,1fr);gap:1.2rem}
+.media-folder-nav{display:flex;flex-direction:column;gap:4px;min-width:0;background:var(--theme-surface, white);border:1px solid var(--theme-line, #dce4ee);border-radius:12px;padding:12px;align-self:start}
+.media-folder-heading,.media-bulk-toolbar,.media-dialog-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.media-folder-heading{justify-content:space-between}.media-folder-nav a{display:inline-block;padding:7px 9px;border-radius:7px;overflow-wrap:anywhere}.media-folder-nav a.active{background:var(--theme-selected, #edf1ff);color:var(--theme-accent, #4263eb);font-weight:650}
+.folder-children{margin-left:12px;border-left:1px solid var(--theme-line, #dce4ee);padding-left:7px}.media-folder-nav summary,.media-target-tree summary{cursor:pointer;overflow-wrap:anywhere}
+.media-folder-nav a i,.media-target-tree .folder-choice i{color:var(--theme-muted, #8492a6);width:16px;text-align:center}.media-folder-nav a.active i,.media-target-tree .folder-choice:has(input:checked) i{color:var(--theme-accent, #4263eb)}.media-target-tree .folder-choice:has(input:checked){background:var(--theme-selected, #edf1ff);border-radius:7px}.media-crumbs{margin:12px 0;overflow-wrap:anywhere}.media-bulk-toolbar{margin:12px 0;padding:10px;border:1px solid var(--theme-line, #dce4ee);border-radius:8px;background:var(--theme-surface, #fff)}.media-bulk-toolbar button:disabled{opacity:.45;cursor:not-allowed}
+.media-card[hidden]{display:none}.media-card.selected{outline:2px solid #4263eb;outline-offset:-2px;background:var(--theme-selected, #f5f7ff)}.media-select{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer}.media-select input,.folder-choice input{width:auto!important;min-height:0!important;margin:0!important;accent-color:#4263eb}
+.media-dialog{width:min(480px,calc(100% - 32px));max-height:85vh;overflow:auto;border:1px solid var(--theme-line, #dce4ee);border-radius:12px;padding:22px;color:var(--theme-text, #243149);background:var(--theme-surface, white);box-sizing:border-box}.media-dialog::backdrop{background:#17233b66}.media-dialog h2{margin-top:0}.media-dialog-actions{justify-content:flex-end;margin-top:16px}.media-target-tree{max-height:42vh;overflow:auto;border:1px solid var(--theme-line, #dce4ee);border-radius:8px;padding:10px}.folder-choice{display:inline-flex;align-items:center;gap:6px;padding:7px;cursor:pointer;overflow-wrap:anywhere}.media-target-tree>label{display:flex}.media-manager-main{min-width:0}
+@media(max-width:850px){.media-manager{grid-template-columns:1fr}.media-folder-nav{max-height:35vh;overflow:auto}.media-bulk-toolbar{gap:6px}.upload-form .drop-zone{min-width:0}}
+/* UI-003: minimalist upload area */
+.hub-admin .upload-form{display:flex;flex-direction:column;align-items:stretch;gap:10px;margin:0 0 20px;min-width:0}
+.media-upload-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.media-upload-heading small,.upload-hint,.hub-admin .drop-zone small{color:var(--theme-muted, #64748b)}
+.hub-admin .upload-form .drop-zone{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;min-width:0;min-height:220px;padding:24px 12px;background:var(--theme-raised, #f7f9fc);border:2px dashed var(--theme-line, #aebbd0);border-radius:12px;cursor:default;box-sizing:border-box}
+.hub-admin .upload-form .drop-zone.dragover{background:var(--theme-selected, #edf1ff);border-color:#4263eb}
+.upload-symbol{font-size:42px;color:var(--theme-muted, #8492a6)}.hub-admin .drop-zone input[type=file]{position:absolute;width:1px;height:1px;min-height:0;opacity:0;padding:0;margin:0}
+.hub-admin .drop-zone:focus-within{outline:2px solid #4263eb;outline-offset:2px}
+.upload-selection:empty{display:none}.upload-footer{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}.hub-admin .upload-footer [hidden]{display:none}
+
+/* UI-004: two states inside the drop zone */
+.hub-admin .drop-zone [hidden]{display:none!important}
+.upload-empty{display:flex;flex-direction:column;align-items:center;gap:12px}
+.upload-selection{overflow-wrap:anywhere;font-size:13px;color:var(--theme-text, #243149);width:100%;min-width:0;text-align:center}
+.upload-file-list{list-style:none;margin:12px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(110px,100%),1fr));gap:12px}
+.upload-file-list li{display:flex;flex-direction:column;align-items:center;gap:8px;padding:8px;min-width:0;overflow-wrap:anywhere}
+.upload-file-list i{font-size:32px;color:var(--theme-accent, #4263eb)}
+.upload-file-list span{max-width:100%;font-size:13px}
+.hub-admin .drop-zone .upload-footer{justify-content:center}
+#upload-error{color:var(--theme-danger-text, #9c2434);margin:0;font-size:13px}
+
+.upload-file-list li{position:relative;padding-top:28px}.upload-remove-file{position:absolute;top:0;right:0;min-width:24px;padding:2px 6px;line-height:1}

@@ -1,0 +1,33 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* SEARCH-001: global wiki search; independent of the navigation filter. */
+.hub-wiki-search { display: flex; align-items: stretch; flex: 0 1 320px; min-width: 120px; height: 38px; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; background: rgba(255,255,255,.1); }
+.hub-wiki-search input { flex: 1; min-width: 0; width: 100%; border: 0; background: transparent; color: #fff; padding: 0 10px; font: inherit; font-size: 13px; }
+.hub-wiki-search input::placeholder { color: #cad6ea; }
+.hub-wiki-search button { border: 0; border-left: 1px solid rgba(255,255,255,.25); background: transparent; color: #fff; padding: 0 12px; border-radius: 0 7px 7px 0; cursor: pointer; }
+.hub-wiki-search button:hover { background: rgba(255,255,255,.15); }
+.hub-wiki-search:focus-within { outline: 2px solid #a9c9ff; outline-offset: 2px; }
+.hub-wiki-search input:focus { outline: none; }
+.hub-search-results { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 24px 30px; overflow-wrap: anywhere; }
+.hub-search-results > p { color: var(--muted); font-size: 14px; margin: 0 0 12px; }
+.hub-search-list { list-style: none; margin: 0; padding: 0; }
+.hub-search-list > li { padding: 18px 0; border-top: 1px solid var(--line); }
+.hub-search-list > li:last-child { padding-bottom: 0; }
+.hub-search-list h2 { margin: 0; font-size: 17px; }
+.hub-search-list h2 a { text-decoration: none; }
+.hub-search-list h2 a:hover { text-decoration: underline; }
+.hub-search-path { margin: 5px 0; color: var(--muted); font-size: 12px; }
+.hub-search-excerpt { margin: 9px 0 0; color: var(--text); font-size: 14px; line-height: 1.6; }
+.hub-search-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+@media (max-width: 900px) {
+    .app-shell > .hub-header { gap: 12px; }
+    .app-shell > .hub-header > .hub-breadcrumbs { display: none; }
+    .hub-wiki-search { flex: 1 1 auto; }
+}
+@media (max-width: 600px) {
+    :root:has(.hub-wiki-search) { --hub-header-height: 112px; }
+    .app-shell > .hub-header { flex-wrap: wrap; align-content: center; gap: 8px; }
+    .hub-wiki-search { order: 1; flex-basis: 100%; height: 34px; }
+    .hub-header-actions .hub-header-create span { display: none; }
+    .hub-search-results { padding: 16px; }
+}

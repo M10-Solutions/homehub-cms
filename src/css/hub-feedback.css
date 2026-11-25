@@ -1,0 +1,23 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* UAT-002a: shared feedback, both themes; keep notifications above modal content. */
+.hub-toast-stack{position:fixed;right:1.1rem;bottom:1.1rem;z-index:10010;display:grid;gap:.6rem;width:min(26rem,calc(100vw - 2rem));pointer-events:none}
+.hub-toast{pointer-events:auto;display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:.9rem 1rem;border:1px solid var(--theme-line,#cbd5e1);border-left:4px solid #4263eb;border-radius:.6rem;background:var(--theme-surface,#fff);color:var(--theme-text,#16233c);box-shadow:0 8px 28px #0003;overflow-wrap:anywhere}
+.hub-toast-success{border-left-color:#16834b}.hub-toast-error{border-left-color:#b42334}.hub-toast-info{border-left-color:#4263eb}
+.hub-toast-close{border:0;background:transparent;color:inherit;font-size:1.4rem;cursor:pointer;line-height:1;padding:0 .15rem}
+.hub-toast-close:focus-visible,.hub-confirm-dialog button:focus-visible{outline:2px solid #4263eb;outline-offset:3px}
+.hub-confirm-dialog{max-width:min(30rem,calc(100vw - 2rem));width:100%;padding:0 0 1rem;border:1px solid var(--theme-line,#cbd5e1);border-radius:.65rem;background:var(--theme-surface,#fff);color:var(--theme-text,#16233c);box-shadow:0 18px 48px #0005}
+.hub-confirm-dialog::backdrop{background:#0f172a9c}
+.hub-confirm-dialog .hub-dialog-header{margin:0;padding:1rem 1.25rem;background:#16233c;color:#fff;border-radius:.6rem .6rem 0 0}
+.hub-confirm-dialog p{padding:1rem 1.25rem;margin:0;line-height:1.55;white-space:pre-line}
+.hub-confirm-actions{display:flex;justify-content:flex-end;gap:.65rem;padding:0 1.25rem;flex-wrap:wrap}
+@media(max-width:480px){.hub-toast-stack{right:.65rem;bottom:.65rem;width:calc(100vw - 1.3rem)}}
+
+/* UAT-002a follow-up: consistent HomeHub buttons in shared dialog (wiki and admin). */
+.hub-confirm-dialog .hub-confirm-actions button{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:8px 14px;border:1px solid var(--theme-line,#cbd5e1);border-radius:8px;background:var(--theme-surface,#fff);color:var(--theme-text,#243149);font:600 13px/1.35 system-ui,sans-serif;cursor:pointer}
+.hub-confirm-dialog .hub-confirm-actions button:hover{background:var(--theme-selected,#edf1ff)}
+.hub-confirm-dialog .hub-confirm-actions button.danger{background:#9c2434;border-color:#9c2434;color:#fff}
+.hub-confirm-dialog .hub-confirm-actions button.danger:hover{background:#761827;border-color:#761827;color:#fff}
+.hub-confirm-dialog .hub-confirm-actions button.primary{background:#4263eb;border-color:#4263eb;color:#fff}
+.hub-confirm-dialog .hub-confirm-actions button.primary:hover{background:#3451c8;border-color:#3451c8;color:#fff}
+.hub-toast-delete{border-left-color:#9c2434}

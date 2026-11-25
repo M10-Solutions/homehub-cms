@@ -1,0 +1,17 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* Global page creation belongs to the wiki header, not the page heading. */
+.hub-header-actions .hub-header-create {
+  display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+  min-height: 38px; padding: 0 15px; border: 1px solid #3269cf;
+  border-radius: 8px; background: #3269cf; color: #fff;
+  font: inherit; font-size: 13px; font-weight: 700; line-height: 1;
+  white-space: nowrap; cursor: pointer;
+  transition: background-color .15s ease, box-shadow .15s ease;
+}
+.hub-header-actions .hub-header-create:hover { background: #2557b5; border-color: #2557b5; box-shadow: 0 2px 9px rgba(0,0,0,.16); }
+.hub-header-actions .hub-header-create:focus-visible { outline: 3px solid #a9c9ff; outline-offset: 2px; }
+.hub-header-actions .hub-header-create .fa-solid { font-size: 14px; }
+@media (max-width: 520px) {
+  .hub-header-actions .hub-header-create { padding: 0 10px; gap: 6px; font-size: 12px; }
+}

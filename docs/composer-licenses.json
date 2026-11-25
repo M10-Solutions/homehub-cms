@@ -1,0 +1,73 @@
+{
+    "name": "homehub/cms",
+    "version": "1.0.0+no-version-set",
+    "license": [
+        "GPL-3.0-or-later"
+    ],
+    "dependencies": {
+        "dflydev/dot-access-data": {
+            "version": "v3.0.3",
+            "license": [
+                "MIT"
+            ]
+        },
+        "league/commonmark": {
+            "version": "2.10.8",
+            "license": [
+                "BSD-3-Clause"
+            ]
+        },
+        "league/config": {
+            "version": "v1.2.0",
+            "license": [
+                "BSD-3-Clause"
+            ]
+        },
+        "nette/schema": {
+            "version": "v1.4.0",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0-only",
+                "GPL-3.0-only"
+            ]
+        },
+        "nette/utils": {
+            "version": "v4.1.6",
+            "license": [
+                "BSD-3-Clause",
+                "GPL-2.0-only",
+                "GPL-3.0-only"
+            ]
+        },
+        "psr/event-dispatcher": {
+            "version": "1.0.0",
+            "license": [
+                "MIT"
+            ]
+        },
+        "symfony/deprecation-contracts": {
+            "version": "v3.8.1",
+            "license": [
+                "MIT"
+            ]
+        },
+        "symfony/polyfill-ctype": {
+            "version": "v1.37.0",
+            "license": [
+                "MIT"
+            ]
+        },
+        "symfony/polyfill-php80": {
+            "version": "v1.43.0",
+            "license": [
+                "MIT"
+            ]
+        },
+        "symfony/yaml": {
+            "version": "v7.4.23",
+            "license": [
+                "MIT"
+            ]
+        }
+    }
+}

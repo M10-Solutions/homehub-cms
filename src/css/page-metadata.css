@@ -1,0 +1,4 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+.page-last-modified { display: flex; align-items: center; gap: .45rem; margin: 12px 4px 0; color: var(--theme-muted, #758197); font-size: .78rem; line-height: 1.5; }
+.page-last-modified i { font-size: .8rem; }

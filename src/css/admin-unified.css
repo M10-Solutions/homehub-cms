@@ -1,0 +1,21 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* ADMIN-001c: Consistent HomeHub navigation and form affordances. Scoped to admin UI. */
+.admin-sidebar{background:var(--theme-surface, #fff);border-color:var(--theme-line, #e7ebf2)}
+.admin-nav-section{display:flex;flex-direction:column;gap:5px}
+.admin-nav-section h2{margin:12px 0 5px}
+.admin-nav-link{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:var(--theme-text, #596579);font-size:14px;text-decoration:none}
+.admin-nav-link:hover{background:var(--theme-raised, #f5f7fb);color:var(--theme-text, #202938);text-decoration:none}
+.admin-nav-link.active{background:var(--theme-selected, #edf1ff);color:var(--theme-accent, #4263eb);font-weight:650}
+.admin-nav-link i{width:18px;text-align:center}
+
+
+.admin-main .primary,.login-panel .primary{background:#4263eb}
+.admin-main .primary:hover,.login-panel .primary:hover{background:#3451c8}
+.admin-main input:focus-visible,.admin-main select:focus-visible,.admin-main textarea:focus-visible,.admin-main button:focus-visible,.admin-sidebar a:focus-visible{outline:2px solid #4263eb;outline-offset:2px}
+.admin-main .alert{border:1px solid var(--theme-line, #e7ebf2)}
+@media(max-width:900px){.admin-nav-section{max-width:100%}}
+/* UI-005: keep header typography and brand consistent with the wiki. */
+.admin-top.hub-header{line-height:normal;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.admin-top .hub-header-actions form{margin:0}
+@media(max-width:520px){.admin-top.hub-header .hub-breadcrumbs{display:none}.admin-top .hub-header-actions .admin-btn{padding:7px 8px;white-space:nowrap;font-size:12px}.admin-top .hub-brand{flex:1 1 auto}.admin-top .hub-brand-copy strong{overflow-wrap:anywhere}}

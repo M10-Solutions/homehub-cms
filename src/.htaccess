@@ -1,0 +1,16 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<FilesMatch "^(\.htaccess|\.htpasswd)$">
+    Require all denied
+</FilesMatch>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Existing PHP, CSS, JS, images and other files remain directly accessible.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [L]
+</IfModule>

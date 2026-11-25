@@ -1,0 +1,18 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+/* HomeHub Markdown code blocks; scoped to rendered content and editor preview. */
+.markdown-content .hub-code-wrap, .preview-code .hub-code-wrap {margin: 1.2rem 0; border-radius: 9px; overflow: hidden; background: #172337; border: 1px solid #31415b;}
+.markdown-content .hub-code-toolbar, .preview-code .hub-code-toolbar {display:flex;align-items:center;justify-content:space-between;gap:12px;padding:7px 13px;background:#24334a;color:#b9c8dd;font:600 11px/1.4 system-ui,sans-serif;letter-spacing:.05em;}
+.markdown-content .hub-code-copy, .preview-code .hub-code-copy {display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:#dce6f5;cursor:pointer;font:500 12px system-ui,sans-serif;padding:3px 5px;}
+.markdown-content .hub-code-copy:hover, .preview-code .hub-code-copy:hover {color:white;}
+.markdown-content .hub-code-copy svg, .preview-code .hub-code-copy svg {width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;}
+.markdown-content pre.hub-code-block, .preview-code pre.hub-code-block {margin:0!important;padding:14px 16px!important;max-width:100%;overflow-x:auto;white-space:pre!important;background:#172337!important;color:#e1e8f2!important;border:0!important;border-radius:0!important;font:13px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace!important;}
+.markdown-content pre.hub-code-block code, .preview-code pre.hub-code-block code {background:transparent!important;padding:0!important;border:0!important;color:inherit;font:inherit;white-space:inherit;}
+.hub-code-block .token.comment,.hub-code-block .token.prolog,.hub-code-block .token.doctype {color:#8294ad}
+.hub-code-block .token.punctuation {color:#a9b8cf}
+.hub-code-block .token.keyword,.hub-code-block .token.atrule,.hub-code-block .token.selector {color:#c5a2f2}
+.hub-code-block .token.string,.hub-code-block .token.char,.hub-code-block .token.attr-value {color:#a2dcaa}
+.hub-code-block .token.function,.hub-code-block .token.class-name {color:#87c8f4}
+.hub-code-block .token.number,.hub-code-block .token.boolean,.hub-code-block .token.constant {color:#f5bc87}
+.hub-code-block .token.operator,.hub-code-block .token.entity,.hub-code-block .token.url {color:#e6b5da}
+.hub-code-block .token.property,.hub-code-block .token.tag,.hub-code-block .token.attr-name {color:#8bd2d0}

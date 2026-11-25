@@ -1,0 +1,56 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+.hub-page-management{display:inline-flex;gap:.4rem;align-items:center;flex-wrap:wrap}
+.hub-page-management button{cursor:pointer}
+.hub-page-dialog{border:1px solid var(--theme-line, #cbd5e1);border-radius:14px;padding:0;max-width:min(94vw,650px);width:100%;box-shadow:0 24px 70px #0004;color:var(--theme-text, #172334);background:var(--theme-surface, #fff)}
+.hub-page-dialog::backdrop{background:#10203999}
+.hub-page-dialog form{padding:1.5rem;display:grid;gap:1rem;max-height:85vh;overflow:auto}
+.hub-page-dialog h2{margin:0;font-size:1.25rem}
+.hub-page-dialog label{display:grid;gap:.35rem;font-weight:600;font-size:.9rem}
+.hub-page-dialog input[type=text],.hub-page-dialog input[type=number],.hub-page-dialog textarea,.hub-page-dialog select{width:100%;padding:.65rem;border:1px solid var(--theme-line, #b9c5d4);border-radius:7px;font:inherit}
+.hub-page-dialog fieldset{border:1px solid var(--theme-line, #d4dce5);border-radius:8px;padding:.8rem;display:grid;gap:.4rem}
+.hub-page-dialog fieldset label,.hub-page-dialog .hub-checkbox{display:flex;align-items:center;gap:.5rem;font-weight:400}
+.hub-page-dialog .hub-dialog-actions{display:flex;justify-content:flex-end;gap:.6rem;flex-wrap:wrap}
+.hub-page-dialog .hub-dialog-actions button{padding:.65rem .9rem;border:1px solid var(--theme-line, #bac7d8);border-radius:7px;cursor:pointer}
+.hub-page-dialog .hub-dialog-actions button[type=submit]{background:#245e9b;color:white;border-color:#245e9b}
+.hub-page-dialog .hub-dialog-actions .hub-danger{background:#9c2434;border-color:#9c2434}
+.hub-page-dialog .hub-muted{color:var(--theme-text, #566579);font-size:.85rem;margin:0}
+
+/* ADMIN-001b: same HomeHub dialog language, with a clear destination preview. */
+.hub-move-fields{display:grid;gap:.7rem}
+.hub-move-fields select{background:var(--theme-surface, #fff)}
+.hub-move-preview{margin:.2rem 0;padding:.65rem .8rem;background:var(--theme-raised, #f1f5f9);border:1px solid var(--theme-line, #d4dce5);border-radius:8px;overflow-wrap:anywhere}
+.hub-move-preview code{font:inherit;font-weight:600}
+.hub-move-error{color:var(--theme-danger-text, #9c2434);margin:0;font-size:.85rem}
+
+/* TAG-001: editable pills reuse the content label appearance. */
+.hub-tag-editor { min-width:0; display:grid; gap:.35rem; }
+.hub-tag-field { border:1px solid var(--theme-line, #b9c5d4); border-radius:7px; padding:.4rem; display:flex; flex-wrap:wrap; align-items:center; gap:.35rem; }
+.hub-tag-field:focus-within { outline:2px solid #4263eb; outline-offset:1px; }
+.hub-tag-pills { display:contents; }
+.hub-tag-field .page-label-chip { font-size:.85rem; gap:.35rem; }
+.hub-tag-field .page-label-chip button { background:none; border:0; color:inherit; cursor:pointer; font-size:1.1rem; line-height:1; padding:.15rem; }
+.hub-page-dialog .hub-tag-field input[type=text] { flex:1 1 10rem; min-width:0; width:auto; border:0; outline:0; padding:.35rem; }
+.hub-tag-options { border:1px solid var(--theme-line, #b9c5d4); border-radius:7px; max-height:12rem; overflow:auto; margin-top:.25rem; background:var(--theme-surface, #fff); }
+.hub-tag-options [role=option] { padding:.5rem .7rem; cursor:pointer; overflow-wrap:anywhere; }
+.hub-tag-options [role=option]:hover,.hub-tag-options [aria-selected=true] { background:var(--theme-selected, #edf2ff); color:var(--theme-text, #16233c); }
+.hub-tag-editor .hub-muted { margin-top:.3rem; }
+
+/* Destructive action must win over the generic submit rule in both themes. */
+.hub-page-dialog .hub-dialog-actions button[type=submit].hub-danger{background:#9c2434;border-color:#9c2434;color:#fff}
+.hub-page-dialog .hub-dialog-actions button[type=submit].hub-danger:hover{background:#761827;border-color:#761827;color:#fff}
+.hub-page-dialog .hub-dialog-actions button[type=button]{background:var(--theme-surface,#fff);color:var(--theme-text,#243149)}
+
+/* UAT-002c: draft management is an explicit admin-only navigation mode. */
+.hub-draft-switch {display:block;padding:.45rem .75rem;margin:.35rem .5rem;border-radius:6px;color:var(--hub-text,inherit);font-size:.83rem;text-decoration:none;border:1px solid var(--hub-border,#9ca3af)}
+.hub-draft-switch:hover {background:var(--hub-surface-hover,rgba(120,130,150,.12))}
+.hub-draft-label {font-size:.7em;font-style:italic;opacity:.75;margin-left:.35em}
+.hub-draft-banner {border-left:4px solid #b7791f;padding:.7rem 1rem;background:rgba(183,121,31,.12);border-radius:4px}
+
+/* UAT-002c.1: Drafts in the shared navigation. */
+.hub-nav-is-draft .hub-nav-title {font-style:italic}
+.hub-draft-label {font-style:normal;font-weight:500;display:inline-block;padding:1px 5px;border:1px solid var(--hub-border,#9ca3af);border-radius:4px}
+
+/* UAT-002c.1 navigation semantics: hidden drafts remain discoverable by editors. */
+.hub-draft-hidden{display:inline-flex;align-items:center;color:var(--theme-muted,#718096);font-size:.78em;margin-left:.3em;vertical-align:baseline}
+.hub-nav-setting-help{margin-top:-.65rem!important;line-height:1.45}

@@ -1,0 +1,9 @@
+.git
+.gitignore
+vendor
+data
+*.zip
+
+.env
+.env.*
+!.env.example

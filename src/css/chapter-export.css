@@ -1,0 +1,14 @@
+/* Copyright (C) 2026 M10-Solutions
+ * SPDX-License-Identifier: GPL-3.0-or-later */
+.hub-chapter-export-trigger { display: inline-flex; align-items: center; gap: .45rem; cursor: pointer; }
+.hub-chapter-export-dialog { border: 1px solid var(--theme-line, #d7e0ed); border-radius: 14px; padding: 0; width: min(94vw, 450px); max-height: 90vh; box-shadow: 0 22px 70px #13244155; color: var(--theme-text, #243248); }
+.hub-chapter-export-dialog::backdrop { background: #15233b88; }
+.hub-chapter-export-form { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+.hub-chapter-export-form h2 { margin: 0; font-size: 1.2rem; display: flex; gap: 10px; align-items: center; }
+.hub-chapter-export-subtitle { margin: 0; color: var(--theme-muted, #68768b); }
+.hub-chapter-export-form fieldset { border: 0; border-top: 1px solid var(--theme-line, #e3e8f0); margin: 0; padding: 12px 0 0; display: flex; flex-direction: column; gap: 12px; }
+.hub-chapter-export-form legend { font-weight: 700; padding-right: 10px; }
+.hub-chapter-export-form label { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.hub-chapter-export-form input { accent-color: #3269cf; }
+.hub-chapter-export-note { color: var(--theme-muted, #68768b); font-size: .82rem; margin: 0; }
+.hub-chapter-export-buttons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }

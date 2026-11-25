@@ -1,0 +1,18 @@
+/vendor/
+/data/config/*
+!/data/config/.gitkeep
+/data/upload/*
+!/data/upload/.gitkeep
+
+# Local files and secrets
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+.env
+.env.*
+!.env.example
+*.log
+*.bak
+*.zip

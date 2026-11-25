@@ -1,0 +1,57 @@
+{
+  "version": "1.30.0",
+  "package": {
+    "version": "1.30.0",
+    "resolved": "https://registry.npmjs.org/prismjs/-/prismjs-1.30.0.tgz",
+    "integrity": "sha512-DEvV2ZF2r2/63V+tK8hQvrR2ZGn10srHbXviTlcv7Kpzw8jWiNTqbVgjO3IY8RxrrOUF8VPMQQFysYYYv0YZxw==",
+    "license": "MIT",
+    "engines": {
+      "node": ">=6"
+    }
+  },
+  "modules": [
+    "core",
+    "markup",
+    "css",
+    "clike",
+    "javascript",
+    "markup-templating",
+    "php",
+    "bash",
+    "python",
+    "json",
+    "yaml",
+    "sql",
+    "docker"
+  ],
+  "sha256": {
+    "LICENSE": "2b947f0901a7ffcf08a89957da9783c0e9c6e72cb6ce8e959f501ab5409e4d2b",
+    "prism-bash.js": "6c67db1a4c86269dc754b588d0ad3a0cdb295044fd466ea6f66bbf01dec306bd",
+    "prism-bash.min.js": "6260814110e5182f2956e3bd257429548d9dbf2a9b66a63719b26cf9fac966a7",
+    "prism-clike.js": "6a7e077bbcb4a2259bc3152e55681f804ec8a3c2b969f234bb220df0f2d79654",
+    "prism-clike.min.js": "c76ba4e240932bdc75546be30e550f5ba5e13815ff71511c76e9e27ac3072444",
+    "prism-core.js": "6fe39cc3a95b3da596218fbca3acf03f1208bc936f9fb84d08a2b4a61e2b9af7",
+    "prism-core.min.js": "6caad316dd991f24f8004e0b9c19c055cb5829ff65e973fbee406f96d81b8e7e",
+    "prism-css.js": "f802a0b3827470dadbbf2841cabd6832fc2d28124ded564d9a590285c627d65d",
+    "prism-css.min.js": "8c9760dba7f26ea842016919544dd9b73a78a36d5b07a1e9842c333ed18ab6ae",
+    "prism-docker.js": "1fe0dfd5fde97986bd7ea2676d5137a6ce2db215aee40810cb897b833d19f235",
+    "prism-docker.min.js": "a6cc0faa5977a40652f62798a692a5ae171e0380480df3ed056e117597ec52dd",
+    "prism-javascript.js": "7be3e7caf699bfddcd6d94d01e9df233257477f7f521e6c6765f03bd936a2d3e",
+    "prism-javascript.min.js": "0345ea83e12b7b974e953c79a64dea35a40308309449db70b82020fb688ac321",
+    "prism-json.js": "835c44857c3f295f2c5bd70316006e455779da76287b0e14d93bbc995f658e4b",
+    "prism-json.min.js": "956d86baa5ae7ec4106758f354ac2d140bdcd7fc103dece02f73ed12b8d663e4",
+    "prism-markup-templating.js": "b3bf3a8498fb379fcc3128195e10c85e7ddc382ce2e420239fa5012f05260235",
+    "prism-markup-templating.min.js": "f30f032fbe9ae45fcc0fe93e7e930906ee70c3eebeb7e35a5e96ed09caf1b730",
+    "prism-markup.js": "981ea1865e1dbe304b661196fac6a6103b4ab19080c58c5b5d8ef2767e905df4",
+    "prism-markup.min.js": "879fc9d256c352d980e053857fa707330853b8bfb67ce284ea661a24dec5756e",
+    "prism-php.js": "7d5de689b6c8978dc97f44606fdd92ebdf52ac054e0a88ee078781e545ecaf2b",
+    "prism-php.min.js": "9ec5c5a78996db36f16d000b81e3f1cd27ac4edb3e1fc0ff6fe5aba9f9c7b377",
+    "prism-python.js": "fd84d8bedf516b82f1b212fc059d280f8f2ca7230bef6408bea6b5ce4e8e68f4",
+    "prism-python.min.js": "ed4385685bcf2d4935c8dbbab4bde16603da1329e092d2bf36c3dadd67e9a85c",
+    "prism-sql.js": "c208fdd212ff69c123c252290d5c325375bfefb0f6c26523b463909606cf3567",
+    "prism-sql.min.js": "3fc5f8ce69950ec73adc972f061df42aaea78faa4864709134ea2adc083f3a33",
+    "prism-yaml.js": "907706b6b1ca4790755c50ca60f82f0273da640f8dacee5666099ba0bf91b038",
+    "prism-yaml.min.js": "719c8e8b8c344dc9de510c729f65ba840b1502a0a8e7e25e2ad19ee715f65c02"
+  },
+  "bundle_sha256": "dd43739f69bf0b7b951e3217e2e68993f657a9e539ab5775af5d3aa45ada4ab1"
+}

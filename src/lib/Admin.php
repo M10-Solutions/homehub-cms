@@ -254,22 +254,6 @@ final class Admin
         if (!rename($old, $new)) throw new \RuntimeException('Verschieben fehlgeschlagen.');
     }
 
-    public function delete(string $slug): void
-    {
-        // Share the same lock as media deletion and relocation. Keep the entire
-        // page mutation (including content-only reads) inside the critical section.
-        (new MediaOperationLock($this->dataDir))->run(function () use ($slug): void {
-            (new PageEditLease($this->dataDir))->assertAvailable($slug);
-            $this->deleteUnlocked($slug);
-        });
-    }
-
-    private function deleteUnlocked(string $slug): void
-    {
-        $path = $this->file($slug);
-        if (!is_file($path) || !unlink($path)) throw new \RuntimeException('Löschen fehlgeschlagen.');
-    }
-
     public function preview(string $markdown): string
     {
         if (strlen($markdown) > 1024 * 1024) throw new \RuntimeException('Markdown ist zu lang.');

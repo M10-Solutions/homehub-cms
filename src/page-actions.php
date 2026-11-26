@@ -98,8 +98,19 @@ try {
         $target = $to;
     } elseif ($action === 'delete') {
         $assertManage($slug);
-        $admin->delete($slug);
-        $_SESSION['hub_page_deleted_notice'] = 'Seite gelöscht.';
+        $tree = ($_POST['delete_scope'] ?? '') === 'tree';
+        // Removing a restrictive ancestor alone would broaden inherited access.
+        (new \HomeHub\PageTrash($config['content_path'], dirname(__DIR__) . '/data/config'))->remove($slug, $tree, $auth->currentUser(), $assertManage, static function () use ($slug, $tree, $config): void {
+            if ($tree) return;
+            $fresh = new PageRepository($config['content_path']);
+            $page = $fresh->findForAccess($slug);
+            if ($page !== null && $page->visibility !== 'all') {
+                foreach ($fresh->allIncludingDrafts() as $child) {
+                    if (str_starts_with($child->slug, $slug . '/')) throw new RuntimeException('Geschütztes Kapitel mit Unterseiten kann nur als gesamte Struktur gelöscht werden.');
+                }
+            }
+        });
+        $_SESSION['hub_page_deleted_notice'] = 'In den Papierkorb verschoben.';
         $target = '';
     } else {
         throw new RuntimeException('Unbekannte Aktion.');

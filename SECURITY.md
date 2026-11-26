@@ -1,12 +1,12 @@
 # Sicherheit / Security
 
 ## Unterstützter Stand
-HomeHub CMS 1.0 (`1.0-20261125`) ist für vertrauenswürdige private Netze vorgesehen. Die öffentliche Bereitstellung des Quellcodes ist keine Freigabe für öffentlich erreichbare Installationen.
+HomeHub CMS 1.1 (`1.1-20261126`) ist für vertrauenswürdige private Netze vorgesehen. Die öffentliche Bereitstellung des Quellcodes ist keine Freigabe für öffentlich erreichbare Installationen.
 
 ## Sicherer Betrieb
 - Kein direktes Port-Forwarding aus dem Internet. Firewall, VPN und bei Zugriff über nicht vertrauenswürdige Netze HTTPS mit geeigneter Zugriffsbeschränkung verwenden.
 - Ersteinrichtung in einem kontrollierten Netz durchführen; der erste Benutzer wird Administrator. Starke individuelle Passwörter verwenden.
-- Medien-ACL Variante A: Medien sind bei Kenntnis ihrer URL ohne Anmeldung und ohne Seiten-ACL abrufbar. Keine vertraulichen Medien ablegen. Geschützte Seiten schützen nicht die referenzierten Medien.
+- MED-SEC: Medienabruf mit Seiten-ACL und Referenzprüfung oder globaler Bibliotheksberechtigung für Editor/Admin. Öffentliche Referenzen veröffentlichen Medien. MED-SEC/EXP-SEC sind funktional abgenommen. Globale Medienrechte und Export-Risikogrenzen beachten.
 - Die Anmeldefunktion hat keine nachgewiesene anwendungsweite Begrenzung von Fehlversuchen. Zugriff einschränken und gegebenenfalls Rate-Limiting am Reverse Proxy einsetzen.
 - Regelmässig Daten sichern, Wiederherstellung testen und Abhängigkeiten sowie Container-Basisimage aktualisieren. Produktive Daten nie in Git einchecken.
 - Fehlerhaftes Front Matter wird restriktiv behandelt; vollständig entfernte Metadaten sind nicht von öffentlichen Legacy-Seiten unterscheidbar. Dateizugriff auf vertrauenswürdige Administratoren beschränken.

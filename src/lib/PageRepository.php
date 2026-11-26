@@ -119,9 +119,24 @@ final class PageRepository
         return $this->fromFile($path, $slug);
     }
 
-    public function render(Page $page): string
+    public function findByIdForAccess(string $id): ?Page
+    {
+        if (!PageIdentity::valid($id)) return null;
+        $relative = PageIdentity::inventory($this->contentPath)[$id] ?? null;
+        if (!is_string($relative)) return null;
+        $page = $this->findForAccess(strtolower(substr($relative, 0, -3)));
+        return $page !== null && $page->id === $id ? $page : null;
+    }
+
+    public function renderRaw(Page $page): string
     {
         return AlignedMarkdown::render($page->content, $this->markdown);
+    }
+
+    public function render(Page $page): string
+    {
+        $html = $this->renderRaw($page);
+        return MediaAccess::contextualize($html, ($page->id === null ? [] : ['page'=>$page->id]) + ['slug'=>$page->slug]);
     }
 
     private function fromFile(string $path, string $slug): ?Page

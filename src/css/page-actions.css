@@ -56,3 +56,5 @@
 .hub-nav-setting-help{margin-top:-.65rem!important;line-height:1.45}
 
 .hub-create-error { color: var(--theme-danger-text, #a32727); margin: 0; }
+
+#hub-page-delete .hub-checkbox input[type=checkbox]{width:auto;min-width:0;flex:0 0 auto;margin:0;accent-color:#4263eb}

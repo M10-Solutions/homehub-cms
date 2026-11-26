@@ -6,7 +6,7 @@ declare(strict_types=1);
 
 namespace HomeHub;
 
-/** Post-process Pandoc ODT image frames using the reference document's page layout. */
+/** Post-process Pandoc ODT image frames and generated table styles. */
 final class OdtImageFitter
 {
     private const SVG = 'urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0';
@@ -26,7 +26,7 @@ final class OdtImageFitter
             $maxCm = $styles === false ? 16.0 : self::availableWidth(self::parse($styles));
             $xpath = new \DOMXPath($dom);
             $xpath->registerNamespace('draw', 'urn:oasis:names:tc:opendocument:xmlns:drawing:1.0');
-            $changed = false;
+            $changed = self::formatTables($dom);
             foreach ($xpath->query('//draw:frame[draw:image]') as $frame) {
                 if (!$frame instanceof \DOMElement) continue;
                 $width = self::centimeters($frame->getAttributeNS(self::SVG, 'width'));
@@ -39,12 +39,40 @@ final class OdtImageFitter
             if ($changed) {
                 $updated = $dom->saveXML();
                 if ($updated === false || !$zip->addFromString('content.xml', $updated)) {
-                    throw new \RuntimeException('ODT-Bildgrössen konnten nicht gespeichert werden.');
+                    throw new \RuntimeException('ODT-Formatierung konnte nicht gespeichert werden.');
                 }
             }
         } finally {
             if (!$zip->close()) throw new \RuntimeException('ODT-Datei konnte nicht gespeichert werden.');
         }
+    }
+
+    /** Pandoc generates these cell styles independently of the reference document. */
+    private static function formatTables(\DOMDocument $dom): bool
+    {
+        $xpath = new \DOMXPath($dom);
+        $xpath->registerNamespace('style', self::STYLE);
+        $xpath->registerNamespace('office', 'urn:oasis:names:tc:opendocument:xmlns:office:1.0');
+        $changed = false;
+        foreach ($xpath->query('/office:document-content/office:automatic-styles/style:style[@style:family="table-cell"]') as $style) {
+            if (!$style instanceof \DOMElement) continue;
+            $name = $style->getAttributeNS(self::STYLE, 'name');
+            if (!in_array($name, ['TableHeaderRowCell', 'TableRowCell'], true)) continue;
+            $properties = $xpath->query('./style:table-cell-properties', $style)->item(0);
+            if (!$properties instanceof \DOMElement) {
+                $properties = $dom->createElementNS(self::STYLE, 'style:table-cell-properties');
+                $style->appendChild($properties);
+            }
+            foreach (['border-top', 'border-bottom', 'border-left', 'border-right'] as $side) {
+                $properties->removeAttributeNS(self::FO, $side);
+            }
+            $properties->setAttributeNS(self::FO, 'fo:border', '0.5pt solid #C5CCD0');
+            if ($name === 'TableHeaderRowCell') {
+                $properties->setAttributeNS(self::FO, 'fo:background-color', '#E8EEF1');
+            }
+            $changed = true;
+        }
+        return $changed;
     }
 
     private static function availableWidth(\DOMDocument $dom): float

@@ -21,14 +21,22 @@ final class DocumentExporter
             throw new \RuntimeException('Exportverzeichnis konnte nicht erstellt werden.');
         }
         try {
-            $source = $directory . '/seite.md';
+            $source = $directory . '/seite.html';
             $output = $directory . '/seite.' . $format;
-            $body = AlignedMarkdown::forPandoc($this->prepareImages((empty($options['collection']) && $page->description !== '' ? $page->description . "\n\n" : '') . $page->content));
+            $body = empty($options['collection']) ? $this->preparePage($page) : '';
+            if (!empty($options['collection'])) {
+                $body = '';
+                foreach ($options['pages'] as $member) {
+                    $level = min(6, substr_count(substr($member->slug, strlen($page->slug)), '/') + 1);
+                    $body .= '<h'.$level.'>'.htmlspecialchars($member->title, ENT_QUOTES, 'UTF-8').'</h'.$level.'>';
+                    $body .= $this->preparePage($member, $level);
+                }
+            }
             if (file_put_contents($source, $body) === false) {
                 throw new \RuntimeException('Exportquelle konnte nicht erstellt werden.');
             }
             $command = [
-                '/usr/bin/pandoc', '--from=markdown+fenced_divs-raw_html', '--standalone',
+                '/usr/bin/pandoc', '--from=html-raw_html', '--standalone',
                 '--metadata=title:' . $page->title,
                 '--metadata=lang:de-CH',
                 '--output=' . $output,
@@ -150,34 +158,13 @@ final class DocumentExporter
         }
     }
 
-    private function prepareImages(string $markdown): string
+    /** Convert only the same safe HTML used by the wiki; never pass user Markdown to Pandoc. */
+    public function preparePage(Page $page, int $headingShift = 0): string
     {
-        // Only permit local images from HomeHub's managed upload directory.
-        // Avoid remote requests and arbitrary local file reads by Pandoc.
-        return (string) preg_replace_callback('~!\[([^\]\\r\\n]*)\]\(([^)\\r\\n]+)\)~u', function (array $matches): string {
-            $alt = $matches[1];
-            $url = trim($matches[2]);
-            $parts = parse_url($url);
-            if (!is_array($parts) || ($parts['path'] ?? '') !== '/media.php') {
-                return $alt;
-            }
-            parse_str($parts['query'] ?? '', $query);
-            $name = $query['file'] ?? null;
-            if (isset($query['id']) && is_string($query['id'])) {
-                try {
-                    $name = (new MediaRegistry(dirname($this->uploadDirectory) . '/config'))->pathForId($query['id']);
-                } catch (\Throwable) { return $alt; }
-            }
-            if (!is_string($name)) return $alt;
-            try {
-                $file = (new MediaLibrary($this->uploadDirectory))->resolve($name);
-                if (!str_starts_with($file['mime'], 'image/')) return $alt;
-                // Local absolute paths are supplied only after MediaLibrary validation.
-                return '![' . $alt . '](' . $file['path'] . ')';
-            } catch (\Throwable) {
-                return $alt;
-            }
-        }, $markdown);
+        $html = AlignedMarkdown::render($page->content, AlignedMarkdown::converter());
+        $html = MediaAccess::exportImages($html, new MediaLibrary($this->uploadDirectory), new MediaRegistry(dirname($this->uploadDirectory).'/config'));
+        if ($headingShift) $html = preg_replace_callback('~<(/?)h([1-6])(?=[ >])~', static fn(array $m): string => '<'.$m[1].'h'.min(6, (int)$m[2]+$headingShift), $html);
+        return ($page->description === '' ? '' : '<p>'.htmlspecialchars($page->description, ENT_QUOTES, 'UTF-8').'</p>') . $html;
     }
 
     public static function cleanup(string $directory): void

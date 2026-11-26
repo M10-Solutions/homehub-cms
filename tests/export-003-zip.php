@@ -2,7 +2,7 @@
 /* Copyright (C) 2026 M10-Solutions
  * SPDX-License-Identifier: GPL-3.0-or-later */
 declare(strict_types=1);
-foreach (['Page','MediaLibrary','MediaRegistry','MediaOperationLock','DocumentExporter','ChapterZipExporter'] as $class) require dirname(__DIR__).'/src/lib/'.$class.'.php';
+require dirname(__DIR__).'/vendor/autoload.php';
 use HomeHub\Page;
 use HomeHub\ChapterZipExporter;
 use HomeHub\MediaRegistry;
@@ -17,7 +17,7 @@ try {
     file_put_contents($dir.'/content/root.md',$raw);
     file_put_contents($dir.'/content/root/child.md',"![Legacy](/media.php?file=photos%2Fa.png)\n![Missing](/media.php?file=missing.png)\n");
     file_put_contents($dir.'/content/root/excluded.md','secret');
-    $pages=[new Page('root','Root','','','',1,true,true),new Page('root/child','Child','','','',1,true,true,id:'p_'.str_repeat('a',32))];
+    $pages=[new Page('root','Root','',substr($raw, strpos($raw, '![A]')),'',1,true,true),new Page('root/child','Child','',file_get_contents($dir.'/content/root/child.md'),'',1,true,true,id:'p_'.str_repeat('a',32))];
     $export=new ChapterZipExporter($dir.'/content',$dir.'/upload',$dir.'/config');
     $entries=[];
     $export->collect($pages,static function($n,$s)use(&$entries){$entries[$n]=$s;},static function($n,$p)use(&$entries){$entries[$n]=file_get_contents($p);});

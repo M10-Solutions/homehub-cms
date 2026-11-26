@@ -57,7 +57,7 @@
   insert.addEventListener('click',()=>{
     if (!selected || !target) return;
     const description=alt.value.replace(/[\[\]\n\r]/g,' ').trim() || 'Bild';
-    const markdown='!['+description+']('+selected.url+')';
+    const markdown='!['+description+']('+selected.markdown_url+')';
     target.setRangeText(markdown,lastPosition,lastPosition,'end');target.dispatchEvent(new Event('input',{bubbles:true}));target.focus();dialog.close();
   });
 })();

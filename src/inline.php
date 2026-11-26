@@ -37,7 +37,7 @@ if (strlen($body) > 1048576) inlineReply(413, ['error'=>'Inhalt ist zu groß.'])
 $action = (string) ($_POST['action'] ?? '');
 try {
     $admin = new Admin($config['content_path'], dirname(__DIR__) . '/data/config');
-    if ($action === 'preview') inlineReply(200, ['html'=>$admin->preview($body)]);
+    if ($action === 'preview') inlineReply(200, ['html'=>\HomeHub\MediaAccess::contextualize($admin->preview($body), ['context'=>'library'])]);
     if ($action !== 'save') inlineReply(400, ['error'=>'Unbekannte Aktion.']);
     $revision = (string) ($_POST['revision'] ?? '');
     $lockToken = (string) ($_POST['lock_token'] ?? '');

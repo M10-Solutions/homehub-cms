@@ -39,3 +39,30 @@ testOdt(29.7, 2, 2, 28, 14, 25.7);
 testOdt(21, 2, 2, 10, 5, 10); // No upscaling
 
 echo "OK: EXPORT-002 dynamic page width, aspect ratio, no upscaling\n";
+
+// Exercise actual Pandoc-generated table styles, including a headerless table.
+$path = tempnam(sys_get_temp_dir(), 'homehub-odt-table-');
+try {
+    $process = proc_open(['/usr/bin/pandoc', '--from=html', '--to=odt', '--output='.$path, '--reference-doc='.__DIR__.'/../docs/templates/reference.odt'], [0=>['pipe','r'],1=>['pipe','w'],2=>['pipe','w']], $pipes);
+    if (!is_resource($process)) throw new RuntimeException('Pandoc unavailable');
+    fwrite($pipes[0], '<table><thead><tr><th>Header</th></tr></thead><tbody><tr><td>Body</td></tr></tbody></table><table><tr><td>Other</td></tr></table>');
+    fclose($pipes[0]); stream_get_contents($pipes[1]); fclose($pipes[1]);
+    $errors = stream_get_contents($pipes[2]); fclose($pipes[2]);
+    if (proc_close($process) !== 0) throw new RuntimeException($errors);
+    OdtImageFitter::fit($path);
+    OdtImageFitter::fit($path);
+    $zip = new ZipArchive();
+    if ($zip->open($path) !== true) throw new RuntimeException('Cannot open export');
+    $xml = $zip->getFromName('content.xml'); $zip->close();
+    $dom = new DOMDocument(); $dom->loadXML($xml, LIBXML_NONET);
+    $xpath = new DOMXPath($dom);
+    $xpath->registerNamespace('style', 'urn:oasis:names:tc:opendocument:xmlns:style:1.0');
+    $fo = 'urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0';
+    foreach (['TableHeaderRowCell', 'TableRowCell'] as $name) {
+        $props = $xpath->query('//style:style[@style:name="'.$name.'"]/style:table-cell-properties')->item(0);
+        if (!$props instanceof DOMElement || $props->getAttributeNS($fo, 'border') !== '0.5pt solid #C5CCD0') throw new RuntimeException('Missing table border: '.$name);
+        if ($name === 'TableHeaderRowCell' && $props->getAttributeNS($fo, 'background-color') !== '#E8EEF1') throw new RuntimeException('Missing header background');
+    }
+    foreach (['Header', 'Body', 'Other'] as $value) if (!str_contains($dom->textContent, $value)) throw new RuntimeException('Missing table content');
+} finally { @unlink($path); }
+echo "OK: EXPORT-002 Pandoc table borders and header background\n";

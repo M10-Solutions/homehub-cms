@@ -92,41 +92,15 @@ if ($format === 'zip') {
     exit;
 }
 
-$markdown = [];
-foreach ($pages as $page) {
-    $depth = substr_count(substr($page->slug, strlen($slug)), '/');
-    $level = min(6, $depth + 1);
-    $markdown[] = str_repeat('#', $level) . ' ' . str_replace(["\r", "\n"], ' ', $page->title);
-    if ($page->description !== '') $markdown[] = $page->description;
-    // Shift headings within a page, but leave fenced code blocks untouched.
-    $lines = preg_split('/\R/', $page->content) ?: [];
-    $fence = null;
-    foreach ($lines as &$line) {
-        if (preg_match('/^\s{0,3}(`{3,}|~{3,})/', $line, $m)) {
-            $char = $m[1][0];
-            if ($fence === null) $fence = [$char, strlen($m[1])];
-            elseif ($fence[0] === $char && strlen($m[1]) >= $fence[1]) $fence = null;
-        } elseif ($fence === null && preg_match('/^(#{1,6})(\s+.*)$/u', $line, $m)) {
-            $line = str_repeat('#', min(6, strlen($m[1]) + $level)) . $m[2];
-        }
-    }
-    unset($line);
-    $markdown[] = implode("\n", $lines);
-}
-
-$document = new Page(
-    slug: $root->slug, title: $root->title, description: '',
-    content: implode("\n\n", $markdown), category: $root->category,
-    order: $root->order, showInNavigation: false, published: true
-);
 $options = [
     'collection' => true,
+    'pages' => $pages,
     'cover' => ($_GET['cover'] ?? '') === '1',
     'toc' => ($_GET['toc'] ?? '') === '1',
     'numbering' => ($_GET['numbering'] ?? '') === '1',
 ];
 try {
-    $result = (new DocumentExporter(dirname(__DIR__) . '/data/upload'))->export($document, $format, $options);
+    $result = (new DocumentExporter(dirname(__DIR__) . '/data/upload'))->export($root, $format, $options);
     try {
         header('Content-Type: ' . $result['mime']);
         header('Content-Disposition: attachment; filename="' . $result['filename'] . '"');

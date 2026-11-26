@@ -18,7 +18,8 @@ try {
     $decorate = static function (array $items) use ($registry): array {
         foreach ($items as &$item) {
             $item['id'] = $registry->register($item['path']);
-            $item['url'] = '/media.php?id=' . $item['id'];
+            $item['markdown_url'] = '/media.php?id=' . $item['id'];
+            $item['url'] = $item['markdown_url'] . '&context=library';
         }
         unset($item);
         return $items;

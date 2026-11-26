@@ -58,8 +58,9 @@ final class ChapterZipExporter
             if ($real !== $path || !is_file($real)) throw new \RuntimeException('Seitenpfad nicht verfügbar.');
             $raw = file_get_contents($real);
             if ($raw === false) throw new \RuntimeException('Seite konnte nicht gelesen werden.');
+            $rendered = AlignedMarkdown::render($page->content, AlignedMarkdown::converter());
             $prefix = str_repeat('../', substr_count($page->slug, '/') + 1);
-            $rewrite = function (string $url) use ($media, $registry, $prefix, $page, $ids, $slugs, &$included, &$warnings, $addFile): ?string {
+            $rewrite = function (string $url) use ($rendered, $media, $registry, $prefix, $page, $ids, $slugs, &$included, &$warnings, $addFile): ?string {
                 $parts = parse_url(html_entity_decode($url, ENT_QUOTES | ENT_HTML5, 'UTF-8'));
                 if ($parts === false || isset($parts['scheme']) || isset($parts['host'])) return null;
                 $path = $parts['path'] ?? '';
@@ -71,11 +72,9 @@ final class ChapterZipExporter
                 }
                 if (in_array($path, ['/', '/index.php', 'index.php'], true) && is_string($query['page'] ?? null) && isset($slugs[$query['page']])) return $prefix . 'pages/' . $query['page'] . '.md' . $fragment;
                 try {
-                    if (in_array($path, ['/media.php', 'media.php'], true)) {
-                        $name = isset($query['id']) ? $registry->pathForId(is_string($query['id']) ? $query['id'] : '') : ($query['file'] ?? null);
-                    } elseif (preg_match('~\A(?:/?|\.\./|\./)*(?:data/upload/|uploads?/)(.+)\z~i', $path, $m)) {
-                        $name = rawurldecode($m[1]);
-                    } else return null;
+                    $selector = MediaAccess::reference($url);
+                    if ($selector === null || !MediaAccess::contains($rendered, $selector)) return null;
+                    $name = isset($selector['id']) ? $registry->pathForId($selector['id']) : $selector['file'];
                     if (!is_string($name)) throw new \RuntimeException('Ungültiger Medienpfad.');
                     $file = $media->resolve($name);
                 } catch (\Throwable) {
@@ -88,6 +87,10 @@ final class ChapterZipExporter
                 }
                 return $prefix . 'media/' . implode('/', array_map('rawurlencode', explode('/', $name))) . $fragment;
             };
+            // Collect even references whose Markdown spelling the portable rewriter cannot handle.
+            foreach (MediaAccess::references($rendered) as $selector) {
+                $rewrite('/media.php?' . http_build_query($selector, '', '&', PHP_QUERY_RFC3986));
+            }
             // Portable Markdown contains names, not installation-specific tag IDs.
             if (preg_match('/\A---\R(.*?)\R---\R?(.*)\z/s', $raw, $front) && preg_match('/^labels:/m', $front[1]) && preg_match('/\bt_[a-f0-9]{32}\b/', $front[1])) {
                 $meta = \Symfony\Component\Yaml\Yaml::parse($front[1]);

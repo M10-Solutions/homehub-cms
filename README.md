@@ -6,7 +6,7 @@
 
 Ein schlankes, dateibasiertes CMS für private Intranets, Haushalte und kleine Gemeinschaften. Inhalte werden als Markdown-Dateien gespeichert; eine Datenbank ist nicht erforderlich.
 
-Version: `1.0-20261125` · GitHub-Tag: `1.0.1` · Lizenz: GPL-3.0-or-later
+Release: `1.1.0` · Anwendungsversion: `1.1-20261126` · Lizenz: GPL-3.0-or-later
 
 ![HomeHub CMS mit Wiki-Navigation und integriertem Benutzerhandbuch](docs/images/homehub-screenshot.jpg)
 
@@ -18,6 +18,8 @@ Version: `1.0-20261125` · GitHub-Tag: `1.0.1` · Lizenz: GPL-3.0-or-later
 - Bearbeitungssperren und Revisionsprüfung für mehrere Benutzer
 - Responsive Oberfläche mit Light- und Dark-Mode
 - PDF-, ODT- und Kapitel-ZIP-Export
+- Papierkorb und rekursives Löschen mit administrativer Mehrfachauswahl und Wiederherstellung
+- Typografisch optimierter ODT-Export mit dezent gestalteten Tabellen
 - Browserbasierte Ersteinrichtung, Beispielseiten und integriertes Benutzerhandbuch
 
 ## Installation
@@ -33,7 +35,7 @@ Auf dem Docker-Host `http://localhost:8011/` öffnen (bei abweichendem Port anpa
 
 ## Sicherheit und Daten
 
-HomeHub ist **nicht für direkten öffentlichen Internetzugriff** freigegeben. Firewall/VPN und gegebenenfalls HTTPS mit Zugriffsbeschränkung verwenden. Medien sind bei Kenntnis der URL ohne Anmeldung abrufbar; keine vertraulichen Medien speichern. Die Ersteinrichtung nur in kontrollierter Umgebung durchführen. Weitere Grenzen: [SECURITY.md](SECURITY.md).
+HomeHub ist **nicht für direkten öffentlichen Internetzugriff** freigegeben. Firewall/VPN und gegebenenfalls HTTPS mit Zugriffsbeschränkung verwenden. Medienzugriff gemäss MED-SEC; Editoren und Admins sehen alle Medien. Globale Medienrechte und Export-Risikogrenzen beachten. Die Ersteinrichtung nur in kontrollierter Umgebung durchführen. Weitere Grenzen: [SECURITY.md](SECURITY.md).
 
 Produktive Daten unter `data/` regelmässig sichern. Vollarchive niemals über produktive Inhalte entpacken. Entwicklungsrepository und produktive Installation strikt trennen: Beispielseiten unter `data/content/` sind absichtlich versioniert.
 
@@ -44,7 +46,7 @@ docker compose --profile qa run --rm --no-deps --build qa
 ```
 
 - [Installation und Betrieb](docs/README.md)
-- [Spezifikation](docs/SPEC.md) und [Architektur](docs/ARCHITECTURE.md)
+- [Content-/Editor-Spezifikation](docs/SPEC-EDITOR.md), [Admin-Spezifikation](docs/SPEC-ADMIN.md) und [Architektur](docs/ARCHITECTURE.md)
 - [Mitwirken](CONTRIBUTING.md), [Änderungen](CHANGELOG.md), [Drittkomponenten](THIRD-PARTY-NOTICES.md)
 
 ## Lizenz

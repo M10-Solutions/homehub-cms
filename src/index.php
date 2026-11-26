@@ -269,7 +269,7 @@ function e(string $value): string
     <?php if ($inlineAllowed): ?><link rel="stylesheet" href="/css/page-picker.css?v=1&amp;theme=1"><?php endif; ?>
     <link rel="stylesheet" href="/css/login-modal.css?v=2&amp;theme=1">
     <link rel="stylesheet" href="/css/page-metadata.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/page-actions.css?v=6&amp;theme=1">
+    <link rel="stylesheet" href="/css/page-actions.css?v=7&amp;theme=1">
     <link rel="stylesheet" href="/css/header-create.css?v=1">
     <link rel="stylesheet" href="/css/wiki-navigation-ux.css?v=3&amp;theme=1">
     <link rel="stylesheet" href="/css/sidebar-account.css?v=3&amp;theme=1">
@@ -561,8 +561,14 @@ function e(string $value): string
 <p class="hub-muted">Die Seiten-ID bleibt erhalten. ID-basierte Links funktionieren weiter; alte pfadbasierte Links müssen gegebenenfalls separat migriert werden.</p>
 <div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit">Verschieben</button></div></form></dialog>
 <dialog id="hub-page-delete" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-delete-title"><form id="hub-delete-page-form" action="/page-actions.php" method="post">
-<h2 class="hub-dialog-header" id="hub-delete-title"><i class="fa-solid fa-trash" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seite löschen?</span></h2><p>„<?= e($pageTitle) ?>“ wird dauerhaft gelöscht.</p><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="delete"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>">
-<div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit" class="hub-danger">Endgültig löschen</button></div></form></dialog>
+<h2 class="hub-dialog-header" id="hub-delete-title"><i class="fa-solid fa-trash" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seite löschen?</span></h2><p>„<?= e($pageTitle) ?>“ wird in den Papierkorb verschoben.</p><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="delete"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>">
+<?php $descendantCount = count(array_filter($pages->allIncludingDrafts(), static fn($p) => str_starts_with($p->slug, $currentPage->slug . "/"))); ?>
+<?php if ($descendantCount > 0 || $role !== 'admin'): ?>
+<?php $forceTree = $role === 'admin' && $descendantCount > 0 && $currentPage->visibility !== 'all'; ?>
+<label class="hub-checkbox"><input type="checkbox" name="delete_scope" value="tree"<?= $forceTree ? ' checked disabled' : '' ?>> Gesamte Seitenstruktur löschen<?= $role === 'admin' ? ' (' . ($descendantCount + 1) . ' Seiten)' : '' ?></label>
+<?php if ($forceTree): ?><input type="hidden" name="delete_scope" value="tree"><p class="hub-muted">Geschützte Kapitel können nur als gesamte Struktur gelöscht werden.</p><?php else: ?><p class="hub-muted">Ohne Auswahl wird nur diese Seite gelöscht. Unterseiten bleiben erhalten.</p><?php endif; ?>
+<?php endif; ?>
+<div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit" class="hub-danger">In Papierkorb verschieben</button></div></form></dialog>
 <?php endif; ?>
 <?php endif; ?>
 <?php if (!$notFound && !$isDraftView): ?>
@@ -590,5 +596,5 @@ function e(string $value): string
     </form>
 </dialog>
 <?php endif; ?>
-<?php if ($inlineAllowed): ?><?php require __DIR__ . "/media-picker-view.php"; ?><script src="/js/media-picker.js?v=1" defer></script><?php endif; ?></body>
+<?php if ($inlineAllowed): ?><?php require __DIR__ . "/media-picker-view.php"; ?><script src="/js/media-picker.js?v=2" defer></script><?php endif; ?></body>
 </html>

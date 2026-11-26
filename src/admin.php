@@ -38,6 +38,7 @@ $role = $auth->currentRole();
 $isAdmin = \HomeHub\PermissionService::can($role, 'user.manage');
 $canMedia = \HomeHub\PermissionService::can($role, 'media.manage');
 $showUsers = $loggedIn && $isAdmin && isset($_GET['users']);
+$showTrash = $loggedIn && $isAdmin && isset($_GET['trash']);
 $showTags = $loggedIn && $isAdmin && isset($_GET['tags']);
 $error = '';
 $notice = '';
@@ -84,6 +85,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tagAdmin = new \HomeHub\TagAdministration($config['content_path'], dirname(__DIR__) . '/data/config');
             $tagAdmin->change($action, (string) ($_POST['original_tag'] ?? ''), (string) ($_POST['tag'] ?? ''));
             redirectAdmin('?tags=1&tags_updated=' . rawurlencode($action));
+        }
+        if (in_array($action, ['trash-restore','trash-purge','trash-empty'], true)) {
+            if (!$isAdmin) { http_response_code(403); throw new RuntimeException('Nur Administratoren dürfen den Papierkorb verwalten.'); }
+            $trash = new \HomeHub\PageTrash($config['content_path'], dirname(__DIR__) . '/data/config');
+            $restore = $action === 'trash-restore';
+            if ($restore ? (($_POST['restore_confirm'] ?? '') !== 'yes') : (($_POST['confirm'] ?? '') !== 'yes')) {
+                throw new RuntimeException('Bitte die Aktion ausdrücklich bestätigen.');
+            }
+            if ($action === 'trash-empty') {
+                $trash->empty();
+            } else {
+                $ids = $_POST['ids'] ?? (isset($_POST['id']) ? [$_POST['id']] : []);
+                if (!is_array($ids) || !$ids) throw new RuntimeException('Keine gültige Auswahl.');
+                foreach ($ids as $id) {
+                    if (!is_string($id) || !preg_match('/\A[a-f0-9]{32}\z/D', $id)) throw new RuntimeException('Ungültige Auswahl.');
+                }
+                $entries = $trash->entries();
+                $done = 0; $failures = [];
+                foreach (array_unique($ids) as $id) {
+                    try {
+                        if ($restore) $trash->restore($id); else $trash->purge($id);
+                        ++$done;
+                    } catch (Throwable $e) {
+                        $failures[] = ($entries[$id]['slug'] ?? $id) . ': ' . $e->getMessage();
+                    }
+                }
+                $_SESSION['trash_batch_notice'] = $done . ' Einträge ' . ($restore ? 'wiederhergestellt.' : 'endgültig gelöscht.');
+                $_SESSION['trash_batch_error'] = implode(' | ', $failures);
+                redirectAdmin('?trash=1');
+            }
+            redirectAdmin('?trash=1&updated=1');
         }
         $permission = match ($action) {
             'upload', 'delete-media', 'create-media-folder', 'move-media', 'bulk-media' => 'media.manage',
@@ -179,7 +211,8 @@ if (isset($_GET['tags_updated'])) {
         default => 'Schlagwortverwaltung aktualisiert.',
     };
 }
-if (isset($_GET['updated'])) $notice = 'Benutzerverwaltung aktualisiert.';
+if (isset($_GET['updated'])) $notice = $showTrash ? 'Papierkorb aktualisiert.' : 'Benutzerverwaltung aktualisiert.';
+if ($showTrash && isset($_SESSION['trash_batch_notice'])) { $notice = $_SESSION['trash_batch_notice']; $error = $_SESSION['trash_batch_error']; unset($_SESSION['trash_batch_notice'], $_SESSION['trash_batch_error']); }
 if (isset($_GET['uploaded'])) $notice = 'Datei hochgeladen.';
 if (isset($_GET['removed'])) $notice = 'Datei gelöscht.';
 if (isset($_GET['media_moved'])) $notice = 'Medium verschoben.';
@@ -187,8 +220,8 @@ if (isset($_SESSION['media_batch_notice'])) { $notice = $_SESSION['media_batch_n
 $noticeType = (isset($_GET['removed']) || (isset($_GET['tags_updated']) && $_GET['tags_updated'] === 'tag-delete')) ? 'delete' : ($_SESSION['media_batch_notice_type'] ?? 'success');
 unset($_SESSION['media_batch_notice_type']);
 $showMedia = $loggedIn && $canMedia && isset($_GET['media']);
-function adminBreadcrumbs(bool $showMedia, bool $showUsers, bool $loggedIn, bool $showTags = false): array {
-    $label = !$loggedIn ? 'Anmeldung' : ($showTags ? 'Schlagwörter' : ($showUsers ? 'Benutzerverwaltung' : ($showMedia ? 'Medienverwaltung' : null)));
+function adminBreadcrumbs(bool $showMedia, bool $showUsers, bool $loggedIn, bool $showTags = false, bool $showTrash = false): array {
+    $label = !$loggedIn ? 'Anmeldung' : ($showTrash ? 'Papierkorb' : ($showTags ? 'Schlagwörter' : ($showUsers ? 'Benutzerverwaltung' : ($showMedia ? 'Medienverwaltung' : null))));
     $crumbs = [['label' => 'Verwaltung', 'href' => $label === null ? null : '/admin.php']];
     if ($label !== null) $crumbs[] = ['label' => $label, 'href' => null];
     return $crumbs;
@@ -197,12 +230,12 @@ function adminBreadcrumbs(bool $showMedia, bool $showUsers, bool $loggedIn, bool
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>HomeHub · Verwaltung</title>
     <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css?v=6.7.2"><link rel="stylesheet" href="/css/admin.css?v=2&amp;theme=1"><link rel="stylesheet" href="/css/admin-media.css?v=4&amp;theme=1"><link rel="stylesheet" href="/css/admin-navigation.css?v=2&amp;theme=1"><link rel="stylesheet" href="/css/admin-unified.css?v=4&amp;theme=1"><link rel="stylesheet" href="/css/layout.css?v=3&amp;theme=1"><link rel="stylesheet" href="/css/navigation.css?v=3&amp;theme=1">
-<link rel="stylesheet" href="/css/fontawesome-ui.css?v=2"><link rel="stylesheet" href="/css/admin-users.css?v=1&amp;theme=1"><link rel="stylesheet" href="/css/admin-buttons.css?v=3&amp;theme=1"><link rel="stylesheet" href="/css/sidebar-account.css?v=3&amp;theme=1"><link rel="stylesheet" href="/css/dialog-header.css?v=1"><link rel="stylesheet" href="/css/theme.css?v=1"><link rel="stylesheet" href="/css/hub-feedback.css?v=2">
+<link rel="stylesheet" href="/css/fontawesome-ui.css?v=2"><link rel="stylesheet" href="/css/admin-users.css?v=2&amp;theme=1"><link rel="stylesheet" href="/css/admin-buttons.css?v=3&amp;theme=1"><link rel="stylesheet" href="/css/sidebar-account.css?v=3&amp;theme=1"><link rel="stylesheet" href="/css/dialog-header.css?v=1"><link rel="stylesheet" href="/css/theme.css?v=1"><link rel="stylesheet" href="/css/hub-feedback.css?v=2">
 <link rel="stylesheet" href="/css/responsive-navigation.css?v=1">
 <script src="/js/responsive-navigation.js?v=1" defer></script>
 <script src="/js/hub-feedback.js?v=3" defer></script><script src="/js/theme.js?v=1"></script>
 </head>
-<body class="hub-admin"><header class="admin-top hub-header"><?php if ($loggedIn): ?><button type="button" class="hub-mobile-nav-toggle" aria-controls="admin-sidebar" aria-expanded="false" aria-label="Navigation öffnen" title="Navigation öffnen" hidden><i class="fa-solid fa-bars" aria-hidden="true"></i></button><?php endif; ?><a class="hub-brand" href="/" aria-label="HomeHub Startseite"><span class="hub-brand-mark">H</span><span class="hub-brand-copy"><strong><?= h((string) $config['name']) ?></strong><small><?= h((string) $config['tagline']) ?></small></span></a><nav class="hub-header-context hub-breadcrumbs" aria-label="Brotkrumennavigation"><?php foreach (adminBreadcrumbs($showMedia, $showUsers, $loggedIn, $showTags) as $i => $crumb): ?><?php if ($i > 0): ?><span class="hub-crumb-separator" aria-hidden="true">›</span><?php endif; ?><?php if ($crumb['href'] !== null): ?><a href="<?= h($crumb['href']) ?>"><?= h($crumb['label']) ?></a><?php else: ?><span aria-current="page"><?= h($crumb['label']) ?></span><?php endif; ?><?php endforeach; ?></nav>
+<body class="hub-admin"><header class="admin-top hub-header"><?php if ($loggedIn): ?><button type="button" class="hub-mobile-nav-toggle" aria-controls="admin-sidebar" aria-expanded="false" aria-label="Navigation öffnen" title="Navigation öffnen" hidden><i class="fa-solid fa-bars" aria-hidden="true"></i></button><?php endif; ?><a class="hub-brand" href="/" aria-label="HomeHub Startseite"><span class="hub-brand-mark">H</span><span class="hub-brand-copy"><strong><?= h((string) $config['name']) ?></strong><small><?= h((string) $config['tagline']) ?></small></span></a><nav class="hub-header-context hub-breadcrumbs" aria-label="Brotkrumennavigation"><?php foreach (adminBreadcrumbs($showMedia, $showUsers, $loggedIn, $showTags, $showTrash) as $i => $crumb): ?><?php if ($i > 0): ?><span class="hub-crumb-separator" aria-hidden="true">›</span><?php endif; ?><?php if ($crumb['href'] !== null): ?><a href="<?= h($crumb['href']) ?>"><?= h($crumb['label']) ?></a><?php else: ?><span aria-current="page"><?= h($crumb['label']) ?></span><?php endif; ?><?php endforeach; ?></nav>
 <div class="hub-header-actions"><a class="admin-btn link-button" href="/" aria-label="Zum Wiki" title="Zum Wiki"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>Zum Wiki</span></a><?php require __DIR__ . '/theme-toggle-view.php'; ?><?php if ($loggedIn): ?><form method="post"><input type="hidden" name="csrf" value="<?= h(csrf()) ?>"><input type="hidden" name="action" value="logout"><button class="hub-auth-button" aria-label="Abmelden" title="Abmelden"><i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i></button></form><?php endif; ?></div></header>
 <?php if (!$loggedIn): ?>
 <main class="login-panel"><h1>Admin-Login</h1><p>Für Medien- und Benutzerverwaltung anmelden.</p>
@@ -210,10 +243,12 @@ function adminBreadcrumbs(bool $showMedia, bool $showUsers, bool $loggedIn, bool
 <?php if ($error): ?><div class="alert error"><?= h($error) ?></div><?php endif; ?>
 <form method="post"><input type="hidden" name="csrf" value="<?= h(csrf()) ?>"><input type="hidden" name="action" value="login"><label>Benutzername<input type="text" name="username" autocomplete="username" required autofocus></label><label>Passwort<input type="password" name="password" autocomplete="current-password" required></label><button class="admin-btn primary"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>Anmelden</span></button></form></main>
 <?php else: ?>
-<div class="admin-layout" id="admin-layout"><div class="hub-mobile-nav-backdrop" hidden></div><aside class="admin-sidebar" id="admin-sidebar"><div class="admin-nav-section"><h2>Verwaltung</h2><?php if ($canMedia): ?><a class="admin-nav-link<?= $showMedia ? ' active' : '' ?>" href="/admin.php?media=1"<?= $showMedia ? ' aria-current="page"' : '' ?>><i class="fa-solid fa-images" aria-hidden="true"></i> Medienverwaltung</a><?php endif; ?><?php if ($isAdmin): ?><a class="admin-nav-link<?= $showUsers ? ' active' : '' ?>" href="/admin.php?users=1"<?= $showUsers ? ' aria-current="page"' : '' ?>><i class="fa-solid fa-users" aria-hidden="true"></i> Benutzerverwaltung</a><a class="admin-nav-link<?= $showTags ? ' active' : '' ?>" href="/admin.php?tags=1"<?= $showTags ? ' aria-current="page"' : '' ?>><i class="fa-solid fa-tags" aria-hidden="true"></i> Schlagwörter</a><?php endif; ?></div><?php require __DIR__ . '/sidebar-account-view.php'; ?></aside><main class="admin-main">
+<div class="admin-layout" id="admin-layout"><div class="hub-mobile-nav-backdrop" hidden></div><aside class="admin-sidebar" id="admin-sidebar"><div class="admin-nav-section"><h2>Verwaltung</h2><?php if ($canMedia): ?><a class="admin-nav-link<?= $showMedia ? ' active' : '' ?>" href="/admin.php?media=1"<?= $showMedia ? ' aria-current="page"' : '' ?>><i class="fa-solid fa-images" aria-hidden="true"></i> Medienverwaltung</a><?php endif; ?><?php if ($isAdmin): ?><a class="admin-nav-link<?= $showTrash ? ' active' : '' ?>" href="/admin.php?trash=1"><i class="fa-solid fa-trash" aria-hidden="true"></i> Papierkorb</a><a class="admin-nav-link<?= $showUsers ? ' active' : '' ?>" href="/admin.php?users=1"<?= $showUsers ? ' aria-current="page"' : '' ?>><i class="fa-solid fa-users" aria-hidden="true"></i> Benutzerverwaltung</a><a class="admin-nav-link<?= $showTags ? ' active' : '' ?>" href="/admin.php?tags=1"<?= $showTags ? ' aria-current="page"' : '' ?>><i class="fa-solid fa-tags" aria-hidden="true"></i> Schlagwörter</a><?php endif; ?></div><?php require __DIR__ . '/sidebar-account-view.php'; ?></aside><main class="admin-main">
 <?php if ($error): ?><div class="alert error" data-hub-notice="error"><?= h($error) ?></div><?php endif; ?>
 <?php if ($notice): ?><div class="alert success" data-hub-notice="<?= h($noticeType) ?>"><?= h($notice) ?></div><?php endif; ?>
-<?php if ($showTags): ?>
+<?php if ($showTrash): ?>
+<?php require __DIR__ . '/admin-trash-view.php'; ?>
+<?php elseif ($showTags): ?>
 <h1>Schlagwörter</h1>
 <p>Zentralen Schlagwortkatalog verwalten.</p>
 <?php require __DIR__ . '/admin-tags-view.php'; ?>
@@ -253,7 +288,7 @@ $tree = function (string $parent, bool $picker = false) use (&$tree, $children, 
 <input id="media-filter" type="search" placeholder="Dateiname suchen ..." aria-label="Medien suchen">
 <div class="media-grid" id="media-manager-grid">
 <?php foreach ($media->all($mediaFolder) as $asset): $asset['url'] = '/media.php?id=' . $mediaRegistry->register($asset['path']); ?>
-<article class="media-card" data-media-name="<?= h(strtolower($asset['name'])) ?>"><label class="media-select"><input type="checkbox" value="<?= h($asset['path']) ?>" aria-label="<?= h($asset['name']) ?> auswählen"> Auswählen</label><div class="media-thumb"><?php if ($asset['image']): ?><img src="<?= h($asset['url']) ?>" alt="" loading="lazy"><?php else: ?><span>📄</span><?php endif; ?></div><strong title="<?= h($asset['name']) ?>"><?= h($asset['name']) ?></strong><small><?= number_format($asset['size'] / 1024, 1, ',', '.') ?> KB</small><div class="media-actions"><button type="button" class="admin-btn copy-markdown" data-markdown="<?= h(($asset['image'] ? '![' : '[') . $asset['name'] . '](' . $asset['url'] . ')') ?>"><i class="fa-solid fa-copy" aria-hidden="true"></i><span>Markdown kopieren</span></button><button type="button" class="admin-btn" data-open-media="rename-dialog" data-media-path="<?= h($asset['path']) ?>" data-media-filename="<?= h($asset['name']) ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span>Umbenennen</span></button></div></article>
+<article class="media-card" data-media-name="<?= h(strtolower($asset['name'])) ?>"><label class="media-select"><input type="checkbox" value="<?= h($asset['path']) ?>" aria-label="<?= h($asset['name']) ?> auswählen"> Auswählen</label><div class="media-thumb"><?php if ($asset['image']): ?><img src="<?= h($asset['url'] . '&context=library') ?>" alt="" loading="lazy"><?php else: ?><span>📄</span><?php endif; ?></div><strong title="<?= h($asset['name']) ?>"><?= h($asset['name']) ?></strong><small><?= number_format($asset['size'] / 1024, 1, ',', '.') ?> KB</small><div class="media-actions"><button type="button" class="admin-btn copy-markdown" data-markdown="<?= h(($asset['image'] ? '![' : '[') . $asset['name'] . '](' . $asset['url'] . ')') ?>"><i class="fa-solid fa-copy" aria-hidden="true"></i><span>Markdown kopieren</span></button><button type="button" class="admin-btn" data-open-media="rename-dialog" data-media-path="<?= h($asset['path']) ?>" data-media-filename="<?= h($asset['name']) ?>"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i><span>Umbenennen</span></button></div></article>
 <?php endforeach; ?></div></div></div>
 <dialog id="rename-dialog" class="media-dialog" aria-labelledby="rename-dialog-title"><form method="post"><h2 class="hub-dialog-header" id="rename-dialog-title"><i class="fa-solid fa-pen" aria-hidden="true"></i> <span class="hub-dialog-title-text">Medium umbenennen</span></h2><p>Aktueller Dateiname: <strong data-current-name></strong></p><input type="hidden" name="csrf" value="<?= h(csrf()) ?>"><input type="hidden" name="action" value="move-media"><input type="hidden" name="file"><input type="hidden" name="target_folder" value="<?= h($mediaFolder) ?>"><label>Neuer Dateiname<input name="target_name" required maxlength="150" pattern="[a-zA-Z0-9][a-zA-Z0-9._-]*" autofocus></label><p>Bestehende ID-Verlinkungen bleiben erhalten.</p><div class="media-dialog-actions"><button class="admin-btn" type="button" data-close-media><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Abbrechen</span></button><button class="admin-btn primary" type="submit"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i><span>Speichern</span></button></div></form></dialog>
 <dialog id="folder-dialog" class="media-dialog" aria-labelledby="folder-dialog-title"><form method="post"><h2 class="hub-dialog-header" id="folder-dialog-title"><i class="fa-solid fa-folder-plus" aria-hidden="true"></i> <span class="hub-dialog-title-text">Neuer Ordner</span></h2><p>In: <?= h($mediaFolder ?: 'Hauptordner') ?></p><input type="hidden" name="csrf" value="<?= h(csrf()) ?>"><input type="hidden" name="action" value="create-media-folder"><input type="hidden" name="folder" value="<?= h($mediaFolder) ?>"><label>Ordnername<input name="folder_name" required maxlength="150" pattern="[a-zA-Z0-9][a-zA-Z0-9._-]*" autofocus></label><div class="media-dialog-actions"><button class="admin-btn" type="button" data-close-media><i class="fa-solid fa-xmark" aria-hidden="true"></i><span>Abbrechen</span></button><button class="admin-btn primary"><i class="fa-solid fa-folder-plus" aria-hidden="true"></i><span>Erstellen</span></button></div></form></dialog>

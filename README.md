@@ -45,7 +45,7 @@ Produktive Daten unter `data/` regelmässig sichern. Vollarchive niemals über p
 docker compose --profile qa run --rm --no-deps --build qa
 ```
 
-- [Installation und Betrieb](docs/README.md)
+- [Installation und Betrieb](docs/OPERATIONS.md)
 - [Content-/Editor-Spezifikation](docs/SPEC-EDITOR.md), [Admin-Spezifikation](docs/SPEC-ADMIN.md) und [Architektur](docs/ARCHITECTURE.md)
 - [Mitwirken](CONTRIBUTING.md), [Änderungen](CHANGELOG.md), [Drittkomponenten](THIRD-PARTY-NOTICES.md)
 

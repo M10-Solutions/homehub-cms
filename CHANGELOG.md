@@ -2,27 +2,26 @@
 
 ## 1.1.1 – UX-Optimierungen und Wartung (27.11.2026)
 
-Anwendungsversion `1.1.1-20261127`.
+Anwendungsversion `1.1.1-20261127`. GitHub-Commit und Release am 27.11.2026 laut Betreiber erfolgreich; Tag `v1.1.1`, Paket `homehub-1.1.1-final.zip`.
+
+- Nach Veröffentlichung: SDD-Dokumentationskonsolidierung vorbereitet (ohne Versionsänderung).
 
 - IDEA-20/21: Markdown-Leerzeilen erhalten; Web-Bild-Tooltip präzisiert.
 - IDEA-22/23: kontextabhängige ACL-Auswahl, redaktionelle Metadaten im Seitenkopf, ausklappbare Beschreibung und Schlagworte, gemeinsame Speicherung mit Revisions- und Lease-Prüfung.
 - IDEA-25: gemeinsamer Exportdialog für angemeldete Benutzer, PDF-Einzelseitenexport für Gäste.
 - Redundante Eyebrow und Bearbeiten-Pill entfernt; CSS, SDD und Beispielhandbuch konsolidiert.
-- Funktionsumfang, visuelle Prüfung und Regression vor Versionspflege laut Betreiber erfolgreich. Finale visuelle NAS-Prüfung und Regression erfolgreich; endgültige Betreiberfreigabe am 27.11.2026 erteilt.
 - Keine neuen Abhängigkeiten oder erforderlichen Datenmigrationen. IDEA-24 zurückgestellt.
 
 ## 1.1.0 – Papierkorb, Sicherheit und ODT-Gestaltung (26.11.2026)
 
-Anwendungsversion `1.1-20261126`.
+Anwendungsversion `1.1-20261126`. Veröffentlichung am 26.11.2026 laut Betreiber.
 
-- ODT: typografisch überarbeitete Referenzvorlage und nachträgliche Formatierung der Pandoc-Tabellenzellen; Betreiberabnahme erfolgreich.
+- ODT: typografisch überarbeitete Referenzvorlage und nachträgliche Formatierung der Pandoc-Tabellenzellen.
 
 - MED-SEC / EXP-SEC: seitengebundener Medienzugriff und einheitliche Referenzprüfung für Exporte.
 - TRASH-001: Papierkorb, rekursives Löschen, Admin-Toolbar und Mehrfachaktionen.
 - SDD: Aufteilung in SPEC-EDITOR.md und SPEC-ADMIN.md.
-- Betreiberabnahme am 25.11.2026: alle manuellen Kriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen vor Versionspflege.
 - Keine neuen Abhängigkeiten oder erforderlichen Datenmigrationen. IDEA-19 bleibt im Backlog.
-- Paketierung und abschliessende Betreiberabnahme am 26.11.2026: alle Kriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen. Veröffentlichung freigegeben; GitHub-Publikation laut Betreiber bestätigt.
 
 ## 1.0.1 – Small UX improvements and bugfixes (25.11.2026)
 
@@ -33,13 +32,13 @@ Anwendungsversion `1.0-20261125`.
 - Kapitel-Exportdialog schliesst bei gültigem Exportstart; Live-Pfadkonfliktprüfung bei neuen Wiki-Seiten mit Fehleranzeige im Dialog.
 - Einheitliche Icons in modalen Dialogheadern.
 - README, Screenshot und SDD-Dokumentation aktualisiert.
-- Betreiberabnahme: 36/36 Regressionstests ohne PHP-Warnungen und alle manuellen Kriterien erfüllt. Abschliessende Regression nach Versionspflege und Publikation laut Betreiber bestätigt.
 - Keine neuen Abhängigkeiten oder Datenmigrationen.
 
 ## 1.0.0 – erster öffentlicher Release (25.11.2026)
 
-Anwendungsversion `1.0-20261124`. Betreiberfreigabe des privaten Releases am 24.11.2026; öffentliche Freigabe am 25.11.2026 bestätigt.
+Anwendungsversion `1.0-20261124`. Öffentliche Veröffentlichung am 25.11.2026 laut Betreiber.
 
+- Rollenbezeichnungen member/visitor durch editor/reader ersetzt; Legacy-Kompatibilität erhalten. Redaktionelle Entwurfsnavigation UAT-002c durch UAT-002c.1/.2 abgelöst.
 - Markdown-Wiki, Editor, Medien, Suche, Schlagwörter und Kapitelberechtigungen.
 - Mehrbenutzerbetrieb mit Bearbeitungssperren, responsive Navigation, Light-/Dark-Mode.
 - PDF-, ODT- und ZIP-Export, browserbasierte Ersteinrichtung.
@@ -50,4 +49,5 @@ Anwendungsversion `1.0-20261124`. Betreiberfreigabe des privaten Releases am 24.
 - Prism 1.30.0 mit dokumentierten Quellen; eigene LibreOffice-ODT-Vorlage.
 - Vier SDD-Grundsätze und konsolidierte Projektdokumentation.
 
-Abnahmen und Einschränkungen: docs/TESTING.md; Publikationsstatus: docs/PROJECT.md.
+
+Test- und Freigabenachweise: [ACCEPTANCE.md](docs/ACCEPTANCE.md).

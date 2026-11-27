@@ -18,4 +18,4 @@ Nach Veröffentlichung bevorzugt die private Schwachstellenmeldung des GitHub-Re
 Kein vollständiger Penetrationstest. Composer-Audit und vollständige Lizenzprüfung sind vor Veröffentlichung nachzuweisen. Composer-Audit deckt Systempakete nicht ab. Die Docker-Konfiguration ist eine Referenzinstallation; umfassende Prüfung, Härtung und Wartung der individuellen Betriebsumgebung liegen beim Betreiber. Bekannte anwendungsrelevante Risiken und die bereitgestellte Referenzkonfiguration bleiben im Projektumfang. Ein CVE-freies Basisimage ist kein Freigabekriterium.
 
 ## Dokumentexport
-Nur vertrauenswürdige schreibberechtigte Benutzer und Medien zulassen. Die vollständige Isolation externer und lokaler Ressourcen beim Pandoc-/WeasyPrint-Export ist nicht nachgewiesen. Siehe docs/TESTING.md.
+Nur vertrauenswürdige schreibberechtigte Benutzer und Medien zulassen. Die vollständige Isolation externer und lokaler Ressourcen beim Pandoc-/WeasyPrint-Export ist nicht nachgewiesen. Siehe docs/ACCEPTANCE.md.

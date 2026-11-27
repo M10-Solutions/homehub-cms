@@ -1,8 +1,5 @@
 # HomeHub CMS – Installation und Betrieb
 
-## Struktur
-`src/` Apache-Webroot und Anwendung; `src/lib/` PHP-Klassen; `data/content/` Markdown; `data/upload/` Medien; `data/config/` JSON-Kataloge, Benutzer und Sperren; `bin/` Wartungs-CLI; `tests/` Regressionen; `docker/` Laufzeit; `docs/` Dokumentation und ODT-Vorlage.
-
 ## Neue Installation
 Im Projektverzeichnis:
 
@@ -16,7 +13,7 @@ Optionaler CLI-Bootstrap (nur falls noch kein Benutzerkonto angelegt wurde): `do
 
 Aufruf: `http://homehub.local:8011/` (Hostnamen an Installation anpassen), Administration `/admin.php`. Dort Benutzer, Medien und Schlagwörter verwalten; Seiten im Wiki bearbeiten. Funktionsdetails siehe SPEC-EDITOR.md und SPEC-ADMIN.md.
 
-Für eine isolierte Erstinstallations-Abnahme auf dem NAS siehe `TESTING.md` und `bin/prepare-fresh-install-test.sh`.
+Für eine isolierte Erstinstallations-Abnahme auf dem NAS siehe `ACCEPTANCE.md` und `bin/prepare-fresh-install-test.sh`.
 
 ## Aktualisierung / bestehende Installation
 Vor Updates `data/` sichern. Patch über Projektverzeichnis entpacken und genannte Löschungen explizit durchführen. Vollarchive enthalten Beispielinhalte: niemals über produktive `data/content`, `data/config` oder `data/upload` schreiben. Bestehende IDs, JSON-Dateien und Passwort-Hashes nicht manuell ersetzen.
@@ -36,31 +33,11 @@ www-data standardmässig UID 1000 und GID 1001. Bei abweichenden Host-Kennungen 
 Seiten-IDs: `php bin/register-page-ids.php` (Vorschau) / `--apply`. Alte Links: `php bin/migrate-page-links.php --check` / `--apply`, entsprechend `migrate-media-links.php`. Im Container mit Schreibzugriff ausführen; vorher Backup, Prüfstand beachten. Details im folgenden Migrationsabschnitt. Die alte Tag-Katalogstruktur vor TAG-004 separat sichern; bei bereits migriertem Stand nicht erneut zurücksetzen.
 
 ## ODT und Export
-Gäste können lesbare veröffentlichte Einzelseiten als PDF herunterladen. Angemeldete Benutzer wählen über Export Format und Umfang; Dokumentoptionen gelten für Kapitel-PDF/ODT.
+Exportfunktionen siehe SPEC-EDITOR.md.
 `docs/templates/reference.odt` kann in LibreOffice Writer angepasst werden (Seitenränder, Formatvorlagen). Im Compose-Betrieb werden Änderungen bei neuen Exporten ohne Neustart wirksam. ODT-Bildbreite wird aus der Standard-Seitenvorlage berechnet. PDF nutzt `src/css/export.css` und bei Kapiteln `chapter-document.css`. ZIP enthält referenzierte lokale Medien statt kompletter Bibliothek.
-
-## Tests
-```sh
-docker compose config
-docker compose --profile qa run --rm --no-deps --build qa
-```
-
-Tests nutzen temporäre Dateien; zusätzlich Browser-/NAS-Abnahme und tatsächliche Exportdownloads prüfen. Für lokale Tests sind PHP 8.3, Composer-Abhängigkeiten und DOM/zip/mbstring erforderlich. Einzeltests und Grenzen siehe TESTING.md. Prism und Font Awesome werden lokal ausgeliefert; Lizenzen in docs/PRISM-LICENSE.txt und src/vendor/fontawesome/LICENSE.txt.
-
-## App-Version
-Die Version wird in `src/config/app.php` unter `version` gepflegt (initial `0.8-20261122`). Ab 1.1.1: Major.Minor.Patch-YYYYMMDD; Wartungsreleases erhöhen Patch. Ältere Versionen verwenden Major.Minor-YYYYMMDD. Der Wiki-Footer übernimmt den Wert beim nächsten Seitenaufruf. Kein Neustart erforderlich. Bei eigenen Änderungen an der App-Config diese beim Patch-Einspielen übernehmen.
-
-### Light-/Dark-Mode (UI-011)
-Der Schalter im Wiki- und Admin-Header speichert die Wahl lokal im Browser. Standard: Light. Keine Migration oder zusätzliche Konfiguration erforderlich. App-Version: `0.9-20261122`.
-
-## Fachliche Abnahme und Release
-UAT-002a–f und UI-012 sind abgenommen; NAS-Regression 34/34 auf 0.13-20261123. Release 1.0-20261124 ist seit 24.11.2026 freigegeben; finale NAS-QA 35/35. Wartungsrelease 1.0.1 (Anwendung 1.0-20261125) veröffentlicht; Release 1.1.0 (Anwendung 1.1-20261126) mit MED-SEC/EXP-SEC, TRASH-001 und ODT-Gestaltung abschliessend abgenommen; 39/39 ohne PHP-Warnungen laut Betreiber nach Versionspflege am 26.11.2026; GitHub-Publikation laut Betreiber bestätigt. Release 1.1.1 (1.1.1-20261127): Funktionsumfang, Konsolidierung, finale visuelle Prüfung und Regression abgenommen; Betreiberfreigabe am 27.11.2026 erteilt. Siehe TESTING.md für Prüfschritte und Risiken.
 
 ## Backup und Wiederherstellung
 Vor einem Update Schreibzugriffe beenden (Wartungsfenster, `docker compose stop homehub`). Vollständiges Projekt einschliesslich `data/` und individueller Compose-/Konfigurationsdateien geschützt sichern. Sicherung ausserhalb des Projektverzeichnisses aufbewahren und auf Lesbarkeit prüfen. Patch ohne Nutzdaten einspielen; individuelle Konfiguration erhalten. Anschliessend `docker compose up -d --build`. Bei Rückkehr zum alten Stand Container stoppen und zusammengehörigen Code- und Datenstand aus der Sicherung wiederherstellen; seit dem Backup entstandene Änderungen vorher separat sichern. Restore zunächst auf isolierter Instanz mit eigenem Port und separaten Daten prüfen.
-
-## Sicherheitsgrenzen
-Nur in einem vertrauenswürdigen Netz betreiben, kein direkter Internetzugriff. Bei Zugriff über nicht vertrauenswürdige Netze HTTPS und geeignete Zugriffsbeschränkungen vorsehen. MED-SEC schützt Medien-URLs; Editor/Admin haben globalen Medienzugriff. MED-SEC/EXP-SEC sind seit Release 1.1.0 abgenommen; globale Medienrechte und Export-Risikogrenzen beachten. Ungültiges Front Matter wird seit SEC-1.0 restriktiv behandelt; vollständig entfernte Metadaten bleiben von Legacy-Seiten ohne Front Matter nicht unterscheidbar. Export-Risikogrenzen siehe TESTING.md.
 
 ## Mitgelieferte Beispielinhalte
 
@@ -139,6 +116,9 @@ Regressionstest auf dem Entwicklungsrechner: `php tests/migrate-page-links.php`.
 Im Backup-Ordner liegt die ursprüngliche relative Markdown-Verzeichnisstruktur. Bei Bedarf einzelne Seiten aus dem Backup zurückkopieren. Vor dem Zurückspielen HomeHub-Änderungen an diesen Seiten sichern.
 
 ## Papierkorb
-Gelöschte Wiki-Seiten liegen in `data/trash`; diesen Ordner in vollständige Datensicherungen einschliessen. Admins können in der Verwaltung Einträge wiederherstellen oder endgültig löschen. Medien werden nicht mitgelöscht. Geschützte Kapitel mit Unterseiten können nur als gesamte Struktur gelöscht werden. Wiederherstellung verwendet die aktuellen geerbten Berechtigungen. Bei Dateisystemfehlern oder Prozessabbruch Backup und Papierkorb prüfen, nicht blind leeren.
 
-Im Papierkorb können Admins mehrere Einträge per Checkbox auswählen und über die Toolbar wiederherstellen oder endgültig löschen. Konflikte werden pro Eintrag gemeldet. Die Checkbox im Seitenlöschdialog aktiviert die rekursive Löschung.
+`data/trash` in vollständige Datensicherungen einschliessen. Bei Dateisystemfehlern oder Prozessabbruch Backup und Papierkorb prüfen, nicht blind leeren. Bedienung und Rechte siehe SPEC-ADMIN.md.
+
+## Weitere Referenzen
+
+Systemstruktur, Versionierung und Betriebsgrenzen: ARCHITECTURE.md. Tests: ACCEPTANCE.md. Vor Änderungen an der App-Konfiguration individuelle Werte sichern; der Footer übernimmt den Versionswert beim nächsten Aufruf ohne Neustart.

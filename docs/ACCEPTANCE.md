@@ -42,6 +42,40 @@ Manuelle Stichproben nach betroffenen Änderungen: Erstinstallation auf isoliert
 
 Backup, Update, Versionsanzeige, vollständige strikte Regression, betroffene Browserfunktionen und tatsächliche Exportdownloads prüfen; Ergebnisse und ausdrückliche Betreiberfreigabe dokumentieren. Architektur: QA-0001–0002 und RELEASE-0002.
 
+## Release 1.2.0 – IDEA-19, funktional abgenommen (27.11.2026)
+
+Prüfkatalog (Soll gemäss STRUCT-0002–0013):
+
+- TEST-0004: Kapitel verschieben.
+- TEST-0005: Kapitel umbenennen.
+- TEST-0006: Kombinierte Operation.
+- TEST-0007: Einzelverschiebung.
+- TEST-0008: ACL-Schutzregel inkl. manipuliertem POST.
+- TEST-0009: Datenerhaltung.
+- TEST-0010: Editor mit Berechtigung.
+- TEST-0011: Fehlende Quellberechtigung.
+- TEST-0012: Fehlende Zielberechtigung.
+- TEST-0013: Reader und Gast.
+- TEST-0014: ACL-Vererbung.
+- TEST-0015: Aktive Lease.
+- TEST-0016: Veraltete Revision.
+- TEST-0017: Pfadkollisionen.
+- TEST-0018: Eigene Unterstruktur.
+- TEST-0019: Ungültige Pfade und Symlinks.
+- TEST-0020: Dateisystemfehler und Rollback.
+- TEST-0021: Stabile Referenzen.
+- TEST-0022: Suche und Export.
+- TEST-0023: Draft und Navigation.
+- TEST-0024: Dialogzustände; Zielkollision im Dialog, Button während Prüfung und bei Fehler deaktiviert und in Light/Dark Mode visuell eindeutig erkennbar, nach gültiger Änderung aktiviert; Umfangwechsel erneut prüfen; keine zweite Bestätigung. Prüfkriterien der Dialogvereinfachung: kurze Beschriftungen, dezenter Zielpfad, Schutzhinweis nur bei erzwungener Auswahl, ACL-Hinweis nur bei Verzeichniswechsel (auch Rückkehr zum Quellordner), Fehler und Buttonzustände unverändert; Light/Dark und Mobilansicht prüfen.
+- TEST-0025: Responsive UI; offene und geschlossene Ordnersymbole sowie Verzeichnisbrowser mit Ausgangsordner, direkten Unterordnern, Breadcrumb, übergeordneter Ebene, Hauptverzeichnis, leeren Ordnern, Scrollen, Tastatur und Touch in Light/Dark Mode prüfen. Zielwechsel aktualisiert Pfadvorschau und Vorprüfung; erneutes Öffnen startet im Quellordner. Prüfkriterien der Dialogvereinfachung: kurze Beschriftungen, dezenter Zielpfad, Schutzhinweis nur bei erzwungener Auswahl, ACL-Hinweis nur bei Verzeichniswechsel (auch Rückkehr zum Quellordner), Fehler und Buttonzustände unverändert; Light/Dark und Mobilansicht prüfen.
+
+Lokaler erweiterter PAGE-004-Test bestanden (YAML- und Converter-Testdoubles). Lokale Regression: 33/39 bestanden; sechs Fehler wegen fehlendem Composer-Autoload bzw. ZipArchive. Diese lokale Teilprüfung bleibt historisch dokumentiert.
+
+NAS: Betreiber bestätigte die funktionale Abnahme der Kapiteloperationen und Regression sowie die Nachprüfungen des Verzeichnisbrowsers und der Dialogbereinigung einschliesslich visueller Prüfung und Regression am 27.11.2026. Keine separaten Einzelprotokolle, Testanzahl oder Rollback-Fehlerinjektion bestätigt. Effektive Leserechte können durch Standortwechsel erweitert werden (STRUCT-0007); Rollback bleibt bestmöglich, nicht absturzsicher.
+
+### Release 1.2.0 – finale Betreiberfreigabe
+Anwendung `1.2.0-20261127`. Funktionaler Stand eingefroren. Der Betreiber bestätigte am 27.11.2026 den erfolgreichen Test des versionierten Release Candidate und erteilte anschliessend ausdrücklich die endgültige Betreiberfreigabe. Einzelprotokolle zu TEST-0003, insbesondere Backup, Exportdownloads, strikter Regression nach Versionspflege, Testanzahl und Warnungsfreiheit, liegen nicht separat vor. Composer-Audit, GitHub Actions und Veröffentlichung nicht bestätigt. Der finale Abschluss ändert ausschliesslich Dokumentation; kein erneuter funktionaler Testlauf.
+
 ## Release 1.1.1 – 27.11.2026
 
 ### IDEA-25 – abgenommen
@@ -73,6 +107,10 @@ CSS- und Dokumentationsbereinigung: visuelle Abnahme und vollständige NAS-Regre
 ### Release 1.1.1 – Betreiberfreigabe
 Anwendung 1.1.1-20261127. Finale visuelle NAS-Prüfung und vollständige Regression nach Versionspflege laut Betreiber erfolgreich. Endgültige Betreiberfreigabe am 27.11.2026 ausdrücklich erteilt. Kein separater Testlog oder Einzelprotokoll der Backup-/Update-Prüfung vorliegend. GitHub-Commit und Release am 27.11.2026 laut Betreiber erfolgreich; CI und Audit nicht separat bestätigt.
 Lokale Teilprüfung nach Versionspflege: VERSION-001 auf das neue dreiteilige Versionsformat angepasst und bestanden; 33/39 Regressionen erfolgreich, sechs bekannte Fehlschläge wegen fehlendem Composer-Autoload bzw. ZipArchive. Keine finale NAS-Freigabe in der lokalen Umgebung; anschliessende Betreiberfreigabe siehe oben.
+
+### SDD-Dokumentationskonsolidierung nach Veröffentlichung – 27.11.2026
+
+Der Betreiber bestätigt, dass die Dokumentation gut und sauber strukturiert ist, und erteilt die Freigabe zum formellen Abschluss des Arbeitspakets. TASK-0006 ist erledigt. Die Anwendungsversion bleibt unverändert. Die Abnahme ist eine redaktionelle Betreiberabnahme; eine lückenlose semantische Prüfung sämtlicher ursprünglicher Anforderungen ist nicht nachgewiesen. Kein erneuter funktionaler Regressionslauf für die reine Dokumentationsänderung. Veröffentlichung der konsolidierten Dokumentation auf GitHub noch nicht bestätigt.
 
 ## Release 1.1.0 – 26.11.2026
 

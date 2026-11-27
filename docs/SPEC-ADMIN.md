@@ -1,6 +1,6 @@
 # HomeHub CMS – Funktionsspezifikation Administration
 
-Geltungsstand: Release 1.1.1 (`1.1.1-20261127`). Architekturgrundsätze: [ARCHITECTURE.md](ARCHITECTURE.md). Content-Funktionen: [SPEC-EDITOR.md](SPEC-EDITOR.md).
+Geltungsstand: Release 1.2.0 (`1.2.0-20261127`). Architekturgrundsätze: [ARCHITECTURE.md](ARCHITECTURE.md). Content-Funktionen: [SPEC-EDITOR.md](SPEC-EDITOR.md).
 
 ## Allgemeines
 
@@ -90,6 +90,54 @@ Nur die zur Sichtbarkeit passende Rollen- oder Benutzerauswahl wird angezeigt un
 ### STRUCT-0001 – Seitenoperationen
 
 Seitenoperationen erfolgen im Content-Bereich gemäss ACL-0001–0004. Pfade: Kleinbuchstaben a–z, Zahlen, `_`, `-`, Unterordner; maximal 180 Zeichen. Titel 1–160 Zeichen, Beschreibung bis 500 Zeichen, Inhalt bis 1 MiB, Sortierung −99999 bis 99999. Zielpfad darf nicht existieren; Schreibpfade ohne Symlinks. Move-Dialog wählt bestehenden Ordner und Namen, zeigt resultierenden Pfad; keine Ordnerneuanlage im Move-Dialog. Keine produktive Massenaktualisierung alter Referenzen. Seitenerstellung prüft nach 300 ms Eingabepause serverseitig Pfad und ACL; Konflikte im Dialog, Eingaben bleiben erhalten. Autoritative Prüfung beim Schreiben unter Sperre. Revision und Lease gemäss DATA-0002 und Content-Spezifikation.
+
+### STRUCT-0002 – Funktionsumfang
+
+Einzelne Seiten und vollständige Kapitelstrukturen können verschoben und umbenannt werden.
+
+### STRUCT-0003 – Bedienung
+
+Bei Unterseiten bietet der Move-Dialog eine standardmässig nicht angekreuzte Checkbox für die gesamte Kapitelstruktur. Geschützte Hauptseiten erzwingen die Auswahl. Der Dialog weist nur bei Wechsel des Zielverzeichnisses auf mögliche Änderungen geerbter Rechte hin. Bei erzwungener Auswahl erscheint ein kurzer Schutzhinweis. Die Zielpfadvorschau steht dezent unter dem Seitennamen; technische ID- und Linkhinweise werden nicht im Dialog angezeigt. Zielordner, Name und Umfang lösen eine serverseitige Vorprüfung aus. Bei Fehlern erscheint ein Hinweis im Dialog; während der Prüfung, bei Fehlern und unverändertem Ziel bleibt Verschieben deaktiviert. Nach erfolgreicher Prüfung wird der Button aktiviert. Der Klick bestätigt die Operation ohne weiteren Bestätigungsdialog. Die Ausführung prüft erneut serverseitig. Ein Verzeichnisbrowser zeigt nur die direkten Unterordner des aktuellen Zielverzeichnisses mit den Ordnersymbolen der Navigation. Ausgangspunkt ist der bisherige Seitenordner. Breadcrumb und übergeordnete Ebene ermöglichen den Wechsel; das angezeigte Verzeichnis ist automatisch das Ziel. Die Liste ist höhenbegrenzt und scrollbar; leere Ordner werden kenntlich gemacht. Die Navigation verwendet die vorhandene Verzeichnisliste clientseitig.
+
+### STRUCT-0004 – Strukturerhaltung
+
+Relative Hierarchie sämtlicher Unterseiten bleibt unverändert.
+
+### STRUCT-0005 – Datenerhaltung
+
+IDs, Markdown und gespeicherte Metadaten bleiben bytegenau erhalten.
+
+### STRUCT-0006 – Berechtigungen
+
+Admin und Editor gemäss ACL-0001–0004; Editor benötigt Zugriff auf alle betroffenen Seiten und Berechtigung am Zielort.
+
+### STRUCT-0007 – ACL-Schutz und Vererbung
+
+Hauptseiten mit einschränkender eigener ACL und Unterseiten dürfen nur als gesamte Struktur verschoben werden, auch durch Admins. Explizite ACL bleiben unverändert; geerbte ACL folgen dem neuen Standort. Effektive Leserechte können sich erweitern, auch bei Editor-Operationen.
+
+### STRUCT-0008 – Zielvalidierung
+
+Alle resultierenden Seitenpfade gemäss STRUCT-0001; keine Kollision, Zusammenführung bei Kapitelverschiebung, Symlinks oder Ziele innerhalb eigener Unterstruktur. Zielordner muss existieren. Betroffene Kapitel-Seiten benötigen gültige IDs.
+
+### STRUCT-0009 – Bearbeitungssperren
+
+Aktive Leases auf betroffenen Quell- oder Zielseiten verhindern die Operation.
+
+### STRUCT-0010 – Konsistenz
+
+Serverseitige Validierung und Verschiebung unter gemeinsamer Operationssperre. Hauptseitenrevision und bei Kapitelverschiebung Unterstrukturrevision prüfen.
+
+### STRUCT-0011 – Fehlerbehandlung
+
+Keine Verschiebung bei Validierungsfehlern. Bei Fehler während der Verschiebung bestmöglicher Rollback; fehlgeschlagenen Rollback ausdrücklich melden. Keine absturzsichere Transaktion.
+
+### STRUCT-0012 – Referenzen
+
+Stabile Seiten-ID-Links und Medienreferenzen bleiben erhalten; Legacy-Pfadlinks werden nicht automatisch angepasst.
+
+### STRUCT-0013 – Abschluss
+
+Nach Erfolg Hauptseite am Ziel anzeigen; Navigation und pfadabhängige Funktionen nutzen neue Hierarchie.
 
 ## Medienbibliothek
 

@@ -44,7 +44,7 @@ $assertManage = static function (string $pageSlug) use ($repository, $role, $use
     }
 };
 $slug = trim((string) ($_POST['slug'] ?? ''), '/');
-$json = in_array($action, ['create', 'check-create'], true) && ($_SERVER['HTTP_ACCEPT'] ?? '') === 'application/json';
+$json = in_array($action, ['create', 'check-create', 'check-move'], true) && ($_SERVER['HTTP_ACCEPT'] ?? '') === 'application/json';
 $reply = static function (array $payload, int $status = 200): void {
     http_response_code($status);
     header('Content-Type: application/json; charset=UTF-8');
@@ -87,14 +87,16 @@ try {
         }
         $admin->save($slug, $input, false, $slug, false, $revision);
         $target = $slug;
-    } elseif ($action === 'move') {
+    } elseif (in_array($action, ['move', 'check-move'], true)) {
         $assertManage($slug);
         $to = trim((string) ($_POST['target_slug'] ?? ''), '/');
         if (!Admin::slugIsValid($to)) throw new RuntimeException('Ungültiger Zielpfad.');
         if (!PermissionService::canCreateAt($to, $role, $repository, $userId)) throw new RuntimeException('Keine Berechtigung für das Zielkapitel.');
         $revision = (string) ($_POST['revision'] ?? '');
         if ($revision === '') throw new RuntimeException('Bitte die Seite neu laden.');
-        $admin->move($slug, $to, $revision);
+        $tree = ($_POST['move_scope'] ?? '') === 'tree';
+        $admin->move($slug, $to, $revision, $tree, (string) ($_POST['tree_revision'] ?? ''), $role, $userId, $action === 'check-move');
+        if ($action === 'check-move') { $reply(['ok' => true]); exit; }
         $target = $to;
     } elseif ($action === 'delete') {
         $assertManage($slug);
@@ -123,7 +125,7 @@ try {
     header('Location: ' . $url, true, 303);
     exit;
 } catch (Throwable $error) {
-    if ($json || $action === 'check-create') { $reply(['ok' => false, 'error' => $error->getMessage()], 400); exit; }
+    if ($json || in_array($action, ['check-create', 'check-move'], true)) { $reply(['ok' => false, 'error' => $error->getMessage()], 400); exit; }
     http_response_code(400);
     header('Content-Type: text/html; charset=UTF-8');
     echo '<!doctype html><html lang="de"><meta charset="utf-8"><title>HomeHub – Aktion fehlgeschlagen</title><main style="font:1rem system-ui;max-width:42rem;margin:4rem auto"><h1>Aktion fehlgeschlagen</h1><p>'

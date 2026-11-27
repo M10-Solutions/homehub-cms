@@ -1,6 +1,6 @@
 # HomeHub CMS – Funktionsspezifikation Content und Editor
 
-Geltungsstand: Release 1.1.1 (`1.1.1-20261127`). Architekturgrundsätze: [ARCHITECTURE.md](ARCHITECTURE.md). Rollen, Administration und gemeinsame UI: [SPEC-ADMIN.md](SPEC-ADMIN.md).
+Geltungsstand: Release 1.2.0 (`1.2.0-20261127`). Architekturgrundsätze: [ARCHITECTURE.md](ARCHITECTURE.md). Rollen, Administration und gemeinsame UI: [SPEC-ADMIN.md](SPEC-ADMIN.md).
 
 ## Allgemeines
 
@@ -30,7 +30,7 @@ Markdown mit Tabellen, Codeblöcken, Syntax-Highlighting (Prism), Ausrichtungsbl
 
 ### NAV-0001 – Baum und Filter
 
-Hierarchischer Baum, Sortierung nach Reihenfolge/Titel, Breadcrumbs, aktive Seite und Zweige. Separater Navigationsfilter. Redaktionelle Entwurfsnavigation gemäss ACL-0003. Keine zusätzliche «INTRANET»-Überschrift; Navigationseinträge 14 px, Kapitelüberschriften dürfen abweichen.
+Hierarchischer Baum, Sortierung nach Reihenfolge/Titel, Breadcrumbs, aktive Seite und Zweige. Separater Navigationsfilter. Redaktionelle Entwurfsnavigation gemäss ACL-0003. Keine zusätzliche «INTRANET»-Überschrift; Navigationseinträge 14 px, Kapitelüberschriften dürfen abweichen. Ordnersymbole zeigen den geöffneten bzw. geschlossenen Zustand des jeweiligen Zweigs.
 
 ### NAV-0002 – Desktop-Navigation
 

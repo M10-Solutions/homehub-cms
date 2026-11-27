@@ -19,7 +19,11 @@
 /* ADMIN-001b: same HomeHub dialog language, with a clear destination preview. */
 .hub-move-fields{display:grid;gap:.7rem}
 .hub-move-fields select{background:var(--theme-surface, #fff)}
-.hub-move-preview{margin:.2rem 0;padding:.65rem .8rem;background:var(--theme-raised, #f1f5f9);border:1px solid var(--theme-line, #d4dce5);border-radius:8px;overflow-wrap:anywhere}
+.hub-move-name-group{display:grid;gap:.35rem;min-width:0}
+.hub-move-preview{margin:0;font-size:.85rem;color:var(--theme-muted,#64748b);overflow-wrap:anywhere}
+#hub-page-move form{gap:.8rem}
+#hub-page-move .hub-dialog-actions{border-top:1px solid var(--theme-line,#d4dce5);padding-top:.8rem}
+#hub-page-move [hidden]{display:none!important}
 .hub-move-preview code{font:inherit;font-weight:600}
 .hub-move-error{color:var(--theme-danger-text, #9c2434);margin:0;font-size:.85rem}
 
@@ -54,3 +58,24 @@
 .hub-create-error { color: var(--theme-danger-text, #a32727); margin: 0; }
 
 #hub-page-delete .hub-checkbox input[type=checkbox]{width:auto;min-width:0;flex:0 0 auto;margin:0;accent-color:#4263eb}
+
+/* Disabled dialog submit: neutral, readable in both themes. */
+.hub-page-dialog .hub-dialog-actions button[type=submit]:disabled{background:var(--theme-raised,#e2e8f0);color:var(--theme-muted,#64748b);border-color:var(--theme-line,#cbd5e1);cursor:not-allowed;opacity:1}
+
+/* Move destination browser: native buttons, shared navigation folder icon. */
+.hub-folder-picker{display:grid;gap:.35rem;min-width:0}
+.hub-folder-label{font-weight:600;font-size:.9rem}
+.hub-folder-picker [hidden]{display:none!important}
+.hub-folder-browser{border:1px solid var(--theme-line,#b9c5d4);border-radius:7px;min-width:0;overflow:hidden}
+.hub-folder-breadcrumb{display:flex;align-items:center;flex-wrap:wrap;gap:.2rem;padding:.35rem .5rem;background:var(--theme-raised,#f1f5f9);border-bottom:1px solid var(--theme-line,#b9c5d4)}
+.hub-folder-browser button{font:inherit;color:inherit;background:transparent;border:0;border-radius:4px;cursor:pointer;min-width:0;text-align:left}
+.hub-folder-browser button:hover{background:var(--theme-selected,#edf2ff)}
+.hub-folder-browser button:focus-visible{outline:2px solid #4263eb;outline-offset:-2px}
+.hub-folder-crumb{display:inline-flex;align-items:center;gap:.4rem;padding:.35rem;min-height:36px;font-size:.85rem!important;overflow-wrap:anywhere}
+.hub-folder-crumb[aria-current=location]{font-weight:600}
+.hub-folder-list{max-height:12rem;overflow:auto;padding:.25rem;overscroll-behavior:contain}
+.hub-folder-row{display:flex;align-items:center;gap:.6rem;width:100%;min-height:44px;padding:.45rem .6rem;overflow-wrap:anywhere}
+.hub-folder-row>span:nth-child(2){flex:1;min-width:0}
+.hub-folder-chevron{display:inline-block;flex:0 0 6px;width:6px;height:6px;border-right:1.5px solid currentColor;border-top:1.5px solid currentColor;transform:rotate(45deg);color:var(--theme-muted,#718096);margin:0 .25rem}
+.hub-folder-parent{color:var(--theme-muted,#718096)!important;border-bottom:1px solid var(--theme-line,#b9c5d4)!important}
+.hub-folder-empty{padding:.65rem}

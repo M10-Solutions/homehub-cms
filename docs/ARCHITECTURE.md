@@ -1,6 +1,6 @@
 # HomeHub CMS – Architektur und Grundsätze
 
-Geltungsstand: Release 1.1.1. Test- und Abnahmenachweise: [ACCEPTANCE.md](ACCEPTANCE.md).
+Geltungsstand: Release 1.2.0. Test- und Abnahmenachweise: [ACCEPTANCE.md](ACCEPTANCE.md).
 
 ## Entwicklungsmethodik
 

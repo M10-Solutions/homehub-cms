@@ -7,7 +7,7 @@ declare(strict_types=1);
 return [
     'name' => 'HomeHub',
     // Release version: major.minor.patch-YYYYMMDD (last revision date).
-    'version' => '1.1.1-20261127',
+    'version' => '1.2.0-20261127',
     'tagline' => 'Dein Zuhause auf einen Blick.',
     // Content stays outside the public web root.
     'content_path' => dirname(__DIR__, 2) . '/data/content',

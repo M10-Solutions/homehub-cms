@@ -226,36 +226,72 @@ final class Admin
         return $result;
     }
 
-    /** Move a page to another folder/slug without overwriting existing pages. */
-    public function move(string $oldSlug, string $newSlug, string $revision = ''): void
+    /** Snapshot the subtree without exposing descendant names in the dialog. */
+    public function moveSnapshot(string $slug): array
     {
-        // Share the same lock as media deletion and relocation. Keep the entire
-        // page mutation (including content-only reads) inside the critical section.
-        (new MediaOperationLock($this->dataDir))->run(function () use ($oldSlug, $newSlug, $revision): void {
-            (new PageEditLease($this->dataDir))->assertAvailable($oldSlug);
-            $this->moveUnlocked($oldSlug, $newSlug, $revision);
-        });
-    }
-
-    private function moveUnlocked(string $oldSlug, string $newSlug, string $revision): void
-    {
-        PageIdentity::inventory($this->contentDir);
-        $old = $this->file($oldSlug);
-        $new = $this->file($newSlug);
-        if (!is_file($old)) throw new \RuntimeException('Ursprungsseite fehlt.');
-        if ($revision !== '') {
-            $current = hash('sha256', json_encode($this->read($oldSlug), JSON_THROW_ON_ERROR));
-            if (!hash_equals($current, $revision)) {
-                throw new \RuntimeException('Die Seite wurde zwischenzeitlich geändert. Bitte neu laden.');
+        $file = $this->file($slug);
+        $dir = substr($file, 0, -3);
+        $files = [];
+        if (is_link($dir)) throw new \RuntimeException('Symbolische Links sind nicht erlaubt.');
+        if (is_dir($dir)) {
+            $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS), \RecursiveIteratorIterator::SELF_FIRST);
+            foreach ($it as $entry) {
+                if ($entry->isLink() || (!$entry->isDir() && !$entry->isFile())) throw new \RuntimeException('Ungültiger Eintrag in der Kapitelstruktur.');
+                $relative = substr($entry->getPathname(), strlen($dir) + 1);
+                $hash = $entry->isDir() ? 'dir' : hash_file('sha256', $entry->getPathname());
+                if ($hash === false) throw new \RuntimeException('Kapitel konnte nicht gelesen werden.');
+                $files[$relative] = $hash;
             }
         }
-        if ($oldSlug === $newSlug) return;
-        if (file_exists($new)) throw new \RuntimeException('Zielseite existiert bereits.');
-        $parent = dirname($new);
-        if (!is_dir($parent) && !mkdir($parent, 0775, true) && !is_dir($parent)) {
-            throw new \RuntimeException('Zielordner konnte nicht erstellt werden.');
-        }
-        if (!rename($old, $new)) throw new \RuntimeException('Verschieben fehlgeschlagen.');
+        ksort($files);
+        return ['files' => $files, 'revision' => hash('sha256', json_encode($files, JSON_THROW_ON_ERROR))];
+    }
+
+    /** Move under the shared lock; never rewrite page bytes. */
+    public function move(string $oldSlug, string $newSlug, string $revision = '', bool $tree = false, string $treeRevision = '', ?string $role = 'admin', ?string $userId = null, bool $checkOnly = false): void
+    {
+        (new MediaOperationLock($this->dataDir))->run(function () use ($oldSlug, $newSlug, $revision, $tree, $treeRevision, $role, $userId, $checkOnly): void {
+            PageIdentity::inventory($this->contentDir);
+            $old = $this->file($oldSlug);
+            $new = $this->file($newSlug);
+            if (!is_file($old)) throw new \RuntimeException('Ursprungsseite fehlt.');
+            $repo = new PageRepository($this->contentDir);
+            $page = $repo->findForAccess($oldSlug);
+            if ($page === null || !PermissionService::canManagePage($page, $role, $repo, $userId) || !PermissionService::canCreateAt($newSlug, $role, $repo, $userId)) throw new \RuntimeException('Keine Berechtigung für Quelle oder Ziel.');
+            if ($revision !== '' && !hash_equals(hash('sha256', json_encode($this->read($oldSlug), JSON_THROW_ON_ERROR)), $revision)) throw new \RuntimeException('Die Seite wurde zwischenzeitlich geändert. Bitte neu laden.');
+            if ($oldSlug === $newSlug) return;
+            if (str_starts_with($newSlug, $oldSlug . '/')) throw new \RuntimeException('Ziel liegt in der eigenen Kapitelstruktur.');
+            $snapshot = $this->moveSnapshot($oldSlug);
+            $children = array_filter(array_keys($snapshot['files']), static fn($p) => strtolower(substr($p, -3)) === '.md');
+            if (!$tree && $children && $page->visibility !== 'all') throw new \RuntimeException('Geschütztes Kapitel kann nur als gesamte Struktur verschoben werden.');
+            if ($tree && ($treeRevision === '' || !hash_equals($snapshot['revision'], $treeRevision))) throw new \RuntimeException('Kapitelstruktur wurde geändert. Bitte neu laden.');
+            $lease = new PageEditLease($this->dataDir);
+            $lease->assertAvailable($oldSlug);
+            $lease->assertAvailable($newSlug);
+            if ($tree) {
+                if ($page->id === null) throw new \RuntimeException('Seiten-ID fehlt.');
+                foreach ($children as $relative) {
+                    $suffix = substr($relative, 0, -3);
+                    $source = $oldSlug . '/' . $suffix;
+                    $destination = $newSlug . '/' . $suffix;
+                    if (!str_ends_with($relative, '.md') || !self::slugIsValid($source) || !self::slugIsValid($destination)) throw new \RuntimeException('Ungültiger Unterseitenpfad.');
+                    $child = $repo->findForAccess($source);
+                    if ($child === null || $child->id === null || !PermissionService::canManagePage($child, $role, $repo, $userId)) throw new \RuntimeException('Kapitelstruktur kann nicht vollständig verschoben werden.');
+                    $lease->assertAvailable($source);
+                    $lease->assertAvailable($destination);
+                }
+            }
+            $oldDir = substr($old, 0, -3);
+            $newDir = substr($new, 0, -3);
+            if (file_exists($new) || is_link($newDir) || ($tree && file_exists($newDir))) throw new \RuntimeException('Ziel existiert bereits.');
+            if (!is_dir(dirname($new))) throw new \RuntimeException('Zielordner fehlt.');
+            if ($checkOnly) return;
+            if (!@rename($old, $new)) throw new \RuntimeException('Verschieben fehlgeschlagen.');
+            if ($tree && is_dir($oldDir) && !@rename($oldDir, $newDir)) {
+                if (!@rename($new, $old)) throw new \RuntimeException('Verschieben und Rollback fehlgeschlagen. Dateisystem prüfen.');
+                throw new \RuntimeException('Kapitel konnte nicht verschoben werden. Änderung rückgängig gemacht.');
+            }
+        });
     }
 
     public function preview(string $markdown): string

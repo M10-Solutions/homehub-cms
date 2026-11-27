@@ -28,4 +28,6 @@ Während der Bearbeitung ist die Seite für andere Bearbeiter gesperrt. Bei eine
 
 Über **Sichtbarkeit** änderst du Reihenfolge, Veröffentlichungsstatus und Anzeige in der Navigation. Administratoren konfigurieren dort auch die Zugriffsrechte. Berechtigte Redakteure können Seiten auch verschieben oder löschen. Nutze interne Seitenlinks aus dem Picker, damit sie beim Verschieben gültig bleiben.
 
+Im Verschieben-Dialog ist das angezeigte Verzeichnis das Ziel. Öffne Unterordner durch Anklicken oder wechsle über die Pfadnavigation in eine übergeordnete Ebene. Im Verschieben-Dialog kannst du bei Kapiteln auch **Unterseiten mitverschieben** auswählen. Geschützte Kapitel mit Unterseiten müssen vollständig verschoben werden. Beim Wechsel des Verzeichnisses können sich geerbte Zugriffsrechte ändern. Ohne Auswahl bleiben Unterseiten am bisherigen Ort. Bei einem Zielkonflikt erscheint ein Hinweis; erst nach erfolgreicher Prüfung kannst du auf **Verschieben** klicken.
+
 Weiter: [Markdown-Kurzanleitung](/page.php?id=p_cea3a8df1a45518ebc7ed42d9c188a1b).

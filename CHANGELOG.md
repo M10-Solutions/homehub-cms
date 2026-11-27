@@ -1,10 +1,21 @@
 # Changelog
 
+## 1.2.0 – Kapitelstrukturen verschieben (27.11.2026)
+
+Anwendungsversion `1.2.0-20261127`. Release Candidate laut Betreiber erfolgreich getestet; endgültige Betreiberfreigabe am 27.11.2026 erteilt. Veröffentlichung, CI und Audit noch nicht bestätigt.
+
+- Verschieben-Dialog: kürzere Beschriftungen, dezente Zielpfadvorschau, kontextabhängiger ACL-Hinweis und keine technischen ID-Hinweise.
+
+- Navigation: zustandsabhängige Ordnersymbole; Verschieben-Dialog: mobiler Verzeichnisbrowser mit Breadcrumb, direkter Unterordnerauswahl und gemeinsamen Ordnersymbolen.
+
+- IDEA-19: Verschieben und Umbenennen ganzer Kapitelstrukturen im bestehenden Dialog; ACL-, Lease-, Revisions- und Pfadprüfungen. Zielprüfung im Dialog mit deaktiviertem Aktionsbutton bei Konflikten; keine doppelte Bestätigung. Funktionale und visuelle NAS-Abnahme sowie Regression vor Versionspflege laut Betreiber erfolgreich.
+- Keine neuen Abhängigkeiten oder erforderlichen Datenmigrationen. IDEA-19 abgeschlossen; finale Releaseprüfung siehe ACCEPTANCE.md.
+
 ## 1.1.1 – UX-Optimierungen und Wartung (27.11.2026)
 
 Anwendungsversion `1.1.1-20261127`. GitHub-Commit und Release am 27.11.2026 laut Betreiber erfolgreich; Tag `v1.1.1`, Paket `homehub-1.1.1-final.zip`.
 
-- Nach Veröffentlichung: SDD-Dokumentationskonsolidierung vorbereitet (ohne Versionsänderung).
+- Nach Veröffentlichung: SDD-Dokumentationskonsolidierung am 27.11.2026 abgenommen und formell abgeschlossen (ohne Versionsänderung). Normative Dokumente funktional bzw. thematisch gegliedert und nummeriert; Historie, Abnahmen, Pendenzen und Betrieb getrennt. PROJECT.md aufgelöst, TESTING.md durch ACCEPTANCE.md und docs/README.md durch OPERATIONS.md ersetzt.
 
 - IDEA-20/21: Markdown-Leerzeilen erhalten; Web-Bild-Tooltip präzisiert.
 - IDEA-22/23: kontextabhängige ACL-Auswahl, redaktionelle Metadaten im Seitenkopf, ausklappbare Beschreibung und Schlagworte, gemeinsame Speicherung mit Revisions- und Lease-Prüfung.

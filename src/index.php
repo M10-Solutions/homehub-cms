@@ -263,7 +263,7 @@ function e(string $value): string
     <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css?v=6.7.2">
     <link rel="stylesheet" href="/css/app.css?v=4-clean&amp;theme=1">
     <link rel="stylesheet" href="/css/labels.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/layout.css?v=3-clean&amp;theme=1"><link rel="stylesheet" href="/css/navigation.css?v=3-clean&amp;theme=1">
+    <link rel="stylesheet" href="/css/layout.css?v=3-clean&amp;theme=1"><link rel="stylesheet" href="/css/navigation.css?v=5-folder-browser&amp;theme=1">
     <link rel="stylesheet" href="/css/code-blocks.css?v=1">
 
     <link rel="stylesheet" href="/css/inline-editor.css?v=22-9-clean&amp;theme=1">
@@ -271,7 +271,7 @@ function e(string $value): string
     <?php if ($inlineAllowed): ?><link rel="stylesheet" href="/css/page-picker.css?v=1&amp;theme=1"><?php endif; ?>
     <link rel="stylesheet" href="/css/login-modal.css?v=2-clean&amp;theme=1">
     <link rel="stylesheet" href="/css/page-metadata.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/page-actions.css?v=7-clean&amp;theme=1">
+    <link rel="stylesheet" href="/css/page-actions.css?v=10-move-clean&amp;theme=1">
     <link rel="stylesheet" href="/css/header-create.css?v=1">
     <link rel="stylesheet" href="/css/wiki-navigation-ux.css?v=3&amp;theme=1">
     <link rel="stylesheet" href="/css/sidebar-account.css?v=3&amp;theme=1">
@@ -284,7 +284,7 @@ function e(string $value): string
     <script src="/js/inline-editor.js?v=10" defer></script>
     <?php if ($inlineAllowed): ?><script src="/js/page-picker.js?v=4" defer></script><?php endif; ?>
     <script src="/js/login-modal.js?v=1" defer></script>
-    <script src="/js/page-actions.js?v=8" defer></script>
+    <script src="/js/page-actions.js?v=12-move-clean" defer></script>
     <script src="/js/wiki-navigation-ux.js?v=4" defer></script>
     <script src="/js/chapter-export.js?v=3" defer></script>
 <link rel="stylesheet" href="/css/dialog-header.css?v=1">
@@ -549,23 +549,39 @@ function e(string $value): string
 <div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit">Speichern</button></div>
 </form></dialog>
 <dialog id="hub-page-move" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-move-title"><form action="/page-actions.php" method="post">
-<h2 class="hub-dialog-header" id="hub-move-title"><i class="fa-solid fa-folder-open" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seite umbenennen oder verschieben</span></h2><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="move"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>"><input type="hidden" name="revision" value="<?= e($manageRevision) ?>">
+<h2 class="hub-dialog-header" id="hub-move-title"><i class="fa-solid fa-folder-open" aria-hidden="true"></i> <span class="hub-dialog-title-text">Verschieben / Umbenennen</span></h2><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="move"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>"><input type="hidden" name="revision" value="<?= e($manageRevision) ?>">
 <div class="hub-move-fields" data-page-move-fields>
-<label>Zielordner
-<select data-move-folder aria-describedby="hub-move-folder-help">
 <?php $currentFolder = str_contains($currentPage->slug, '/') ? dirname($currentPage->slug) : ''; ?>
+<div class="hub-folder-picker" role="group" aria-labelledby="hub-move-folder-label">
+<span id="hub-move-folder-label" class="hub-folder-label">Zielverzeichnis</span>
+<select data-move-folder hidden aria-label="Zielverzeichnis">
 <?php foreach ($moveFolders as $folder): ?>
-<option value="<?= e($folder) ?>" <?= $folder === $currentFolder ? 'selected' : '' ?>><?= e($folder === '' ? 'Hauptverzeichnis' : str_repeat('  ', substr_count($folder, '/')) . '📁 ' . basename($folder)) ?></option>
+<option value="<?= e($folder) ?>" <?= $folder === $currentFolder ? 'selected' : '' ?>><?= e($folder === '' ? 'Hauptverzeichnis' : $folder) ?></option>
 <?php endforeach; ?>
-</select></label>
-<p id="hub-move-folder-help" class="hub-muted">Wähle einen vorhandenen Ordner. Unterordner sind eingerückt dargestellt.</p>
-<label>Seitenname (ohne .md)<input type="text" data-move-name required maxlength="180" pattern="[a-z0-9_-]+" value="<?= e(basename($currentPage->slug)) ?>" autocomplete="off"></label>
+</select>
+<div class="hub-folder-browser">
+<div class="hub-folder-breadcrumb" data-folder-breadcrumb role="group" aria-label="Aktuelles Zielverzeichnis"></div>
+<div class="hub-folder-list" data-folder-list role="group" aria-label="Verzeichnisse"></div>
+</div>
+</div>
+<div class="hub-move-name-group"><label>Seitenname<input type="text" data-move-name required maxlength="180" pattern="[a-z0-9_-]+" value="<?= e(basename($currentPage->slug)) ?>" autocomplete="off"></label>
 <input type="hidden" name="target_slug" data-move-target value="<?= e($currentPage->slug) ?>">
-<p class="hub-move-preview" aria-live="polite">Neuer Pfad: <code data-move-preview><?= e($currentPage->slug) ?></code></p>
+<p class="hub-move-preview" aria-live="polite">Zielpfad: <code data-move-preview><?= e($currentPage->slug) ?></code></p></div>
 <p class="hub-move-error" data-move-error role="alert" hidden></p>
 </div>
-<p class="hub-muted">Die Seiten-ID bleibt erhalten. ID-basierte Links funktionieren weiter; alte pfadbasierte Links müssen gegebenenfalls separat migriert werden.</p>
-<div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit">Verschieben</button></div></form></dialog>
+<?php
+$moveSnapshot = null;
+try { $moveSnapshot = (new \HomeHub\Admin($config['content_path'], dirname(__DIR__) . '/data/config'))->moveSnapshot($currentPage->slug); } catch (\Throwable) {}
+$moveHasChildren = $moveSnapshot !== null && (bool) array_filter(array_keys($moveSnapshot['files']), static fn($p) => strtolower(substr($p, -3)) === '.md');
+$moveForceTree = $moveHasChildren && $currentPage->visibility !== 'all';
+?>
+<?php if ($moveHasChildren): ?>
+<input type="hidden" name="tree_revision" value="<?= e($moveSnapshot['revision']) ?>">
+<label class="hub-checkbox"><input type="checkbox" data-move-tree name="move_scope" value="tree"<?= $moveForceTree ? ' checked disabled' : '' ?>> Unterseiten mitverschieben</label>
+<?php if ($moveForceTree): ?><input type="hidden" name="move_scope" value="tree"><p class="hub-muted">Geschütztes Kapitel: Unterseiten müssen mitverschoben werden.</p><?php endif; ?>
+<?php endif; ?>
+<p class="hub-muted hub-move-acl" data-move-acl hidden aria-live="polite">Geerbte Zugriffsrechte können sich ändern.</p>
+<div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit" disabled>Verschieben</button></div></form></dialog>
 <dialog id="hub-page-delete" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-delete-title"><form id="hub-delete-page-form" action="/page-actions.php" method="post">
 <h2 class="hub-dialog-header" id="hub-delete-title"><i class="fa-solid fa-trash" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seite löschen?</span></h2><p>„<?= e($pageTitle) ?>“ wird in den Papierkorb verschoben.</p><input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="delete"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>">
 <?php $descendantCount = count(array_filter($pages->allIncludingDrafts(), static fn($p) => str_starts_with($p->slug, $currentPage->slug . "/"))); ?>

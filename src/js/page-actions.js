@@ -64,19 +64,119 @@
     const preview = moveFields.querySelector('[data-move-preview]');
     const error = moveFields.querySelector('[data-move-error]');
     const form = moveFields.closest('form');
+    const tree = form.querySelector('[data-move-tree]');
+    const aclHint = form.querySelector('[data-move-acl]');
+    const initialFolder = folder.value;
+    const dialog = form.closest('dialog');
+    const submit = form.querySelector('[type=submit]');
+    let timer, generation = 0, approved = null, busy = false;
+    const showError = message => { error.textContent = message; error.hidden = !message; };
     const update = () => {
       const value = folder.value ? folder.value + '/' + name.value.trim() : name.value.trim();
       const valid = /^[a-z0-9_-]+$/.test(name.value.trim()) && value.length <= 180;
       target.value = value;
       preview.textContent = value || '—';
+      aclHint.hidden = folder.value === initialFolder;
       name.setCustomValidity(valid ? '' : 'Bitte einen gültigen Seitennamen (a-z, 0-9, - oder _) eingeben; maximal 180 Zeichen insgesamt.');
-      error.hidden = valid;
-      error.textContent = valid ? '' : name.validationMessage;
-      return valid;
+      return valid && name.validity.valid;
     };
-    folder.addEventListener('change', update);
-    name.addEventListener('input', update);
-    form.addEventListener('submit', event => { if (!update()) { event.preventDefault(); name.reportValidity(); } });
+    const signature = () => JSON.stringify([target.value, !!tree?.checked]);
+    const schedule = () => {
+      clearTimeout(timer);
+      const current = ++generation;
+      approved = null;
+      submit.disabled = true;
+      showError('');
+      if (!update()) { showError(name.validationMessage); return; }
+      if (target.value === form.elements.slug.value) return;
+      timer = setTimeout(async () => {
+        const checked = signature();
+        try {
+          const body = new FormData(form);
+          body.set('page_action', 'check-move');
+          const response = await fetch(form.action, {method: 'POST', body, headers: {Accept: 'application/json'}});
+          const result = await response.json();
+          if (!response.ok || !result.ok) throw new Error(result.error || 'Prüfung fehlgeschlagen.');
+          if (current !== generation || !dialog.open || busy) return;
+          approved = checked;
+          submit.disabled = false;
+        } catch (e) {
+          if (current !== generation || !dialog.open || busy) return;
+          showError(e instanceof SyntaxError || e instanceof TypeError ? 'Prüfung nicht verfügbar. Bitte Eingabe ändern oder Dialog erneut öffnen.' : e.message);
+        }
+      }, 300);
+    };
+    const breadcrumb = moveFields.querySelector('[data-folder-breadcrumb]');
+    const list = moveFields.querySelector('[data-folder-list]');
+    const children = new Map();
+    for (const option of folder.options) {
+      const path = option.value;
+      if (!path) continue;
+      const parent = path.split('/').slice(0, -1).join('/');
+      if (!children.has(parent)) children.set(parent, []);
+      children.get(parent).push(path);
+    }
+    const icon = (classes) => {
+      const element = document.createElement('span');
+      element.className = classes;
+      element.setAttribute('aria-hidden', 'true');
+      return element;
+    };
+    const button = (label, path, className, symbol, trailing = false) => {
+      const element = document.createElement('button');
+      element.type = 'button';
+      element.className = className;
+      if (symbol) element.append(icon(symbol));
+      const text = document.createElement('span');
+      text.textContent = label;
+      element.append(text);
+      if (trailing) element.append(icon('hub-folder-chevron'));
+      element.addEventListener('click', () => {
+        folder.value = path;
+        renderFolders();
+        breadcrumb.lastElementChild?.focus();
+        schedule();
+      });
+      return element;
+    };
+    const renderFolders = () => {
+      const path = folder.value;
+      const parts = path ? path.split('/') : [];
+      breadcrumb.replaceChildren(button('Hauptverzeichnis', '', 'hub-folder-crumb', 'fa-solid fa-house'));
+      parts.forEach((part, index) => {
+        breadcrumb.append(icon('hub-folder-chevron'), button(part, parts.slice(0, index + 1).join('/'), 'hub-folder-crumb'));
+      });
+      breadcrumb.lastElementChild.setAttribute('aria-current', 'location');
+      list.replaceChildren();
+      if (path) list.append(button('Eine Ebene höher', parts.slice(0, -1).join('/'), 'hub-folder-row hub-folder-parent', 'fa-solid fa-arrow-turn-up'));
+      for (const child of children.get(path) || []) {
+        list.append(button(child.split('/').pop(), child, 'hub-folder-row', 'hub-nav-icon hub-nav-folder-icon', true));
+      }
+      if (!children.get(path)?.length) {
+        const empty = document.createElement('p');
+        empty.className = 'hub-muted hub-folder-empty';
+        empty.textContent = 'Keine Unterordner';
+        list.append(empty);
+      }
+      list.scrollTop = 0;
+    };
+    renderFolders();
+    folder.addEventListener('change', schedule);
+    name.addEventListener('input', schedule);
+    tree?.addEventListener('change', schedule);
+    document.querySelectorAll('[data-open-page-dialog="hub-page-move"]').forEach(button => button.addEventListener('click', schedule));
+    dialog.addEventListener('close', () => {
+      clearTimeout(timer); ++generation; approved = null; submit.disabled = true;
+      if (tree && !tree.disabled) tree.checked = false;
+      folder.value = initialFolder;
+      renderFolders();
+      update();
+      showError('');
+    });
+    form.addEventListener('submit', event => {
+      if (busy || !update() || approved !== signature() || submit.disabled) { event.preventDefault(); return; }
+      busy = true; submit.disabled = true;
+    });
     update();
   }
   // The styled page-delete dialog already confirms the action. Do not ask twice.

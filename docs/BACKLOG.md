@@ -9,13 +9,9 @@ Nicht beauftragte Anforderungen. Priorität H/M/N und Aufwand sind qualitative V
 | IDEA-01 | Seitenhistorie | Frühere Stände anzeigen, vergleichen und wiederherstellen | H | M–H | Speicherbedarf, Aufbewahrung, Rechte, Restore mit gleicher ID |
 | IDEA-05 | Seitenvorlagen | Wiederkehrende Markdown-Strukturen | M | N–M | Keine kopierten IDs oder ungewollten Freigaben |
 | IDEA-10 | Seiten per Drag-and-drop verschieben | Seiten direkt im Navigationsbaum reorganisieren | M | M–H | Rechte, Kollisionen, Vererbung, Bestätigung, stabile IDs |
-| IDEA-19 | Ganze Kapitelstrukturen verschieben | Kapitel mitsamt allen Unterseiten an einen neuen Ort verschieben | M | M–H | ACL-Vererbung, Sperren, Pfadkollisionen, stabile IDs, keine Verschiebung in eigene Unterstruktur |
 
 ### IDEA-10 – Drag-and-drop im Seitenbaum
 Ziel: Admin kann eine Seite auf einen zulässigen Zielordner ziehen, statt den bestehenden Move-Dialog manuell zu bedienen. Variante für Umsortierung unter Geschwistern separat entscheiden; keine implizite Änderung der Sortierreihenfolge. Bestehender Move-Dialog bleibt als Tastatur-/Touch-Alternative erhalten. Vor dem Commit Zielpfad und mögliche Änderung geerbter Leserechte anzeigen, Bestätigung und Abbruch anbieten. Vorhandene serverseitige Move-Operation, Rollen-/CSRF-Prüfung, Revisionskontrolle, Sperre und Pfadvalidierung wiederverwenden. Keine Überschreibung, keine ungültigen Ziele, keine unbeabsichtigte Verschiebung eines gesamten Kapitels; Semantik von Unterseiten ausdrücklich spezifizieren. ID-Links und Medienreferenzen bleiben erhalten, Legacy-Pfadlinks können wie bisher brechen. Bei Fehler Baum aus Serverzustand aktualisieren; keine vorgetäuschte Erfolgsmeldung. Tests für Admin/Editor/Reader, Kollisionen, veraltete Revision, Abbruch, geerbte Rechte, Tastatur und schmale Ansichten. Noch nicht implementiert.
-
-### IDEA-19 – Ganze Kapitelstrukturen verschieben
-Ziel: Ein bestehendes Kapitel mitsamt sämtlichen Unterseiten an einen neuen zulässigen Ort verschieben. Hierarchie, stabile Seiten-IDs, Inhalte und Metadaten sollen erhalten bleiben. Bei einer späteren Spezifikation sind Berechtigungen am Quell- und Zielort, geerbte Rechte, Sperren, Pfadkollisionen, ungültige Ziele (insbesondere eigene Unterstrukturen), Legacy-Pfadlinks und Fehlerbehandlung zu klären. Bedienung über den bestehenden Move-Dialog prüfen; Drag-and-drop (IDEA-10) bleibt eine separate Idee. Noch nicht beauftragt oder implementiert.
 
 ## Navigation und persönliche Einstellungen
 

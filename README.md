@@ -6,7 +6,7 @@
 
 Ein schlankes, dateibasiertes CMS für private Intranets, Haushalte und kleine Gemeinschaften. Inhalte werden als Markdown-Dateien gespeichert; eine Datenbank ist nicht erforderlich.
 
-Release: `1.1.0` · Anwendungsversion: `1.1-20261126` · Lizenz: GPL-3.0-or-later
+Release: `1.1.1` · Anwendungsversion: `1.1.1-20261127` · Lizenz: GPL-3.0-or-later
 
 ![HomeHub CMS mit Wiki-Navigation und integriertem Benutzerhandbuch](docs/images/homehub-screenshot.jpg)
 

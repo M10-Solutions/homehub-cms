@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.1 – UX-Optimierungen und Wartung (27.11.2026)
+
+Anwendungsversion `1.1.1-20261127`.
+
+- IDEA-20/21: Markdown-Leerzeilen erhalten; Web-Bild-Tooltip präzisiert.
+- IDEA-22/23: kontextabhängige ACL-Auswahl, redaktionelle Metadaten im Seitenkopf, ausklappbare Beschreibung und Schlagworte, gemeinsame Speicherung mit Revisions- und Lease-Prüfung.
+- IDEA-25: gemeinsamer Exportdialog für angemeldete Benutzer, PDF-Einzelseitenexport für Gäste.
+- Redundante Eyebrow und Bearbeiten-Pill entfernt; CSS, SDD und Beispielhandbuch konsolidiert.
+- Funktionsumfang, visuelle Prüfung und Regression vor Versionspflege laut Betreiber erfolgreich. Finale visuelle NAS-Prüfung und Regression erfolgreich; endgültige Betreiberfreigabe am 27.11.2026 erteilt.
+- Keine neuen Abhängigkeiten oder erforderlichen Datenmigrationen. IDEA-24 zurückgestellt.
+
 ## 1.1.0 – Papierkorb, Sicherheit und ODT-Gestaltung (26.11.2026)
 
 Anwendungsversion `1.1-20261126`.
@@ -11,7 +22,7 @@ Anwendungsversion `1.1-20261126`.
 - SDD: Aufteilung in SPEC-EDITOR.md und SPEC-ADMIN.md.
 - Betreiberabnahme am 25.11.2026: alle manuellen Kriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen vor Versionspflege.
 - Keine neuen Abhängigkeiten oder erforderlichen Datenmigrationen. IDEA-19 bleibt im Backlog.
-- Paketierung und abschliessende Betreiberabnahme am 26.11.2026: alle Kriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen. Veröffentlichung freigegeben; GitHub-Publikation noch nicht bestätigt.
+- Paketierung und abschliessende Betreiberabnahme am 26.11.2026: alle Kriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen. Veröffentlichung freigegeben; GitHub-Publikation laut Betreiber bestätigt.
 
 ## 1.0.1 – Small UX improvements and bugfixes (25.11.2026)
 

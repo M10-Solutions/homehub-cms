@@ -104,12 +104,14 @@ if ($inlineAllowed && $role !== 'admin') {
     $inlineAllowed = ($isDraftView ? PermissionService::canReadDraft($currentPage, $role, $pages, $userId) : PermissionService::canReadPage($currentPage, $role, $pages, $userId));
 }
 $inlineToken = $_SESSION['csrf'] ??= bin2hex(random_bytes(32));
-$inlineRevision = $inlineAllowed ? hash('sha256', $currentPage->content) : '';
+
 $canManagePages = PermissionService::can($role, 'page.create');
 $manageAdmin = $canManagePages ? new \HomeHub\Admin($config['content_path'], dirname(__DIR__) . '/data/config') : null;
 $canManageCurrent = $canManagePages && $currentPage !== null && PermissionService::canManagePage($currentPage, $role, $pages, $userId);
 $managePage = $canManageCurrent ? $manageAdmin->read($currentPage->slug) : null;
 $manageRevision = $managePage !== null ? hash('sha256', json_encode($managePage, JSON_THROW_ON_ERROR)) : '';
+$inlineAllowed = $inlineAllowed && $managePage !== null;
+$inlineRevision = $inlineAllowed ? $manageRevision : '';
 $knownTags = [];
 $tagWarning = '';
 if ($managePage !== null) {
@@ -259,34 +261,34 @@ function e(string $value): string
     <title><?= e($pageTitle) ?> · <?= e($config['name']) ?></title>
     <link rel="stylesheet" href="/css/text-alignment.css?v=1">
     <link rel="stylesheet" href="/vendor/fontawesome/css/all.min.css?v=6.7.2">
-    <link rel="stylesheet" href="/css/app.css?v=3&amp;theme=1">
+    <link rel="stylesheet" href="/css/app.css?v=4-clean&amp;theme=1">
     <link rel="stylesheet" href="/css/labels.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/layout.css?v=3&amp;theme=1"><link rel="stylesheet" href="/css/navigation.css?v=3&amp;theme=1">
+    <link rel="stylesheet" href="/css/layout.css?v=3-clean&amp;theme=1"><link rel="stylesheet" href="/css/navigation.css?v=3-clean&amp;theme=1">
     <link rel="stylesheet" href="/css/code-blocks.css?v=1">
-    <link rel="stylesheet" href="/css/page-export.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/inline-editor.css?v=6&amp;theme=1">
-    <link rel="stylesheet" href="/css/media-picker.css?v=2&amp;theme=1">
+
+    <link rel="stylesheet" href="/css/inline-editor.css?v=22-9-clean&amp;theme=1">
+    <link rel="stylesheet" href="/css/media-picker.css?v=2-clean&amp;theme=1">
     <?php if ($inlineAllowed): ?><link rel="stylesheet" href="/css/page-picker.css?v=1&amp;theme=1"><?php endif; ?>
-    <link rel="stylesheet" href="/css/login-modal.css?v=2&amp;theme=1">
+    <link rel="stylesheet" href="/css/login-modal.css?v=2-clean&amp;theme=1">
     <link rel="stylesheet" href="/css/page-metadata.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/page-actions.css?v=7&amp;theme=1">
+    <link rel="stylesheet" href="/css/page-actions.css?v=7-clean&amp;theme=1">
     <link rel="stylesheet" href="/css/header-create.css?v=1">
     <link rel="stylesheet" href="/css/wiki-navigation-ux.css?v=3&amp;theme=1">
     <link rel="stylesheet" href="/css/sidebar-account.css?v=3&amp;theme=1">
     <link rel="stylesheet" href="/css/page-protection.css?v=1&amp;theme=1">
-    <link rel="stylesheet" href="/css/chapter-export.css?v=2&amp;theme=1">
+    <link rel="stylesheet" href="/css/chapter-export.css?v=3&amp;theme=1">
 <link rel="stylesheet" href="/css/fontawesome-ui.css?v=2">
     <script src="/js/prism-homehub.min.js?v=1.30.0" defer></script>
     <script src="/js/code-blocks.js?v=1" defer></script>
     <script src="/js/markdown-toolbar.js?v=3" defer></script>
-    <script src="/js/inline-editor.js?v=6" defer></script>
+    <script src="/js/inline-editor.js?v=10" defer></script>
     <?php if ($inlineAllowed): ?><script src="/js/page-picker.js?v=4" defer></script><?php endif; ?>
     <script src="/js/login-modal.js?v=1" defer></script>
-    <script src="/js/page-actions.js?v=7" defer></script>
+    <script src="/js/page-actions.js?v=8" defer></script>
     <script src="/js/wiki-navigation-ux.js?v=4" defer></script>
-    <script src="/js/chapter-export.js?v=2" defer></script>
+    <script src="/js/chapter-export.js?v=3" defer></script>
 <link rel="stylesheet" href="/css/dialog-header.css?v=1">
-<link rel="stylesheet" href="/css/admin-buttons.css?v=4&amp;theme=1">
+<link rel="stylesheet" href="/css/admin-buttons.css?v=4-clean&amp;theme=1">
 <link rel="stylesheet" href="/css/wiki-search.css?v=1">
 <link rel="stylesheet" href="/css/theme.css?v=1"><link rel="stylesheet" href="/css/hub-feedback.css?v=2">
 <link rel="stylesheet" href="/css/responsive-navigation.css?v=1">
@@ -349,7 +351,7 @@ function e(string $value): string
 
     <?php if ($canManagePages): ?><div id="hub-nav-context-menu" class="hub-nav-context-menu" role="menu" hidden>
         <button type="button" role="menuitem" data-nav-action="create"><i class="fa-solid fa-file-circle-plus" aria-hidden="true"></i> Neue Unterseite</button>
-        <button type="button" role="menuitem" data-nav-action="settings"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Einstellungen</button>
+        <button type="button" role="menuitem" data-nav-action="settings"><i class="fa-solid fa-sliders" aria-hidden="true"></i> Sichtbarkeit</button>
         <button type="button" role="menuitem" data-nav-action="move"><i class="fa-solid fa-folder-tree" aria-hidden="true"></i> Verschieben</button>
         <button type="button" role="menuitem" data-nav-action="delete"><i class="fa-solid fa-trash" aria-hidden="true"></i> Löschen</button>
     </div><?php endif; ?>
@@ -357,10 +359,9 @@ function e(string $value): string
         <article class="content">
             <div class="page-heading">
                 <div>
-                    <div class="eyebrow">HOMEHUB · WISSENSBASIS</div>
                     <div class="hub-page-title-row">
-                        <h1><?= e($pageTitle) ?></h1>
-                        <?php if ($inlineAllowed): ?><span class="inline-edit-pill" aria-label="Bearbeitungsmodus" hidden><i class="fa-solid fa-pen" aria-hidden="true"></i> Bearbeiten</span><?php endif; ?>
+                        <h1 class="inline-heading-read"><?= e($pageTitle) ?></h1>
+                        <?php if ($inlineAllowed): ?><h1 class="inline-heading-edit" hidden><input id="inline-title" name="title" type="text" required maxlength="160" aria-label="Titel" placeholder="Titel" value="<?= e($managePage['title']) ?>"></h1><?php endif; ?>
                         <?php if ($hasRestrictedVisibility): ?>
                             <span class="hub-page-protected" role="img" aria-label="Zugriff eingeschränkt" title="Zugriff eingeschränkt">
                                 <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
@@ -368,7 +369,25 @@ function e(string $value): string
                         <?php endif; ?>
                     </div>
                     <?php if ($description !== ''): ?>
-                        <p class="page-description"><?= e($description) ?></p>
+                        <p class="page-description inline-heading-read"><?= e($description) ?></p>
+                    <?php endif; ?>
+                    <?php if ($inlineAllowed): ?>
+                    <details id="inline-meta-details" class="inline-heading-edit inline-metadata" hidden>
+                    <summary>Beschreibung &amp; Schlagworte</summary>
+                    <div class="inline-meta-fields">
+                    <textarea class="page-description" id="inline-description" name="description" rows="2" maxlength="500" aria-label="Beschreibung" placeholder="Beschreibung"><?= e($managePage['description']) ?></textarea>
+<div class="hub-tag-editor" data-tag-editor data-known-tags="<?= e(json_encode((object) $knownTags, JSON_THROW_ON_ERROR)) ?>">
+<label for="hub-tag-fallback" data-tag-label class="inline-visually-hidden">Schlagworte</label>
+<input id="hub-tag-fallback" name="labels" type="text" value="<?= e($managePage['labels']) ?>" aria-label="Schlagworte (kommagetrennt)" placeholder="Schlagworte">
+<div data-tag-enhanced hidden>
+<div class="hub-tag-field"><div data-tag-pills class="hub-tag-pills"></div><input id="hub-tag-input" type="text" maxlength="40" placeholder="Schlagwort eingeben …" aria-label="Schlagworte" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hub-tag-options"></div>
+<div id="hub-tag-options" class="hub-tag-options" role="listbox" hidden></div>
+<p class="hub-muted" data-tag-status aria-live="polite"></p>
+</div>
+<?php if ($tagWarning !== ''): ?><p class="hub-muted"><?= e($tagWarning) ?></p><?php endif; ?>
+</div>
+                    </div>
+                    </details>
                     <?php endif; ?>
                 </div>
                 <?php if (!$notFound): ?>
@@ -376,7 +395,7 @@ function e(string $value): string
                     <div class="page-heading-read-actions" id="page-heading-read-actions">
                         <?php if ($canManagePages): ?>
                         <span class="hub-page-management">
-                            <button type="button" class="hub-icon-button" data-open-page-dialog="hub-page-settings" title="Seiteneinstellungen" aria-label="Seiteneinstellungen"><i class="fa-solid fa-sliders" aria-hidden="true"></i></button>
+                            <button type="button" class="hub-icon-button" data-open-page-dialog="hub-page-settings" title="Sichtbarkeit" aria-label="Sichtbarkeit"><i class="fa-solid fa-sliders" aria-hidden="true"></i></button>
                             <button type="button" class="hub-icon-button" data-open-page-dialog="hub-page-move" title="Seite verschieben" aria-label="Seite verschieben"><i class="fa-solid fa-folder-tree" aria-hidden="true"></i></button>
                             <button type="button" class="hub-icon-button hub-action-btn danger" data-open-page-dialog="hub-page-delete" title="Seite löschen" aria-label="Seite löschen"><i class="fa-solid fa-trash" aria-hidden="true"></i></button>
                         </span>
@@ -384,12 +403,10 @@ function e(string $value): string
                         <?php if ($inlineAllowed): ?>
                         <button type="button" id="inline-edit-toggle" class="inline-primary hub-icon-button" title="Seite bearbeiten" aria-label="Seite bearbeiten"><i class="fa-solid fa-pen-to-square" aria-hidden="true"></i></button>
                         <?php endif; ?>
-                        <?php if (!$isDraftView): ?><a href="/export.php?format=pdf&amp;page=<?= rawurlencode($currentPage->slug) ?>" title="Als PDF herunterladen" download>
+                        <?php if (!$isDraftView && !$auth->isSigned()): ?><a href="/export.php?format=pdf&amp;page=<?= rawurlencode($currentPage->slug) ?>" title="Als PDF herunterladen" download>
                             <i class="fa-solid fa-file-pdf" aria-hidden="true"></i> PDF
                         </a>
-                        <a href="/export.php?format=odt&amp;page=<?= rawurlencode($currentPage->slug) ?>" title="Als ODT herunterladen" download>
-                            <i class="fa-solid fa-file-word" aria-hidden="true"></i> ODT
-                        </a>
+                        <?php elseif (!$isDraftView && $auth->isSigned()): ?>
                         <button type="button" class="hub-chapter-export-trigger" id="hub-chapter-export-open" title="Kapitelstruktur exportieren" aria-label="Kapitelstruktur exportieren"><i class="fa-solid fa-file-export" aria-hidden="true"></i> Export</button><?php endif; ?>
                     </div>
 
@@ -413,7 +430,7 @@ function e(string $value): string
 <button type="button" data-inline-md="link" title="Link" aria-label="Link"><i class="fa-solid fa-link" aria-hidden="true"></i></button>
 <button type="button" data-page-picker data-page-target="inline-body" title="Wiki-Seite verlinken" aria-label="Wiki-Seite verlinken"><i class="fa-solid fa-file-circle-plus" aria-hidden="true"></i></button>
 <button type="button" data-media-picker data-media-target="inline-body" title="Bild aus Medienbibliothek" aria-label="Bild aus Medienbibliothek"><i class="fa-solid fa-images" aria-hidden="true"></i></button>
-<button type="button" data-inline-md="image" title="Bild" aria-label="Bild"><i class="fa-solid fa-image" aria-hidden="true"></i></button>
+<button type="button" data-inline-md="image" title="Web-Bild" aria-label="Web-Bild"><i class="fa-solid fa-image" aria-hidden="true"></i></button>
 <button type="button" data-inline-md="unordered" title="Aufzählung" aria-label="Aufzählung"><i class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
 <button type="button" data-inline-md="ordered" title="Nummerierte Liste" aria-label="Nummerierte Liste"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
 <button type="button" data-inline-md="task" title="Aufgabenliste" aria-label="Aufgabenliste"><i class="fa-solid fa-list-check" aria-hidden="true"></i></button>
@@ -428,7 +445,8 @@ function e(string $value): string
 <button type="button" data-inline-md="align-justify" title="Blocksatz" aria-label="Blocksatz"><i class="fa-solid fa-align-justify" aria-hidden="true"></i></button>
                 </div>
                 <div id="inline-panels" class="inline-panels" data-view="edit">
-                    <label class="inline-edit-pane" for="inline-body"><span class="inline-pane-header"><span class="inline-pane-label">Markdown</span><span id="inline-status" role="status" aria-live="polite"></span></span><textarea id="inline-body" spellcheck="false" maxlength="1048576"><?= e($currentPage->content) ?></textarea></label>
+                    <label class="inline-edit-pane" for="inline-body"><span class="inline-pane-header"><span class="inline-pane-label">Markdown</span><span id="inline-status" role="status" aria-live="polite"></span></span><textarea id="inline-body" spellcheck="false" maxlength="1048576">
+<?= e($currentPage->content) ?></textarea></label>
                     <div class="inline-preview-pane"><span class="inline-pane-label">Vorschau</span><div id="inline-preview" class="markdown-content" aria-live="polite"></div></div>
                 </div>
                 <div class="inline-bottom" aria-label="Bearbeitungsaktionen">
@@ -509,20 +527,8 @@ function e(string $value): string
 <?php if ($managePage !== null): ?>
 <dialog id="hub-page-settings" class="hub-page-dialog" data-page-dialog aria-labelledby="hub-settings-title">
 <form action="/page-actions.php" method="post">
-<h2 class="hub-dialog-header" id="hub-settings-title"><i class="fa-solid fa-gear" aria-hidden="true"></i> <span class="hub-dialog-title-text">Seiteneinstellungen</span></h2>
+<h2 class="hub-dialog-header" id="hub-settings-title"><i class="fa-solid fa-gear" aria-hidden="true"></i> <span class="hub-dialog-title-text">Sichtbarkeit</span></h2>
 <input type="hidden" name="csrf" value="<?= e($authToken) ?>"><input type="hidden" name="page_action" value="settings"><input type="hidden" name="slug" value="<?= e($currentPage->slug) ?>"><input type="hidden" name="revision" value="<?= e($manageRevision) ?>">
-<label>Titel<input name="title" type="text" required maxlength="160" value="<?= e($managePage['title']) ?>"></label>
-<label>Beschreibung<textarea name="description" rows="2" maxlength="500"><?= e($managePage['description']) ?></textarea></label>
-<div class="hub-tag-editor" data-tag-editor data-known-tags="<?= e(json_encode((object) $knownTags, JSON_THROW_ON_ERROR)) ?>">
-<label for="hub-tag-fallback" data-tag-label>Schlagworte</label>
-<input id="hub-tag-fallback" name="labels" type="text" value="<?= e($managePage['labels']) ?>" aria-label="Schlagworte (kommagetrennt)">
-<div data-tag-enhanced hidden>
-<div class="hub-tag-field"><div data-tag-pills class="hub-tag-pills"></div><input id="hub-tag-input" type="text" maxlength="40" placeholder="Schlagwort eingeben …" autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="hub-tag-options"></div>
-<div id="hub-tag-options" class="hub-tag-options" role="listbox" hidden></div>
-<p class="hub-muted" data-tag-status aria-live="polite"></p>
-</div>
-<?php if ($tagWarning !== ''): ?><p class="hub-muted"><?= e($tagWarning) ?></p><?php endif; ?>
-</div>
 <label>Sortierung<input name="order" type="number" min="-99999" max="99999" value="<?= (int)$managePage['order'] ?>"></label>
 <label class="hub-checkbox"><input name="published" type="checkbox" value="1" <?= $managePage['published'] ? 'checked' : '' ?>> Veröffentlicht</label>
 <label class="hub-checkbox"><input name="nav" type="checkbox" value="1" <?= $managePage['nav'] ? 'checked' : '' ?>> In Navigation anzeigen</label>
@@ -532,10 +538,10 @@ function e(string $value): string
 <?php foreach (['all'=>'Alle', 'authenticated'=>'Angemeldete Benutzer', 'roles'=>'Ausgewählte Rollen', 'users'=>'Ausgewählte Benutzer'] as $value=>$label): ?>
 <option value="<?= e($value) ?>" <?= $managePage['visibility'] === $value ? 'selected' : '' ?>><?= e($label) ?></option>
 <?php endforeach; ?></select></label>
-<fieldset><legend>Erlaubte Rollen (bei Sichtbarkeit „Ausgewählte Rollen“)</legend>
+<fieldset data-visibility-fields="roles"><legend>Erlaubte Rollen (bei Sichtbarkeit „Ausgewählte Rollen“)</legend>
 <?php foreach (['reader','editor','admin'] as $r): ?><label><input type="checkbox" name="allowed_roles[]" value="<?= e($r) ?>" <?= in_array($r,$managePage['allowed_roles'],true) ? 'checked' : '' ?>> <?= e($r) ?></label><?php endforeach; ?>
 </fieldset>
-<fieldset><legend>Erlaubte Benutzer (bei Sichtbarkeit „Ausgewählte Benutzer“)</legend>
+<fieldset data-visibility-fields="users"><legend>Erlaubte Benutzer (bei Sichtbarkeit „Ausgewählte Benutzer“)</legend>
 <?php foreach ($manageUsers as $u): ?><label><input type="checkbox" name="allowed_users[]" value="<?= e((string)$u['id']) ?>" <?= in_array($u['id'],$managePage['allowed_users'],true) ? 'checked' : '' ?>> <?= e((string)$u['username']) ?></label><?php endforeach; ?>
 </fieldset>
 <p class="hub-muted">Die Berechtigungen übergeordneter Seiten gelten weiterhin.</p>
@@ -571,17 +577,19 @@ function e(string $value): string
 <div class="hub-dialog-actions"><button type="button" data-close-page-dialog>Abbrechen</button><button type="submit" class="hub-danger">In Papierkorb verschieben</button></div></form></dialog>
 <?php endif; ?>
 <?php endif; ?>
-<?php if (!$notFound && !$isDraftView): ?>
+<?php if (!$notFound && !$isDraftView && $auth->isSigned()): ?>
 <dialog id="hub-chapter-export-dialog" class="hub-chapter-export-dialog" aria-labelledby="hub-chapter-export-title">
     <form method="get" action="/chapter-export.php" class="hub-chapter-export-form">
-        <h2 class="hub-dialog-header" id="hub-chapter-export-title"><i class="fa-solid fa-file-export" aria-hidden="true"></i> Kapitel exportieren</h2>
+        <h2 class="hub-dialog-header" id="hub-chapter-export-title"><i class="fa-solid fa-file-export" aria-hidden="true"></i> Seite oder Kapitel exportieren</h2>
         <p class="hub-chapter-export-subtitle"><?= e($currentPage->title) ?></p>
         <input type="hidden" name="page" value="<?= e($currentPage->slug) ?>">
+        <label for="hub-export-format">Exportformat</label>
+        <select id="hub-export-format" name="format"><option value="pdf">PDF</option><option value="odt">ODT</option><option value="zip">ZIP</option></select>
         <fieldset><legend>Exportumfang</legend>
-            <label><input type="radio" name="scope" value="page"> Nur diese Seite</label>
-            <label><input type="radio" name="scope" value="tree" checked> Diese Seite mit allen Unterseiten</label>
+            <label><input type="radio" name="scope" value="page" checked> Nur diese Seite</label>
+            <label><input type="radio" name="scope" value="tree"> Diese Seite mit allen Unterseiten</label>
         </fieldset>
-        <fieldset><legend>Dokumentoptionen (PDF / ODT)</legend>
+        <fieldset id="hub-export-document-options" hidden disabled><legend>Dokumentoptionen (PDF / ODT)</legend>
             <label><input type="checkbox" name="cover" value="1" checked> Deckblatt erstellen</label>
             <label><input type="checkbox" name="toc" value="1" checked> Inhaltsverzeichnis erstellen</label>
             <label><input type="checkbox" name="numbering" value="1" checked> Kapitel automatisch nummerieren</label>
@@ -589,9 +597,7 @@ function e(string $value): string
         <p class="hub-chapter-export-note">Es werden nur veröffentlichte Seiten berücksichtigt, auf die du Zugriff hast.</p>
         <div class="hub-chapter-export-buttons">
             <button type="button" class="hub-action-btn" data-chapter-export-close><i class="fa-solid fa-xmark" aria-hidden="true"></i> <span>Abbrechen</span></button>
-            <button type="submit" class="hub-action-btn primary" name="format" value="pdf"><i class="fa-solid fa-file-pdf" aria-hidden="true"></i> <span>PDF erstellen</span></button>
-            <button type="submit" class="hub-action-btn primary" name="format" value="odt"><i class="fa-solid fa-file-word" aria-hidden="true"></i> <span>ODT erstellen</span></button>
-            <button type="submit" class="hub-action-btn primary" name="format" value="zip"><i class="fa-solid fa-file-export" aria-hidden="true"></i> <span>ZIP erstellen</span></button>
+            <button type="submit" class="hub-action-btn primary"><i class="fa-solid fa-file-export" aria-hidden="true"></i> <span>Exportieren</span></button>
         </div>
     </form>
 </dialog>

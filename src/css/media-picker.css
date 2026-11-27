@@ -38,10 +38,6 @@
 .hub-media-picker-actions{display:flex;justify-content:flex-end;gap:9px;padding:15px 26px;border-top:1px solid var(--theme-line, #e5eaf2);background:var(--theme-raised, #fafbfd)}
 @media(max-width:700px){.media-manager{grid-template-columns:1fr}.hub-media-picker-header{padding:16px}.hub-media-picker-body{padding:16px;max-height:calc(90dvh - 145px)}.hub-media-picker-actions{padding:13px 16px}.hub-media-picker-controls,.hub-media-picker-utilities{grid-template-columns:1fr}.hub-media-picker-utilities form{flex-wrap:wrap}.hub-media-items{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));max-height:250px}.hub-media-tile img{height:82px}}
 
-/* MEDIA-004: inline confirmation panel matching the HomeHub media manager. */
-.media-usage-panel{margin:1rem 0;padding:1.1rem 1.3rem;border:1px solid var(--theme-line, #cbd5e1);border-radius:12px;background:var(--theme-raised, #f8fafc);color:var(--theme-text, #1e293b);box-shadow:0 3px 12px rgba(15,23,42,.06)}
-.media-usage-panel h2{margin:0 0 .65rem;font-size:1.15rem}.media-usage-panel ul{margin:.65rem 0 1rem;padding-left:1.4rem;overflow-wrap:anywhere}.media-usage-panel li{padding:.2rem 0}.media-usage-panel form{margin:.8rem 0}.media-usage-panel a{display:inline-block;margin-top:.5rem}
-
 /* MEDIA-003: compact move form within existing media cards */
 .media-move { width: 100%; margin-top: .5rem; }
 .media-move summary { cursor: pointer; font-size: .875rem; }

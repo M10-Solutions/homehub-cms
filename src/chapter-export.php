@@ -25,6 +25,13 @@ if (!preg_match('~\A[a-z0-9_-]+(?:/[a-z0-9_-]+)*\z~D', $slug)
     exit('Ungültige Exportanfrage.');
 }
 
+Session::start();
+$auth = new JSONAuthenticator(dirname(__DIR__) . '/data/config');
+if (!$auth->isSigned()) {
+    http_response_code(401);
+    exit('Anmeldung erforderlich.');
+}
+
 $config = require __DIR__ . '/config/app.php';
 $repository = new PageRepository($config['content_path']);
 $root = $repository->find($slug);
@@ -32,8 +39,6 @@ if ($root === null) {
     http_response_code(404);
     exit('Seite nicht gefunden.');
 }
-Session::start();
-$auth = new JSONAuthenticator(dirname(__DIR__) . '/data/config');
 $role = $auth->currentRole();
 $userId = $auth->currentUserId();
 if (!PermissionService::canReadPage($root, $role, $repository, $userId)) {
@@ -92,7 +97,7 @@ if ($format === 'zip') {
     exit;
 }
 
-$options = [
+$options = $scope === 'page' ? [] : [
     'collection' => true,
     'pages' => $pages,
     'cover' => ($_GET['cover'] ?? '') === '1',

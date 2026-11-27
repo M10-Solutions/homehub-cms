@@ -12,3 +12,6 @@
 .hub-chapter-export-form input { accent-color: #3269cf; }
 .hub-chapter-export-note { color: var(--theme-muted, #68768b); font-size: .82rem; margin: 0; }
 .hub-chapter-export-buttons { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+.hub-chapter-export-form fieldset[hidden] { display: none; }
+.hub-chapter-export-form select { width: 100%; }

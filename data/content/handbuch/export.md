@@ -14,9 +14,7 @@ labels:
 
 Seiten und Kapitel ausserhalb des Wikis nutzen.
 
-Öffne eine veröffentlichte Seite und wähle **PDF** oder **ODT** in der Seitenaktionsleiste. PDF eignet sich zum Lesen und Weitergeben, ODT zur weiteren Bearbeitung.
-
-Bei Kapiteln steht zusätzlich **Export** zur Verfügung. Wähle den Umfang und das gewünschte Format. ZIP enthält die Markdown-Inhalte und referenzierte Medien des Exportumfangs.
+Gäste können eine lesbare veröffentlichte Seite über **PDF** herunterladen. Angemeldete Benutzer wählen **Export** und danach Format (PDF, ODT oder ZIP) und Umfang (nur diese Seite oder mit Unterseiten). PDF eignet sich zum Lesen und Weitergeben, ODT zur weiteren Bearbeitung. Bei Kapitel-PDF/ODT stehen Deckblatt, Inhaltsverzeichnis und Nummerierung zur Auswahl. ZIP enthält die Markdown-Inhalte und referenzierte Medien des Exportumfangs.
 
 Entwürfe und nicht lesbare Seiten werden nicht regulär exportiert.
 

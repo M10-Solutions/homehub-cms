@@ -22,6 +22,13 @@ if (!in_array($format, ['pdf', 'odt'], true) || !preg_match('~\A[a-z0-9/_-]+\z~D
     exit('Ungültige Exportanfrage.');
 }
 
+Session::start();
+$auth = new JSONAuthenticator(dirname(__DIR__) . '/data/config');
+if ($format !== 'pdf' && !$auth->isSigned()) {
+    http_response_code(401);
+    exit('Anmeldung erforderlich.');
+}
+
 $config = require __DIR__ . '/config/app.php';
 $repository = new PageRepository($config['content_path']);
 $page = $repository->find($slug);
@@ -29,8 +36,6 @@ if ($page === null) {
     http_response_code(404);
     exit('Seite nicht gefunden.');
 }
-Session::start();
-$auth = new JSONAuthenticator(dirname(__DIR__) . '/data/config');
 if (!PermissionService::canReadPage($page, $auth->currentRole(), $repository, $auth->currentUserId())) {
     http_response_code($auth->isSigned() ? 403 : 401);
     exit('Kein Zugriff auf diese Seite.');

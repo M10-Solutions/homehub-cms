@@ -1,6 +1,6 @@
 # HomeHub CMS – Projektstatus
 
-Stand 26.11.2026. Release 1.1.0 abgenommen und zur Veröffentlichung freigegeben, Anwendung 1.1-20261126; letzte bestätigte GitHub-Veröffentlichung 1.0.1. Maintainer M10-Solutions, GPL-3.0-or-later. Repository M10-Solutions/homehub-cms ist öffentlich; Release 1.0.0 am 25.11.2026 laut Maintainer veröffentlicht.
+Stand 27.11.2026. Release 1.1.0 abgenommen und am 26.11.2026 laut Betreiber erfolgreich auf GitHub veröffentlicht, Anwendung 1.1-20261126; GitHub Actions erfolgreich, alle Publikationskriterien erfüllt. Maintainer M10-Solutions, GPL-3.0-or-later. Repository M10-Solutions/homehub-cms ist öffentlich; Release 1.0.0 am 25.11.2026 laut Maintainer veröffentlicht.
 
 ## Arbeitsweise
 SPEC-EDITOR.md und SPEC-ADMIN.md definieren Anforderungen, ARCHITECTURE die vier SDD-Grundsätze und technische Entscheidungen, TASKS aktuelle Aufträge, BACKLOG unverbindliche Ideen, TESTING die Prüfungen und README den Betrieb. Änderungen erst spezifizieren, dann implementieren, testen und dokumentieren. Historische Unterlagen privat archivieren.
@@ -22,10 +22,14 @@ SPEC-EDITOR.md und SPEC-ADMIN.md definieren Anforderungen, ARCHITECTURE die vier
 - README redaktionell aktualisiert und freigegebener Beispiel-Screenshot ergänzt; Übernahme im gebündelten Release 1.0.1 laut Betreiber bestätigt; kein unabhängiger GitHub-Abgleich.
 - Private Vulnerability Reporting: Aktivierung nicht bestätigt. Historisches Entwicklungsrepository: Löschung nicht bestätigt.
 
-Keine produktiven Daten oder privaten Screenshots veröffentlichen. Kein fertiges Docker-Image verteilen. Historische Dokumentation privat aufbewahren. Keine neuen Entwicklungsaufträge.
+Keine produktiven Daten oder privaten Screenshots veröffentlichen. Kein fertiges Docker-Image verteilen. Historische Dokumentation privat aufbewahren. 
 
 - MED-SEC (IDEA-18): Medienendpunkt/UI funktional abgenommen, 37/37 Regressionen laut Betreiber. EXP-SEC-01–03 umgesetzt; abschliessende Exportabnahme erfolgreich (38/38, keine PHP-Warnungen). IDEA-18 abgeschlossen; Bestandteil von 1.1.0.
 
-TRASH-001 (IDEA-02/17) einschliesslich UI-Nachbesserung: Betreiberabnahme am 25.11.2026 erfolgreich; alle manuellen Abnahmekriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen. Keine aktiven Entwicklungsaufträge oder offenen funktionalen Abnahmen. MED-SEC/EXP-SEC und TRASH-001 sind Bestandteil von 1.1.0.
+TRASH-001 (IDEA-02/17) einschliesslich UI-Nachbesserung: Betreiberabnahme am 25.11.2026 erfolgreich; alle manuellen Abnahmekriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen. MED-SEC/EXP-SEC und TRASH-001 sind Bestandteil von 1.1.0.
 
-ODT-Gestaltung: sämtliche manuellen Kriterien und 39/39 Regressionstests ohne PHP-Warnungen am 25.11.2026 laut Betreiber bestätigt. Spezifikationsaufteilung abgeschlossen. IDEA-19 bleibt unbeauftragt. Paketierung und abschliessende Betreiberabnahme am 26.11.2026 bestätigt: alle Kriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen. Veröffentlichung freigegeben; GitHub-Publikation noch nicht bestätigt.
+ODT-Gestaltung: sämtliche manuellen Kriterien und 39/39 Regressionstests ohne PHP-Warnungen am 25.11.2026 laut Betreiber bestätigt. Spezifikationsaufteilung abgeschlossen. Paketierung und abschliessende Betreiberabnahme am 26.11.2026 bestätigt: alle Kriterien erfüllt, 39/39 Regressionstests ohne PHP-Warnungen. GitHub-Publikation von Release 1.1.0 am 26.11.2026 laut Betreiber erfolgreich; GitHub Actions erfolgreich und alle Publikationskriterien erfüllt. Kein unabhängiger GitHub-Abgleich durchgeführt.
+
+## Entwicklungsstand nach Release 1.1.0
+IDEA-20/21/22/23/25 sowie Entfernung der Eyebrow und Bearbeiten-Pill sind laut Betreiber am 27.11.2026 funktional abgenommen; vollständige NAS-Regression nach Testkorrektur erfolgreich. IDEA-24 bleibt zurückgestellt.
+Dokumentations- und CSS-Bereinigung einschliesslich Beispielhandbuch: visuelle Abnahme und vollständige NAS-Regression am 27.11.2026 laut Betreiber erfolgreich. Funktionsumfang eingefroren. Release 1.1.1 (Anwendung 1.1.1-20261127): finale visuelle NAS-Prüfung und Regression laut Betreiber erfolgreich; endgültige Betreiberfreigabe am 27.11.2026 erteilt. GitHub-Publikation und CI-Bestätigung ausstehend. Keine weiteren funktionalen Änderungen nach Abnahme.

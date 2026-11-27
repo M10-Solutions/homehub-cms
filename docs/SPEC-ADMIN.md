@@ -1,6 +1,6 @@
 # HomeHub CMS – Funktionsspezifikation Administration
 
-**Stand:** 26.11.2026 · Release 1.1.0 (Anwendung 1.1-20261126); abschliessend abgenommen und zur Veröffentlichung freigegeben; GitHub-Publikation noch nicht bestätigt.
+**Stand:** 27.11.2026 · Release 1.1.1 (Anwendung 1.1.1-20261127); Betreiberfreigabe am 27.11.2026 erteilt.
 Diese Datei ist die konsolidierte Soll-/Ist-Beschreibung des aktuellen Produkts; ältere Abnahmedokumente sind historische Nachweise. SEARCH-001 und die vorangegangenen Erweiterungen sind laut Betreiber abgenommen. CLEANUP-001 / SDD-002: Betreiber bestätigt 24/24 Tests und manuelle Funktionstests. QA-002: NAS-Abnahme mit 25/25 Tests bestätigt. VERSION-001: 26/26 Regressionen bestätigt; Footer nicht separat bestätigt. UI-011: 27/27 Regressionen und manuelle Funktionstests bestätigt.
 
 
@@ -150,8 +150,8 @@ Die folgenden bestehenden Anforderungen werden dort gemeinsam mit ihren Content-
 
 ## TAG-001–004 – Schlagwörter
 - Zentraler Katalog `data/config/tags.json` als Liste `{id,name}`, ID `t_<32 hex>`; YAML `labels` speichert IDs. Namen bleiben case-sensitive, nur exakt gleich geschriebene Namen sind identisch. Maximal 20 Zuordnungen pro Seite, Name 1–40 Zeichen ohne Komma/Zeilenumbruch/reservierte ID.
-- Seiteneinstellungen: case-insensitive Vorschlagsuche, Pills mit X, neue Namen eingeben, Tastaturauswahl und Speichern; Abbrechen persistiert nichts. Entfernen aus Seite löscht nicht den Katalogeintrag.
-- Admin-Unterseite Schlagwörter mit Suchfilter, Einzelauswahl, Doppelklick, Neu/Bearbeiten/Löschen und Anzahl zugeordneter Seiten (auch Entwürfe). Umbenennung auch bei Verwendung erlaubt; dabei ändern sich nur Katalogdaten. Löschen verwendeter IDs gesperrt. Katalogänderungen unter Sperren, atomar. Lesbare Legacy-Labels werden beim expliziten Speichern der Seiteneinstellungen zugeordnet; keine automatische Massenmigration. Inhaltsbearbeitung bewahrt vorhandene Zuordnungen.
+- Inline-Editor: case-insensitive Vorschlagsuche, Pills mit X, neue Namen eingeben, Tastaturauswahl und Speichern; Abbrechen persistiert nichts. Entfernen aus Seite löscht nicht den Katalogeintrag.
+- Admin-Unterseite Schlagwörter mit Suchfilter, Einzelauswahl, Doppelklick, Neu/Bearbeiten/Löschen und Anzahl zugeordneter Seiten (auch Entwürfe). Umbenennung auch bei Verwendung erlaubt; dabei ändern sich nur Katalogdaten. Löschen verwendeter IDs gesperrt. Katalogänderungen unter Sperren, atomar. Lesbare Legacy-Labels werden bei Änderung der Schlagwortzuordnung im Editor zugeordnet; keine automatische Massenmigration. Inhaltsbearbeitung ohne Änderung der Schlagworte bewahrt vorhandene Zuordnungen.
 
 **Abnahme:** Ein Tag auf zwei Seiten, zentral umbenennen, beide zeigen neuen Namen ohne Änderung der Markdown-Dateien; Suche mit abweichender Schreibweise, ZIP enthält Namen; Delete bei Verwendung blockiert.
 

@@ -76,14 +76,14 @@ try {
             throw new RuntimeException('Die Seite wurde zwischenzeitlich geändert. Bitte neu laden.');
         }
         $input = $existing;
-        foreach ($role === 'admin' ? ['title', 'description', 'labels', 'order', 'visibility'] : ['title', 'description', 'labels', 'order'] as $key) {
+        foreach ($role === 'admin' ? ['order', 'visibility'] : ['order'] as $key) {
             $input[$key] = $_POST[$key] ?? '';
         }
         $input['published'] = isset($_POST['published']);
         $input['nav'] = isset($_POST['nav']);
         if ($role === 'admin') {
-            $input['allowed_roles'] = $_POST['allowed_roles'] ?? [];
-            $input['allowed_users'] = $_POST['allowed_users'] ?? [];
+            $input['allowed_roles'] = $input['visibility'] === 'roles' ? ($_POST['allowed_roles'] ?? []) : [];
+            $input['allowed_users'] = $input['visibility'] === 'users' ? ($_POST['allowed_users'] ?? []) : [];
         }
         $admin->save($slug, $input, false, $slug, false, $revision);
         $target = $slug;

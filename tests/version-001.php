@@ -5,7 +5,7 @@ declare(strict_types=1);
 $root = dirname(__DIR__) . '/src';
 $config = require $root . '/config/app.php';
 $version = $config['version'] ?? null;
-if (!is_string($version) || !preg_match('/\A\d+\.\d+-(\d{4})(\d{2})(\d{2})\z/', $version, $m) || !checkdate((int)$m[2], (int)$m[3], (int)$m[1])) {
+if (!is_string($version) || !preg_match('/\A\d+\.\d+\.\d+-(\d{4})(\d{2})(\d{2})\z/', $version, $m) || !checkdate((int)$m[2], (int)$m[3], (int)$m[1])) {
     throw new RuntimeException('Invalid configured release version');
 }
 $wiki = file_get_contents($root . '/index.php');

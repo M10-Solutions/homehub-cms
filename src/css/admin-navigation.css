@@ -3,4 +3,3 @@
 /* UI-007: permanently visible admin navigation; responsive positioning in layout.css. */
 .admin-sidebar{min-width:0;overflow-x:hidden}
 .admin-main{min-width:0;max-width:none}
-.admin-sidebar-heading strong{font-size:13px;text-transform:uppercase;letter-spacing:.07em;color:var(--theme-muted, #65758b)}

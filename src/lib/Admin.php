@@ -83,24 +83,26 @@ final class Admin
     }
 
     /** @param array<string,mixed> $input */
-    public function save(string $slug, array $input, bool $create, string $originalSlug = '', bool $contentOnly = false, string $expectedRevision = '', string $lockUser = '', string $lockToken = ''): void
+    public function save(string $slug, array $input, bool $create, string $originalSlug = '', bool $contentOnly = false, string $expectedRevision = '', string $lockUser = '', string $lockToken = '', bool $editorMetadata = false): void
     {
         // Share the same lock as media deletion and relocation. Keep the entire
         // page mutation (including content-only reads) inside the critical section.
-        (new MediaOperationLock($this->dataDir))->run(function () use ($slug, $input, $create, $originalSlug, $contentOnly, $expectedRevision, $lockUser, $lockToken): void {
+        (new MediaOperationLock($this->dataDir))->run(function () use ($slug, $input, $create, $originalSlug, $contentOnly, $expectedRevision, $lockUser, $lockToken, $editorMetadata): void {
             if (!$create) {
-                (new PageEditLease($this->dataDir))->assertAvailable($originalSlug, $lockUser, $lockToken);
+                $lease = new PageEditLease($this->dataDir);
+                if ($editorMetadata) $lease->assertOwner($originalSlug, $lockUser, $lockToken);
+                else $lease->assertAvailable($originalSlug, $lockUser, $lockToken);
                 if ($expectedRevision !== '') {
                     $actual = $this->read($originalSlug);
-                    $hash = $contentOnly ? hash('sha256', $actual['body']) : hash('sha256', json_encode($actual, JSON_THROW_ON_ERROR));
+                    $hash = $contentOnly && !$editorMetadata ? hash('sha256', $actual['body']) : hash('sha256', json_encode($actual, JSON_THROW_ON_ERROR));
                     if (!hash_equals($hash, $expectedRevision)) throw new \RuntimeException('Diese Seite wurde zwischenzeitlich geändert. Bitte Änderungen sichern und neu laden.');
                 }
             }
-            $this->saveUnlocked($slug, $input, $create, $originalSlug, $contentOnly);
+            $this->saveUnlocked($slug, $input, $create, $originalSlug, $contentOnly, $editorMetadata);
         });
     }
 
-    private function saveUnlocked(string $slug, array $input, bool $create, string $originalSlug = '', bool $contentOnly = false): void
+    private function saveUnlocked(string $slug, array $input, bool $create, string $originalSlug = '', bool $contentOnly = false, bool $editorMetadata = false): void
     {
         if ($contentOnly) {
             if ($create || $slug !== $originalSlug) throw new \RuntimeException('Mitglieder dürfen Seiten weder erstellen noch verschieben.');
@@ -109,9 +111,11 @@ final class Admin
             $repository = new PageRepository($this->contentDir);
             $page = $repository->findForAccess($originalSlug);
             if ($page === null || !($page->published ? PermissionService::canReadPage($page, $auth->currentRole(), $repository, $auth->currentUserId()) : PermissionService::canReadDraft($page, $auth->currentRole(), $repository, $auth->currentUserId()))) throw new \RuntimeException('Kein Zugriff auf diese Seite.');
-            // Never trust submitted metadata for members; only the Markdown body can change.
+            // Editorial save accepts only title, description, labels and body; never ACL or publication.
             $body = (string) ($input['body'] ?? '');
-            $input = $existing;
+            $editorFields = $editorMetadata ? array_intersect_key($input, array_flip(['title', 'description', 'labels'])) : [];
+            if ($editorMetadata && !PermissionService::canManagePage($page, $auth->currentRole(), $repository, $auth->currentUserId())) throw new \RuntimeException('Keine Bearbeitungsberechtigung.');
+            $input = array_replace($existing, $editorFields);
             $input['body'] = $body;
         }
         $path = $this->file($slug);
@@ -176,7 +180,7 @@ final class Admin
             'allowed_users' => $visibility === 'users' ? $users : [],
             'title' => $title,
             'description' => $description,
-            'labels' => $contentOnly ? $labels : (new TagRepository($this->dataDir . '/tags.json'))->assign($labels),
+            'labels' => ($contentOnly && (!$editorMetadata || $input['labels'] === $existing['labels'])) ? $labels : (new TagRepository($this->dataDir . '/tags.json'))->assign($labels),
             'order' => $order,
             'published' => !empty($input['published']),
             'nav' => !empty($input['nav']),

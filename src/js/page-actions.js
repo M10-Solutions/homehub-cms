@@ -92,7 +92,6 @@
   const pills = root.querySelector('[data-tag-pills]');
   const options = root.querySelector('[role=listbox]');
   const status = root.querySelector('[data-tag-status]');
-  const form = root.closest('form');
   const key = value => value.trim().toLowerCase();
   const known = JSON.parse(root.dataset.knownTags);
   const name = token => Object.hasOwn(known, token) ? known[token] : token;
@@ -102,6 +101,7 @@
   const close = () => { options.hidden = true; input.setAttribute('aria-expanded', 'false'); input.removeAttribute('aria-activedescendant'); active = -1; };
   const render = () => {
     field.value = tags.join(', ');
+    field.dispatchEvent(new Event('input', {bubbles:true}));
     pills.replaceChildren();
     tags.forEach((tag, index) => {
       const chip = document.createElement('span'); chip.className = 'page-label-chip';
@@ -153,7 +153,18 @@
     else if (['ArrowDown','ArrowUp'].includes(e.key) && !options.hidden) { e.preventDefault(); active = (active < 0 ? (e.key === 'ArrowDown' ? 0 : choices.length - 1) : (active + (e.key === 'ArrowDown' ? 1 : -1) + choices.length) % choices.length); highlight(); }
     else if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); add(!options.hidden && active >= 0 ? choices[active].tag : input.value); }
   });
-  form.addEventListener('submit', e => { if (!add(input.value)) e.preventDefault(); });
-  root.closest('dialog').addEventListener('close', () => { tags = [...initialTags]; input.value = ''; render(); close(); });
+  root.addEventListener('hub-tag-commit', e => { if (!add(input.value)) e.preventDefault(); });
+  root.addEventListener('hub-tag-reset', () => { tags = [...initialTags]; input.value = ''; render(); close(); });
   field.type = 'hidden'; root.querySelector('[data-tag-label]').htmlFor = input.id; root.querySelector('[data-tag-enhanced]').hidden = false; render();
+})();
+
+(() => {
+  const select = document.querySelector('#hub-page-settings select[name=visibility]');
+  if (!select) return;
+  const update = () => document.querySelectorAll('[data-visibility-fields]').forEach(group => {
+    group.hidden = group.dataset.visibilityFields !== select.value;
+    group.disabled = group.hidden;
+  });
+  select.addEventListener('change', update);
+  update();
 })();

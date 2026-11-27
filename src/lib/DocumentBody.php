@@ -13,10 +13,8 @@ final class DocumentBody
     {
         $heading = '# ' . str_replace(["\r", "\n"], ' ', trim($title));
         $description = trim(preg_replace('/\s*\R\s*/u', ' ', $description) ?? $description);
-        $parts = [$heading];
-        if ($description !== '') $parts[] = $description;
-        if (trim($body) !== '') $parts[] = ltrim($body, "\r\n");
-        return implode("\n\n", $parts) . "\n";
+        $header = $heading . ($description !== '' ? "\n\n" . $description : '');
+        return $body === '' ? $header . "\n" : $header . "\n\n" . $body;
     }
 
     /**
@@ -28,22 +26,11 @@ final class DocumentBody
         $normalized = str_replace(["\r\n", "\r"], "\n", $markdown);
         $normalized = ltrim($normalized, "\n");
         $heading = '# ' . str_replace(["\r", "\n"], ' ', trim($title));
-        if (!str_starts_with($normalized, $heading . "\n")) return $markdown;
-        $tail = substr($normalized, strlen($heading));
-        if (!preg_match('/\A\n{2,}/', $tail, $m)) {
-            return trim($tail) === '' && trim($description) === '' ? '' : $markdown;
-        }
-        $tail = substr($tail, strlen($m[0]));
         $description = trim(preg_replace('/\s*\R\s*/u', ' ', $description) ?? $description);
-        if ($description !== '') {
-            // The description must match exactly and end at a paragraph boundary.
-            if (!str_starts_with($tail, $description)) return $markdown;
-            $tail = substr($tail, strlen($description));
-            // A page without content ends after the description and a newline.
-            if (trim($tail) === '') return '';
-            if (!preg_match('/\A\n{2,}/', $tail, $m)) return $markdown;
-            $tail = substr($tail, strlen($m[0]));
-        }
-        return $tail;
+        $header = $heading . ($description !== '' ? "\n\n" . $description : '');
+        if ($normalized === $header || $normalized === $header . "\n") return '';
+        $prefix = $header . "\n\n";
+        if (!str_starts_with($normalized, $prefix)) return $markdown;
+        return substr($normalized, strlen($prefix));
     }
 }

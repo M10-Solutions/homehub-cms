@@ -69,3 +69,33 @@ Betreiberabnahme TRASH-001 einschliesslich UI-Nachbesserung am 25.11.2026 bestä
 Betreiberabnahme am 25.11.2026: alle manuellen Kriterien erfüllt, 39/39 Regressionstests bestanden, keine PHP-Warnungen. Release 1.1.0: erneute strikte NAS-QA nach Versionspflege am 26.11.2026 laut Betreiber erfolgreich: alle Abnahmekriterien erfüllt, 39/39 Regressionstests bestanden, keine PHP-Warnungen.
 
 Lokale Release-Teilprüfung am 26.11.2026 nach Versionspflege: 33/39 erfolgreich; sechs bekannte umgebungsbedingte Fehlschläge (fehlender Composer-Autoload bzw. ZipArchive). PHP-Syntax der Versionskonfiguration erfolgreich. Keine vollständige Release-Abnahme in der lokalen Prüfumgebung; anschliessende NAS-Betreiberabnahme erfolgreich (siehe oben).
+
+## IDEA-25 – abgenommen
+- Gast: nur PDF-Button, PDF einer veröffentlichten lesbaren Seite funktioniert; direkte Aufrufe chapter-export.php (alle Formate/Umfänge) und export.php mit ODT ergeben 401.
+- Reader, Editor, Admin: nur Export-Button; Dialogtitel, Format zuerst, PDF und Einzelseite als Standard; Abbrechen ohne Download; erneutes Öffnen setzt Standardwerte.
+- Alle sechs Format-/Umfangskombinationen herunterladen und öffnen. Dokumentoptionen nur für Kapitel-PDF/ODT sichtbar und aktiv; Wechsel zu ZIP oder Einzelseite übermittelt keine Optionen. Einzelseiten-PDF/ODT behalten bisherige Formatierung.
+- Gesperrte Seiten, Entwürfe und nicht lesbare Unterseiten auch bei direkten URLs ausgeschlossen; versteckte veröffentlichte lesbare Unterseiten weiterhin enthalten. Light/Dark, Tastatur und mobile Ansicht prüfen.
+- UI-009 prüft Quellstruktur; kein automatisierter Browser- oder HTTP-End-to-End-Nachweis. NAS-QA 39/39 ohne Warnungen erforderlich.
+
+## IDEA-20 / IDEA-21 – abgenommen
+Markdown-Speicherung fügt dem eigentlichen Inhalt keine Zeilenenden hinzu; vorhandene Leerzeilen bleiben erhalten. Der generierte Dokumentvorspann bleibt erhalten. Toolbar-Tooltip und zugänglicher Name: «Web-Bild», Funktion unverändert. IDEA-24 bleibt zurückgestellt.
+IDEA-25: manuelle Abnahme und Regression am 27.11.2026 laut Betreiber erfolgreich. IDEA-20/21: wiederholt speichern mit und ohne abschliessende sowie führende Leerzeilen, leeren Inhalt und Beschreibung prüfen; Tooltip und Bildfunktion prüfen. UAT-EDT-01 enthält Roundtrip- und Quellprüfungen.
+
+## IDEA-22 / IDEA-23 – abgenommen
+
+Redaktionelle Metadaten im Inline-Editor; Sichtbarkeit mit kontextabhängigen ACL-Feldern. Sortierung bleibt im Dialog Sichtbarkeit. Gemeinsame Speicherung mit vollständiger Revision und gültiger Lease; ACL und Publikation bleiben serverseitig geschützt. IDEA-22/23: manuelle Abnahme und Regression laut Betreiber erfolgreich. IDEA-24 zurückgestellt.
+
+
+IDEA-22/23: bisherige Funktion laut Betreiber erfolgreich getestet. UX-Nachbesserung IDEA-23: redaktionelle Felder direkt im page-heading, Titeltypografie wie Lesemodus, Beschreibung und Schlagworte darunter ausklappbar (beim Editorstart eingeklappt). Gemeinsame Speicherung und ACL unverändert. Titelgestaltung und erneut ausklappbarer Bereich laut Betreiber erfolgreich abgenommen.
+
+## Page-Heading – UX-Bereinigung
+Die statische Eyebrow «HOMEHUB · WISSENSBASIS» entfällt im Lese- und Bearbeitungsmodus ersatzlos. Titel und übrige Funktionen bleiben unverändert. Visuelle Betreiberabnahme erfolgreich; UAT-EDT-01 prüft die Abwesenheit des Markups im page-heading. Die CSS-Abwesenheitsprüfung entfällt nach einem Fehlschlag auf dem NAS.
+
+Die redundante Bearbeiten-Pill wurde aus HTML, CSS und JavaScript entfernt. UAT-EDT-01 prüft ihre Abwesenheit; visuelle Betreiberabnahme erfolgreich. Vollständige NAS-Regression nach Testkorrektur laut Betreiber erfolgreich.
+
+## Konsolidierung vor Versionierung
+CSS- und Dokumentationsbereinigung: visuelle Abnahme und vollständige NAS-Regression am 27.11.2026 laut Betreiber erfolgreich.
+
+## Release 1.1.1 – Betreiberfreigabe
+Anwendung 1.1.1-20261127. Finale visuelle NAS-Prüfung und vollständige Regression nach Versionspflege laut Betreiber erfolgreich. Endgültige Betreiberfreigabe am 27.11.2026 ausdrücklich erteilt. Kein separater Testlog oder Einzelprotokoll der Backup-/Update-Prüfung vorliegend. GitHub-Publikation und CI-Bestätigung ausstehend.
+Lokale Teilprüfung nach Versionspflege: VERSION-001 auf das neue dreiteilige Versionsformat angepasst und bestanden; 33/39 Regressionen erfolgreich, sechs bekannte Fehlschläge wegen fehlendem Composer-Autoload bzw. ZipArchive. Keine finale NAS-Freigabe in der lokalen Umgebung; anschliessende Betreiberfreigabe siehe oben.

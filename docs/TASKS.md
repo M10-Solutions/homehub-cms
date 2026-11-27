@@ -1,7 +1,10 @@
 # HomeHub CMS – Aufgaben
 
 ## Aktuell
-PUB-001 abgeschlossen; Release 1.0.0 veröffentlicht. QA-002 Cleanup-Korrektur umgesetzt; strikte NAS-Regression 35/35 ohne Warnungen und Betreiberabnahme am 25.11.2026 bestätigt. UI-013a–h umgesetzt und am 25.11.2026 vollständig abgenommen (36/36, keine PHP-Warnungen). Release 1.0.1 zur gebündelten GitHub-Publikation freigegeben; Publikation und abschliessende Regression nach Versionspflege vom Betreiber bestätigt. Status und administrative Restpunkte siehe PROJECT.md.
+IDEA-20/21/22/23/25 sowie Entfernung der Eyebrow und Bearbeiten-Pill sind laut Betreiber am 27.11.2026 funktional abgenommen; vollständige NAS-Regression nach Testkorrektur erfolgreich. IDEA-24 bleibt zurückgestellt.
+
+- Dokumentations- und CSS-Konsolidierung: abgeschlossen, visuelle Abnahme und NAS-Regression laut Betreiber erfolgreich.
+- Release 1.1.1: finale visuelle NAS-Prüfung und Regression erfolgreich; Betreiberfreigabe am 27.11.2026 erteilt. Verbleibend: GitHub-Publikation, CI/Composer-Audit und Publikationskontrolle bestätigen; private Schwachstellenmeldung prüfen.
 
 ## Nach Veröffentlichung (nicht beauftragt)
 - Browser-/Export-End-to-End-Tests und parallele Schreibzugriffe bei konkretem Bedarf vertiefen.
@@ -9,12 +12,3 @@ PUB-001 abgeschlossen; Release 1.0.0 veröffentlicht. QA-002 Cleanup-Korrektur u
 - Docker-Referenzimage und Abhängigkeiten im Rahmen der regulären Wartung aktualisieren; keine umfassende Plattformprüfung.
 
 Abgeschlossene Arbeitspakete sind in SPEC-EDITOR.md, SPEC-ADMIN.md, CHANGELOG und TESTING konsolidiert; historische Nachweise liegen im privaten Entwicklungsarchiv.
-
-## MED-SEC (IDEA-18)
-Beauftragt: Variante A (globale Bibliothek für Editor/Admin), ohne Referer. Medienendpunkt und UI funktional abgenommen; 37/37 Regressionen laut Betreiber erfolgreich. EXP-SEC-01–03 umgesetzt; Betreiberabnahme erfolgreich (38/38, keine PHP-Warnungen).
-
-## TRASH-001 (IDEA-02/17) – abgeschlossen
-Papierkorb, rekursives Löschen und UI-Nachbesserung am 25.11.2026 laut Betreiber vollständig abgenommen (39/39, keine PHP-Warnungen). Keine aktiven Entwicklungsaufträge. Bestandteil von Release 1.1.0.
-
-## Release 1.1.0
-ODT-Gestaltung am 25.11.2026 vollständig abgenommen (39/39, keine PHP-Warnungen laut Betreiber). Paketierung am 26.11.2026 beauftragt. Abschliessende NAS-QA nach Versionspflege am 26.11.2026 laut Betreiber erfolgreich (39/39, keine PHP-Warnungen). Veröffentlichung freigegeben; GitHub-Publikation noch nicht bestätigt. IDEA-19 bleibt im Backlog.

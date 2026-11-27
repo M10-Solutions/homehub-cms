@@ -16,7 +16,7 @@ Bilder, Dateien und interne Seitenlinks einfügen.
 
 ## Medien einfügen
 
-Öffne im Editor den Medienpicker. Wähle einen vorhandenen Ordner oder lege bei Bedarf einen neuen an. Lade eine Datei hoch oder wähle eine bestehende Datei. Ergänze bei Bildern einen aussagekräftigen Alternativtext.
+Für lokale Medien öffne im Editor den Medienpicker. Mit «Web-Bild» kannst du externe Bild-URLs einfügen. Wähle einen vorhandenen Ordner oder lege bei Bedarf einen neuen an. Lade eine Datei hoch oder wähle eine bestehende Datei. Ergänze bei Bildern einen aussagekräftigen Alternativtext.
 
 Unterstützt werden JPEG, PNG, WebP, GIF, PDF und TXT bis 10 MiB pro Datei. Bilder werden proportional an die verfügbare Seitenbreite angepasst.
 
@@ -28,4 +28,4 @@ Administratoren können in der Medienverwaltung Dateien umbenennen, verschieben 
 
 Nutze den Seitenpicker im Editor. Er zeigt lesbare, veröffentlichte Seiten mit stabiler ID an.
 
-> Wichtig: Medien-URLs sind in Version 1.0 nicht durch Seitenberechtigungen geschützt. Lade keine vertraulichen Dateien hoch.
+> Wichtig: Medienzugriff über Seitenlinks setzt eine lesbare Seite und eine gültige Medienreferenz voraus. Editoren und Administratoren haben Zugriff auf die gesamte Medienbibliothek. Berücksichtige dies bei vertraulichen Dateien.

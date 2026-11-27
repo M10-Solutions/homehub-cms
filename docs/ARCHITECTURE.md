@@ -1,6 +1,6 @@
 # HomeHub CMS – Architektur und Entscheidungen
 
-**Stand:** 26.11.2026 · Release 1.1.0 (Anwendung 1.1-20261126); abschliessend abgenommen und zur Veröffentlichung freigegeben; GitHub-Publikation noch nicht bestätigt.
+**Stand:** 27.11.2026 · Release 1.1.1 (Anwendung 1.1.1-20261127); Betreiberfreigabe am 27.11.2026 erteilt.
 
 ## Verbindliche SDD-Grundsätze (25.11.2026)
 
@@ -21,7 +21,7 @@ PHP 8.3/Apache, Composer PSR-4 `HomeHub\` → `src/lib/`, CommonMark 2.x, Symfon
 ## Einstiegspunkte
 | Datei | Verantwortung |
 |---|---|
-| src/index.php | Wiki, Login/Logout, berechtigungsgefilterte Navigation, Suche, Inline-Editor und Seiteneinstellungen |
+| src/index.php | Wiki, Login/Logout, berechtigungsgefilterte Navigation, Suche, Inline-Editor und Dialog Sichtbarkeit |
 | src/inline.php | JSON Preview/Content-Save mit CSRF, Zugriff und Revision |
 | src/page-actions.php | Admin-Seitenoperationen, CSRF und Revision bei Settings/Move |
 | src/page.php | Seiten-ID-Resolver mit Zugriffskontrolle |
@@ -55,6 +55,7 @@ PHP 8.3/Apache, Composer PSR-4 `HomeHub\` → `src/lib/`, CommonMark 2.x, Symfon
 Wiki und Admin nutzen gemeinsamen Header, Sidebar-Account-View, Dialog-Header und Action-Buttons. CSS ist funktionsbezogen aufgeteilt, `layout.css` enthält gemeinsamen Rahmen, `app.css` und `admin.css` die Grundstile. Admin-Benutzer und Tags teilen Tabellen-/Dialogstile. Native Dialoge und Vanilla-JS, Font Awesome lokal, Prism lokal; keine Frontend-Buildkette. Admin-Navigation dauerhaft sichtbar. Drittanbieter-Assets bewusst unverändert.
 
 ## Export und Wartung
+`chapter-export.php` verlangt eine Anmeldung; `export.php` erlaubt Gästen nur PDF. Beide prüfen Publikation und ACL. Einzelseiten-PDF/ODT verwenden dieselbe bisherige Dokumentaufbereitung ohne Kapiteloptionen.
 Kapitelexport sammelt freigegebene Seiten hierarchisch; PDF/ODT über Pandoc, PDF via WeasyPrint, ODT mit `docs/templates/reference.odt` und DOM/ZipArchive-Nachbearbeitung. OdtImageFitter ermittelt Breite aus Standard-Master-Page/Page-Layout, 16 cm Fallback. ZIP schreibt Markdown/Medien und relative Referenzen, Tag-Namen. Temporäre Exportdateien werden bereinigt.
 
 CLI unter `bin/`: `create-admin.php` (nur leerer Benutzerspeicher; bestehende Authenticator-Klasse), `register-page-ids.php` (Dry-Run/--apply), `migrate-page-links.php` und `migrate-media-links.php` (--check/--apply mit Hashmanifest/Backups), `run-regression-tests.php`. Historischer Registrierungsaufruf unter tests/ ist nur ein Weiterleiter. Keine automatische Tag-Migration. Legacy-Medien-/Seitenlinks und Rollen bleiben aus Kompatibilitätsgründen unterstützt.
@@ -81,3 +82,5 @@ EXP-SEC: DocumentExporter rendert jede freigegebene Seite separat mit AlignedMar
 
 ## Papierkorb (TRASH-001)
 PageTrash nutzt MediaOperationLock und PageEditLease. Originaldateien werden ohne Umschreiben verschoben; bei regulärem Verschiebefehler wird ein Rollback versucht. Kein persistenter Index. Papierkorb unter data/trash ist nicht Teil der aktiven Seitenauflösung. Admin-Endpunkt prüft Rolle und CSRF; Seiten-Endpunkt prüft ACL je betroffener Seite innerhalb der Operationssperre. Kein Schutz gegen alle Prozessabbrüche oder externe parallele Dateisystemänderungen.
+
+IDEA-22/23: Inline-Speicherung verwendet die vollständige Admin-Revision und prüft Lease-Eigentümer unter der MediaOperationLock. Nur redaktionelle Felder werden übernommen; Sichtbarkeit verarbeitet ausschliesslich aktive ACL-Auswahl.

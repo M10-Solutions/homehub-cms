@@ -1,6 +1,6 @@
 # HomeHub CMS – Funktionsspezifikation Content und Editor
 
-**Stand:** 26.11.2026 · Release 1.1.0 (Anwendung 1.1-20261126); abschliessend abgenommen und zur Veröffentlichung freigegeben; GitHub-Publikation noch nicht bestätigt.
+**Stand:** 27.11.2026 · Release 1.1.1 (Anwendung 1.1.1-20261127); Betreiberfreigabe am 27.11.2026 erteilt.
 Diese Datei ist die konsolidierte Soll-/Ist-Beschreibung des aktuellen Produkts; ältere Abnahmedokumente sind historische Nachweise. SEARCH-001 und die vorangegangenen Erweiterungen sind laut Betreiber abgenommen. CLEANUP-001 / SDD-002: Betreiber bestätigt 24/24 Tests und manuelle Funktionstests. QA-002: NAS-Abnahme mit 25/25 Tests bestätigt. VERSION-001: 26/26 Regressionen bestätigt; Footer nicht separat bestätigt. UI-011: 27/27 Regressionen und manuelle Funktionstests bestätigt.
 
 
@@ -23,9 +23,9 @@ Gemeinsame verbindliche Regeln (SDD, ACL-001, UI, QA und Administration): [SPEC-
 **Abnahme:** Freigegebene und gesperrte Seite samt Unterseite mit jeder Rolle und ohne Login prüfen; Navigation, direkte Links, Suche, Picker und Export vergleichen.
 
 ## EDIT-001 / ADMIN-001 – Seiten bearbeiten und organisieren
-- **UAT-EDT-01 (implementiert und am 24.11.2026 vom Betreiber abgenommen):** Nach erfolgreicher Übernahme der exklusiven Bearbeitungssperre zeigt HomeHub einen kompakten, viewportorientierten Editor im Content-Bereich. Der Seitentitel bleibt während der Bearbeitung sichtbar und erhält eine kompakte Bearbeiten-Pill, der Editor automatisch sichtbar positioniert und das Textfeld fokussiert. Die Ansichten Bearbeiten/Vorschau/Geteilt werden als Symbolbuttons links im Editorfuss dargestellt. Der Änderungsstatus erscheint rechts in der Markdown-Panelbeschriftung. Die Formatierungswerkzeuge sind platzsparend angeordnet; Speichern und Abbrechen stehen rechts unmittelbar unter den intern scrollbaren Editorflächen. Keine zusätzliche Sticky-Aktionsleiste. Bestehende Sperr-, Vorschau- und Speicherlogik bleiben erhalten.
+- **UAT-EDT-01 (implementiert und am 24.11.2026 vom Betreiber abgenommen):** Nach erfolgreicher Übernahme der exklusiven Bearbeitungssperre zeigt HomeHub einen kompakten, viewportorientierten Editor im Content-Bereich. Der Seitentitel bleibt während der Bearbeitung sichtbar ohne zusätzliche Bearbeiten-Pill; der Editor wird automatisch sichtbar positioniert und das Textfeld fokussiert. Die Ansichten Bearbeiten/Vorschau/Geteilt werden als Symbolbuttons links im Editorfuss dargestellt. Der Änderungsstatus erscheint rechts in der Markdown-Panelbeschriftung. Die Formatierungswerkzeuge sind platzsparend angeordnet; Speichern und Abbrechen stehen rechts unmittelbar unter den intern scrollbaren Editorflächen. Keine zusätzliche Sticky-Aktionsleiste. Bestehende Sperr-, Vorschau- und Speicherlogik bleiben erhalten.
 - Seitenoperationen ausschliesslich im Content-Bereich, nicht im klassischen Admin-Editor (entfernt). Inline-Editor mit Edit-/Preview-/Split-Ansicht, Markdown-Toolbar, Bild- und Seitenlink-Picker; Auswahl an Cursor/Markierung einfügen. Revision beim Inhaltsspeichern, Konfliktmeldung bei veraltetem Stand.
-- Admin verwaltet sämtliche Seiten inklusive ACL-Felder. Editor darf berechtigte Seiten erstellen (als Draft in einem bestehenden berechtigten Kapitel), inhaltlich und redaktionell bearbeiten, veröffentlichen/zurückziehen, verschieben/umbenennen und löschen. ACL-Felder (`visibility`, `allowed_roles`, `allowed_users`) bleiben Admin-only; serverseitige Prüfung auch bei manipulierten Formularen. Geerbte Freigaben werden angezeigt. Seiteneinstellungen prüfen Revision; Move prüft Revision unter gemeinsamer Operationssperre. Details und Einschränkungen siehe **ACL-001**.
+- Admin verwaltet sämtliche Seiten inklusive ACL-Felder. Editor darf berechtigte Seiten erstellen (als Draft in einem bestehenden berechtigten Kapitel), inhaltlich und redaktionell bearbeiten, veröffentlichen/zurückziehen, verschieben/umbenennen und löschen. ACL-Felder (`visibility`, `allowed_roles`, `allowed_users`) bleiben Admin-only; serverseitige Prüfung auch bei manipulierten Formularen. Geerbte Freigaben werden angezeigt. Dialog «Sichtbarkeit» prüft Revision; Move prüft Revision unter gemeinsamer Operationssperre. Details und Einschränkungen siehe **ACL-001**.
 - Pfade: Kleinbuchstaben a–z, Zahlen, `_`, `-`, Unterordner; maximal 180 Zeichen. Titel 1–160 Zeichen, Beschreibung bis 500 Zeichen, Inhalt bis 1 MiB, Sortierung −99999 bis 99999. Zielpfad darf nicht existieren; Schreibpfade ohne Symlinks. Move-Dialog wählt bestehenden Ordner und Namen, zeigt resultierenden Pfad; keine Ordnerneuanlage im Move-Dialog.
 - Seiten speichern atomar (temporäre Datei/rename), Verschieben bleibt bytegleich. Keine produktive Massenaktualisierung alter Referenzen.
 
@@ -45,7 +45,7 @@ Gemeinsame verbindliche Regeln (SDD, ACL-001, UI, QA und Administration): [SPEC-
 **Abnahme:** Titel-, Text-, Tag- und Mehrwortsuche, leere Suche, keine Treffer, geschützte/unsichtbare Seiten, aktuelle Tag-Namen, Link nach Move.
 
 ## EXPORT-001–003 – PDF, ODT und ZIP
-- Einzelne Seite PDF/ODT und Kapitelexport PDF/ODT/ZIP; Umfang Seite oder mit Unterseiten, nur veröffentlichte lesbare Seiten inklusive `nav: false`. Kapitelreihenfolge anhand Hierarchie/Sortierung. PDF/ODT optional Deckblatt, Inhaltsverzeichnis und Nummerierung beim Kapitelexport. Pandoc/WeasyPrint, ODT-Referenzvorlage `docs/templates/reference.odt` und editierbarer ODT-Index.
+- Einzelseiten- und Kapitelexport PDF/ODT/ZIP für angemeldete Benutzer; Gäste nur Einzelseiten-PDF; Umfang Seite oder mit Unterseiten, nur veröffentlichte lesbare Seiten inklusive `nav: false`. Kapitelreihenfolge anhand Hierarchie/Sortierung. PDF/ODT optional Deckblatt, Inhaltsverzeichnis und Nummerierung beim Kapitelexport. Pandoc/WeasyPrint, ODT-Referenzvorlage `docs/templates/reference.odt` und editierbarer ODT-Index.
 - PDF-Bilder innerhalb Seitenbreite; ODT-Bildrahmen proportional auf nutzbare Standard-Seitenbreite (Ränder abgezogen), konservativer Fallback 16 cm; kein Upscaling.
 - ODT-Tabellen: Pandoc-Zellstile erhalten feine graue Rahmen (0,5 pt, #C5CCD0) und einen vollflächig blaugrauen Tabellenkopf (#E8EEF1); Einzel- und Kapitelexport.
 - ZIP: Markdown mit YAML in `pages/`, referenzierte lokale Medien in `media/`, dedupliziert, relative Verweise auf enthaltene Ziele, Tag-Namen statt IDs; fehlende lokale Referenzen protokollieren (`EXPORT-HINWEISE.txt`). Keine externen Bilder herunterladen, Originaldaten unverändert. PDF-/ODT-Optionen gelten nicht für ZIP.
@@ -53,7 +53,7 @@ Gemeinsame verbindliche Regeln (SDD, ACL-001, UI, QA und Administration): [SPEC-
 **Abnahme:** Einzelseite/Kapitel in allen angebotenen Formaten exportieren; Berechtigungen, Bilder, relative Referenzen und Tag-Namen prüfen.
 
 ## VERSION-001 – App-Version
-- Zentraler String `version` in `src/config/app.php`, initial `0.8-20261122`. Format `Major.Minor-YYYYMMDD`; Major für grössere Änderungen, Minor für kleinere Erweiterungen und Bugfix-Releases, Datum für die letzte Revision. Reine Bugfixes können nur das Datum ändern. Keine automatische Datumsänderung.
+- Zentraler String `version` in `src/config/app.php`, initial `0.8-20261122`. Ab 1.1.1 Format `Major.Minor.Patch-YYYYMMDD`; Major für grössere Änderungen, Minor für Erweiterungen, Patch für Wartungsreleases, Datum für die letzte Revision. Ältere Versionen verwenden `Major.Minor-YYYYMMDD`. Keine automatische Datumsänderung.
 - Anzeige als HTML-escaped Text rechts im Content-Footer auf allen Wiki-Ansichten, auch ohne Anmeldung und bei der Suche. Admin-Footer unverändert.
 
 **Abnahme:** Version in Config ändern, Wiki neu laden und Anzeige rechts im Footer prüfen; auch mobile Darstellung und Suchergebnisse prüfen.
@@ -67,13 +67,13 @@ Editoren dürfen berechtigte Seiten erstellen (als Draft unter berechtigtem Kapi
 
 ## UAT-002e – Exklusive Inline-Bearbeitung (abgenommen 23.11.2026)
 
-Beim Öffnen des Inline-Editors muss eine exklusive seitenbezogene Bearbeitungslease erworben werden. Pro Seite darf nur eine gültige Bearbeitungssitzung bestehen; separate Tabs desselben Kontos sind separate Sitzungen. Der Client erneuert die Lease alle 30 Sekunden auch ohne Texteingaben; sie verfällt nach 120 Sekunden ohne bestätigten Heartbeat, ohne Hintergrunddienst. Speichern setzt einen gültigen Lease-Token und die passende Inhaltsrevision voraus; Revisionsprüfung und Schreiboperation erfolgen unter derselben Dateioperationssperre. Abbrechen und erfolgreiches Speichern geben die Lease frei; beim Verlassen wird die Freigabe bestmöglich versucht. Bei Netzwerkfehlern informiert ausschliesslich die zentrale HomeHub-Notification; nach Wiederverbindung wird die Warnung entfernt. Bei ungültiger Lease darf nicht gespeichert werden, ungespeicherter Inhalt bleibt erhalten. Verschieben, Löschen und Seiteneinstellungen respektieren aktive Inline-Leases. Eigene Langzeit-Leases für Einstellungsdialoge sind nicht Teil dieser Anforderung. Siehe `TESTING.md`.
+Beim Öffnen des Inline-Editors muss eine exklusive seitenbezogene Bearbeitungslease erworben werden. Pro Seite darf nur eine gültige Bearbeitungssitzung bestehen; separate Tabs desselben Kontos sind separate Sitzungen. Der Client erneuert die Lease alle 30 Sekunden auch ohne Texteingaben; sie verfällt nach 120 Sekunden ohne bestätigten Heartbeat, ohne Hintergrunddienst. Speichern setzt einen gültigen Lease-Token und die passende vollständige Seitenrevision voraus; Revisionsprüfung und Schreiboperation erfolgen unter derselben Dateioperationssperre. Abbrechen und erfolgreiches Speichern geben die Lease frei; beim Verlassen wird die Freigabe bestmöglich versucht. Bei Netzwerkfehlern informiert ausschliesslich die zentrale HomeHub-Notification; nach Wiederverbindung wird die Warnung entfernt. Bei ungültiger Lease darf nicht gespeichert werden, ungespeicherter Inhalt bleibt erhalten. Verschieben, Löschen und der Dialog «Sichtbarkeit» respektieren aktive Inline-Leases. Eigene Langzeit-Leases für Einstellungsdialoge sind nicht Teil dieser Anforderung. Siehe `TESTING.md`.
 
 
 ### UAT-EDT-01 – Layout-Nachbesserung (24.11.2026)
 Der Seitentitel bleibt im Bearbeitungsmodus sichtbar. Der Editor passt seine Höhe an den sichtbaren Bereich unter dem Seitentitel an; Speichern und Abbrechen bleiben rechts im Editorfuss sichtbar. Bearbeiten, Vorschau und Geteilt verwenden dieselbe verfügbare Panelhöhe und interne Scrollbereiche. NAS-Sichtprüfung und vollständige Regression am 24.11.2026 laut Betreiber erfolgreich; Redesign abgenommen.
 
-**UAT-EDT-01 Feinschliff (24.11.2026):** Seitentitel bleibt mit Bearbeiten-Pill sichtbar; Ansichtsschalter im Editorfuss links, Speichern/Abbrechen rechts. Status im Markdown-Panelkopf. Editorhöhe und unabhängig scrollbare Vorschau bleiben erhalten. NAS-Sichtprüfung und vollständige Regression laut Betreiber am 24.11.2026 erfolgreich; abgenommen.
+**UAT-EDT-01 Feinschliff (24.11.2026):** Seitentitel bleibt sichtbar (die damalige Bearbeiten-Pill wurde später entfernt); Ansichtsschalter im Editorfuss links, Speichern/Abbrechen rechts. Status im Markdown-Panelkopf. Editorhöhe und unabhängig scrollbare Vorschau bleiben erhalten. NAS-Sichtprüfung und vollständige Regression laut Betreiber am 24.11.2026 erfolgreich; abgenommen.
 
 ### UI-012 – Navigationsdarstellung und Theme-Aktion
 Die Wiki-Seitennavigation zeigt keine zusätzliche „INTRANET“-Überschrift. In der Administration gibt es nur die Abschnittsüberschrift „Verwaltung“, keine vorangestellte „Navigation“-Überschrift. Navigationseinträge verwenden in beiden Bereichen 14 px Schriftgrösse; Kapitelüberschriften dürfen zur Hierarchiebetonung abweichen. Der gemeinsame Theme-Button zeigt im hellen Modus den Mond (Aktion: Dark Mode aktivieren) und im dunklen Modus die Sonne (Aktion: Light Mode aktivieren). Die bestehende Theme-Persistenz und Tab-Synchronisierung bleiben erhalten.
@@ -108,4 +108,23 @@ Abnahme: alle Punkte manuell prüfen, Light/Dark und responsive Darstellung erha
 
 ## Bereichsübergreifende Funktionen
 
-Siehe [SPEC-ADMIN.md](SPEC-ADMIN.md): MEDIA-001–004 / MEDIA-006 (Medienpicker und Bibliothek), TAG-001–004 (Schlagwörter und Seiteneinstellungen), TRASH-001 (Löschdialog, rekursives Löschen und Papierkorb), USER-001 (Anmeldung).
+Siehe [SPEC-ADMIN.md](SPEC-ADMIN.md): MEDIA-001–004 / MEDIA-006 (Medienpicker und Bibliothek), TAG-001–004 (Schlagwörter und redaktionelle Metadaten), TRASH-001 (Löschdialog, rekursives Löschen und Papierkorb), USER-001 (Anmeldung).
+
+## IDEA-25 – Konsolidierte Exportaktionen (abgenommen am 27.11.2026 laut Betreiber)
+- Veröffentlichte lesbare Seiten: Gäste sehen nur PDF, angemeldete Benutzer nur «Kapitelstruktur exportieren». Entwürfe bleiben ausgeschlossen.
+- Dialog «Seite oder Kapitel exportieren»: Format zuerst (PDF als Standard, ODT, ZIP), danach Umfang (standardmässig «Nur diese Seite»), danach Dokumentoptionen nur bei Kapitelumfang und PDF/ODT. Ausgeblendete Optionen sind deaktiviert; beim erneuten Öffnen gelten die Standardwerte. Abbrechen und Exportieren sind die einzigen Aktionsbuttons.
+- Einzelseiten-PDF/ODT verwenden die bisherige Einzelseitenformatierung; ZIP unterstützt beide Umfänge. Kapiteloptionen gelten nur für Kapitel-PDF/ODT.
+- Kapitel-Endpunkt erfordert Anmeldung für alle Formate und Umfänge; bisheriger Einzelseiten-Endpunkt bleibt für PDF öffentlich und für ODT angemeldet verfügbar. ACL, Publikationsprüfung und sichere Exportaufbereitung bleiben verbindlich.
+
+## IDEA-20 / IDEA-21 – abgenommen am 27.11.2026 laut Betreiber
+Markdown-Speicherung fügt dem eigentlichen Inhalt keine Zeilenenden hinzu; vorhandene Leerzeilen bleiben erhalten. Der generierte Dokumentvorspann bleibt erhalten. Toolbar-Tooltip und zugänglicher Name: «Web-Bild», Funktion unverändert. IDEA-24 bleibt zurückgestellt.
+
+## IDEA-22 / IDEA-23 – Redaktionelle Metadaten und Sichtbarkeit (abgenommen)
+
+Titel direkt im page-heading mit identischer Titeltypografie; Beschreibung und Schlagworte unmittelbar darunter in einem standardmässig eingeklappten Bereich «Beschreibung & Schlagworte». Gemeinsames Speichern mit Markdown, Abbrechen verwirft alle Änderungen. Vollständige Seitenrevision und gültige Lease erforderlich. Sichtbarkeit ersetzt Seiteneinstellungen; Sortierung, Publikation, Navigation und Admin-ACL verbleiben dort. Nur die zur Sichtbarkeit passende Rollen- oder Benutzerauswahl wird angezeigt und ausgewertet. IDs, Pfade und Berechtigungsmodell unverändert.
+
+
+## Page-Heading – UX-Bereinigung
+Die statische Eyebrow «HOMEHUB · WISSENSBASIS» entfällt im Lese- und Bearbeitungsmodus ersatzlos. Titel und übrige Funktionen bleiben unverändert.
+
+Die redundante Bearbeiten-Pill entfällt ebenfalls. Ansichtsschalter, Zugriffsschutz und Statusanzeigen bleiben unverändert.

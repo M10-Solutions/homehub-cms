@@ -67,7 +67,6 @@
 }
 .sidebar nav .hub-nav-category > details > summary .hub-nav-title.active,
 .admin-sidebar nav .hub-nav-category > details > summary .hub-nav-title.active { color:var(--theme-accent, #245ab2); }
-.admin-sidebar nav .hub-nav-draft { display:inline; font-size:10px; font-weight:400; color:var(--theme-warning-text, #a16b42); margin-left:5px; }
 .sidebar nav .hub-nav-summary:focus-visible, .admin-sidebar nav .hub-nav-summary:focus-visible,
 .sidebar nav .hub-nav-title:focus-visible, .admin-sidebar nav .hub-nav-title:focus-visible {
   outline:2px solid #4e7bcb; outline-offset:1px;

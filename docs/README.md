@@ -36,6 +36,7 @@ www-data standardmässig UID 1000 und GID 1001. Bei abweichenden Host-Kennungen 
 Seiten-IDs: `php bin/register-page-ids.php` (Vorschau) / `--apply`. Alte Links: `php bin/migrate-page-links.php --check` / `--apply`, entsprechend `migrate-media-links.php`. Im Container mit Schreibzugriff ausführen; vorher Backup, Prüfstand beachten. Details im folgenden Migrationsabschnitt. Die alte Tag-Katalogstruktur vor TAG-004 separat sichern; bei bereits migriertem Stand nicht erneut zurücksetzen.
 
 ## ODT und Export
+Gäste können lesbare veröffentlichte Einzelseiten als PDF herunterladen. Angemeldete Benutzer wählen über Export Format und Umfang; Dokumentoptionen gelten für Kapitel-PDF/ODT.
 `docs/templates/reference.odt` kann in LibreOffice Writer angepasst werden (Seitenränder, Formatvorlagen). Im Compose-Betrieb werden Änderungen bei neuen Exporten ohne Neustart wirksam. ODT-Bildbreite wird aus der Standard-Seitenvorlage berechnet. PDF nutzt `src/css/export.css` und bei Kapiteln `chapter-document.css`. ZIP enthält referenzierte lokale Medien statt kompletter Bibliothek.
 
 ## Tests
@@ -44,26 +45,26 @@ docker compose config
 docker compose --profile qa run --rm --no-deps --build qa
 ```
 
-Tests nutzen temporäre Dateien; zusätzlich Browser-/NAS-Abnahme und tatsächliche Exportdownloads prüfen. Für lokale Tests sind PHP 8.3, Composer-Abhängigkeiten und DOM/zip/mbstring erforderlich. Einzeltests und Grenzen siehe TESTING.md und TESTING.md. Prism und Font Awesome werden lokal ausgeliefert; Lizenzen in docs/PRISM-LICENSE.txt und src/vendor/fontawesome/LICENSE.txt.
+Tests nutzen temporäre Dateien; zusätzlich Browser-/NAS-Abnahme und tatsächliche Exportdownloads prüfen. Für lokale Tests sind PHP 8.3, Composer-Abhängigkeiten und DOM/zip/mbstring erforderlich. Einzeltests und Grenzen siehe TESTING.md. Prism und Font Awesome werden lokal ausgeliefert; Lizenzen in docs/PRISM-LICENSE.txt und src/vendor/fontawesome/LICENSE.txt.
 
 ## App-Version
-Die Version wird in `src/config/app.php` unter `version` gepflegt (initial `0.8-20261122`). Major.Minor-YYYYMMDD: grössere Änderungen erhöhen Major, kleinere Erweiterungen und Bugfix-Releases Minor; reine Revisionen können nur das Datum ändern. Der Wiki-Footer übernimmt den Wert beim nächsten Seitenaufruf. Kein Neustart erforderlich. Bei eigenen Änderungen an der App-Config diese beim Patch-Einspielen übernehmen.
+Die Version wird in `src/config/app.php` unter `version` gepflegt (initial `0.8-20261122`). Ab 1.1.1: Major.Minor.Patch-YYYYMMDD; Wartungsreleases erhöhen Patch. Ältere Versionen verwenden Major.Minor-YYYYMMDD. Der Wiki-Footer übernimmt den Wert beim nächsten Seitenaufruf. Kein Neustart erforderlich. Bei eigenen Änderungen an der App-Config diese beim Patch-Einspielen übernehmen.
 
 ### Light-/Dark-Mode (UI-011)
 Der Schalter im Wiki- und Admin-Header speichert die Wahl lokal im Browser. Standard: Light. Keine Migration oder zusätzliche Konfiguration erforderlich. App-Version: `0.9-20261122`.
 
 ## Fachliche Abnahme und Release
-UAT-002a–f und UI-012 sind abgenommen; NAS-Regression 34/34 auf 0.13-20261123. Release 1.0-20261124 ist seit 24.11.2026 freigegeben; finale NAS-QA 35/35. Wartungsrelease 1.0.1 (Anwendung 1.0-20261125) veröffentlicht; Release 1.1.0 (Anwendung 1.1-20261126) mit MED-SEC/EXP-SEC, TRASH-001 und ODT-Gestaltung abschliessend abgenommen; 39/39 ohne PHP-Warnungen laut Betreiber nach Versionspflege am 26.11.2026; GitHub-Publikation noch nicht bestätigt. Siehe TESTING.md für Prüfschritte und Risiken.
+UAT-002a–f und UI-012 sind abgenommen; NAS-Regression 34/34 auf 0.13-20261123. Release 1.0-20261124 ist seit 24.11.2026 freigegeben; finale NAS-QA 35/35. Wartungsrelease 1.0.1 (Anwendung 1.0-20261125) veröffentlicht; Release 1.1.0 (Anwendung 1.1-20261126) mit MED-SEC/EXP-SEC, TRASH-001 und ODT-Gestaltung abschliessend abgenommen; 39/39 ohne PHP-Warnungen laut Betreiber nach Versionspflege am 26.11.2026; GitHub-Publikation laut Betreiber bestätigt. Release 1.1.1 (1.1.1-20261127): Funktionsumfang, Konsolidierung, finale visuelle Prüfung und Regression abgenommen; Betreiberfreigabe am 27.11.2026 erteilt. Siehe TESTING.md für Prüfschritte und Risiken.
 
 ## Backup und Wiederherstellung
 Vor einem Update Schreibzugriffe beenden (Wartungsfenster, `docker compose stop homehub`). Vollständiges Projekt einschliesslich `data/` und individueller Compose-/Konfigurationsdateien geschützt sichern. Sicherung ausserhalb des Projektverzeichnisses aufbewahren und auf Lesbarkeit prüfen. Patch ohne Nutzdaten einspielen; individuelle Konfiguration erhalten. Anschliessend `docker compose up -d --build`. Bei Rückkehr zum alten Stand Container stoppen und zusammengehörigen Code- und Datenstand aus der Sicherung wiederherstellen; seit dem Backup entstandene Änderungen vorher separat sichern. Restore zunächst auf isolierter Instanz mit eigenem Port und separaten Daten prüfen.
 
 ## Sicherheitsgrenzen
-Nur in einem vertrauenswürdigen Netz betreiben, kein direkter Internetzugriff. Bei Zugriff über nicht vertrauenswürdige Netze HTTPS und geeignete Zugriffsbeschränkungen vorsehen. MED-SEC schützt Medien-URLs im Entwicklungsstand; Editor/Admin haben globalen Medienzugriff. MED-SEC/EXP-SEC sind im lokalen Entwicklungsstand abgenommen; globale Medienrechte und Export-Risikogrenzen beachten. Ungültiges Front Matter wird seit SEC-1.0 restriktiv behandelt; vollständig entfernte Metadaten bleiben von Legacy-Seiten ohne Front Matter nicht unterscheidbar. Export-Risikogrenzen siehe TESTING.md.
+Nur in einem vertrauenswürdigen Netz betreiben, kein direkter Internetzugriff. Bei Zugriff über nicht vertrauenswürdige Netze HTTPS und geeignete Zugriffsbeschränkungen vorsehen. MED-SEC schützt Medien-URLs; Editor/Admin haben globalen Medienzugriff. MED-SEC/EXP-SEC sind seit Release 1.1.0 abgenommen; globale Medienrechte und Export-Risikogrenzen beachten. Ungültiges Front Matter wird seit SEC-1.0 restriktiv behandelt; vollständig entfernte Metadaten bleiben von Legacy-Seiten ohne Front Matter nicht unterscheidbar. Export-Risikogrenzen siehe TESTING.md.
 
 ## Mitgelieferte Beispielinhalte
 
-Neue Installationen enthalten eine Startseite, das Kapitel Unser Zuhause und ein integriertes Benutzerhandbuch (13 Markdown-Seiten). Alle Beispielseiten sind veröffentlicht und öffentlich lesbar; sie enthalten keine echten persönlichen Daten. Interne Links verwenden stabile Seiten-IDs. Beispiel-Schlagwörter werden als unterstützte Legacy-Labels mitgeliefert und beim expliziten Speichern der Seiteneinstellungen dem Katalog zugeordnet. Bestehende Installationen nicht überschreiben; das Handbuch kann nach Backup und Kollisionsprüfung separat übernommen werden.
+Neue Installationen enthalten eine Startseite, das Kapitel Unser Zuhause und ein integriertes Benutzerhandbuch (13 Markdown-Seiten). Alle Beispielseiten sind veröffentlicht und öffentlich lesbar; sie enthalten keine echten persönlichen Daten. Interne Links verwenden stabile Seiten-IDs. Beispiel-Schlagwörter werden als unterstützte Legacy-Labels mitgeliefert und bei Änderung der Schlagwortzuordnung im Editor dem Katalog zugeordnet. Bestehende Installationen nicht überschreiben; das Handbuch kann nach Backup und Kollisionsprüfung separat übernommen werden.
 
 ## Portable Installation
 

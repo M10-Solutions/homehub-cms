@@ -40,10 +40,6 @@
 .hub-page-dialog .hub-dialog-actions button[type=submit].hub-danger{background:#9c2434;border-color:#9c2434;color:#fff}
 .hub-page-dialog .hub-dialog-actions button[type=submit].hub-danger:hover{background:#761827;border-color:#761827;color:#fff}
 .hub-page-dialog .hub-dialog-actions button[type=button]{background:var(--theme-surface,#fff);color:var(--theme-text,#243149)}
-
-/* UAT-002c: draft management is an explicit admin-only navigation mode. */
-.hub-draft-switch {display:block;padding:.45rem .75rem;margin:.35rem .5rem;border-radius:6px;color:var(--hub-text,inherit);font-size:.83rem;text-decoration:none;border:1px solid var(--hub-border,#9ca3af)}
-.hub-draft-switch:hover {background:var(--hub-surface-hover,rgba(120,130,150,.12))}
 .hub-draft-label {font-size:.7em;font-style:italic;opacity:.75;margin-left:.35em}
 .hub-draft-banner {border-left:4px solid #b7791f;padding:.7rem 1rem;background:rgba(183,121,31,.12);border-radius:4px}
 

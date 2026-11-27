@@ -42,7 +42,12 @@ try {
     $revision = (string) ($_POST['revision'] ?? '');
     $lockToken = (string) ($_POST['lock_token'] ?? '');
     if ($revision === '' || $lockToken === '') inlineReply(409, ['error'=>'Bearbeitungssperre oder Revision fehlt.']);
-    // Content-only save preserves all existing front-matter metadata and applies access checks again.
-    $admin->save($slug, ['body'=>$body], false, $slug, true, $revision, $auth->currentUserId() ?? '', $lockToken);
+    // Only editorial fields are accepted; ACL and publication remain server-owned.
+    $input = ['body'=>$body];
+    foreach (['title', 'description', 'labels'] as $key) {
+        if (!isset($_POST[$key]) || !is_string($_POST[$key])) inlineReply(400, ['error'=>'Redaktionelle Felder fehlen. Bitte neu laden.']);
+        $input[$key] = $_POST[$key];
+    }
+    $admin->save($slug, $input, false, $slug, true, $revision, $auth->currentUserId() ?? '', $lockToken, true);
     inlineReply(200, ['ok'=>true, 'revision'=>hash('sha256', $body)]);
 } catch (Throwable $e) { inlineReply(409, ['error'=>$e->getMessage()]); }
